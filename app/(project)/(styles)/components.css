@@ -21,7 +21,7 @@
     }
 
     #dock {
-        @apply absolute bottom-5 left-1/2 -translate-x-1/2 z-50 select-none max-sm:hidden;
+        @apply fixed bottom-5 left-1/2 -translate-x-1/2 z-[3000] select-none;
 
         .dock-container {
             @apply bg-white/20 backdrop-blur-md justify-between rounded-2xl p-1.5 flex items-end gap-1.5;
@@ -36,7 +36,7 @@
         @apply flex gap-2;
 
         .close {
-            @apply size-4 rounded-full bg-[#ff6157] cursor-pointer hover:bg-red-800;
+            @apply size-4 rounded-full bg-[#ff6157] cursor-pointer hover:bg-red-800 active:bg-red-900 transition-colors;
         }
 
         .minimize {
@@ -178,5 +178,101 @@
                 }
             }
         }
+    }
+}
+
+@media (max-width: 1024px) {
+    #dock {
+        @apply bottom-3;
+    }
+
+    #dock .dock-icon {
+        @apply size-11;
+    }
+
+    #dock .dock-icon-active {
+        @apply -translate-y-2 translate-x-0.5 scale-[1.06] transition-transform duration-200;
+    }
+
+    #window-header {
+        @apply cursor-default;
+    }
+
+    #safari,
+    #terminal,
+    #contact,
+    #resume,
+    #finder,
+    #txtfile,
+    #imgfile {
+        @apply rounded-none shadow-none;
+    }
+
+    #finder .sidebar {
+        @apply w-28 p-2;
+    }
+
+    #finder .content {
+        @apply p-3 gap-3;
+    }
+
+    #finder .content .content-list-item {
+        @apply w-20;
+    }
+
+    #finder .content .content-list-item img {
+        @apply size-12;
+    }
+
+    #safari #window-header {
+        @apply gap-2 px-2;
+    }
+
+    #safari .search {
+        @apply w-full px-2 py-1.5;
+    }
+
+    #safari .search .search-input-box {
+        @apply text-xs;
+    }
+
+    #safari .pr-1 > div {
+        @apply px-4;
+    }
+
+    #terminal .techstack {
+        @apply p-3 text-xs;
+    }
+
+    #terminal .techstack .label {
+        @apply ms-0 mt-4 gap-4;
+    }
+
+    #terminal .techstack .label p {
+        @apply w-auto;
+    }
+
+    #contact {
+        @apply max-w-none;
+    }
+
+    #contact .p-5 {
+        @apply p-3;
+    }
+
+    #contact .social-cards-container {
+        @apply flex-col items-stretch;
+    }
+
+    #resume canvas {
+        @apply max-w-full h-auto;
+    }
+
+    #txtfile .p-5 {
+        @apply p-3;
+    }
+
+    #imgfile > div {
+        @apply p-3;
     }
 }

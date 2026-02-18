@@ -3,10 +3,12 @@ import dayjs from "dayjs";
 import { navIcons, navLinks } from "@/app/(project)/(content)/other.content";
 import { useWindowStore } from "@/app/(project)/(store)/window";
 import type { WindowKey } from "@/app/(project)/(types)/windows.types";
+import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 
 const Navbar = () => {
   const { openWindow, closeWindow } = useWindowStore();
   const getState = useWindowStore.getState;
+  const isMobile = useIsMobile();
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ const Navbar = () => {
     <nav>
       <div>
         <img src="/images/iconapplewhite.png" className="w-8 h-8 p-2 left-0.5" alt="logo" />
-        <p className="font-semibold text-white">Rohit's Portfolio</p>
+        <p className="font-semibold text-white">{isMobile ? "Portfolio" : "Rohit's Portfolio"}</p>
 
         <ul className="flex items-center gap-2">
           {navLinks.map(({ id, name, type}) => (

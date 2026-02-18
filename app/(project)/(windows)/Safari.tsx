@@ -13,6 +13,7 @@ import {
   MoveRight
 } from "lucide-react";
 import type { BlogPost } from "@/app/(project)/(types)/other.types";
+import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 
 /* ---------- Component ---------- */
 
@@ -21,37 +22,41 @@ type SafariProps = {
 };
 
 const Safari = ({ blogPosts }: SafariProps) => {
+  const isMobile = useIsMobile();
+
   return (
     <>
       {/* ---------- Window Header ---------- */}
       <div id="window-header" className="flex items-center gap-3 px-4 py-2">
         <WindowControls target="safari" />
 
-        <PanelLeft className="ml-6 icon" />
+        {!isMobile && <PanelLeft className="ml-6 icon" />}
 
-        <div className="flex items-center gap-1 ml-4">
+        <div className={`flex items-center gap-1 ${isMobile ? "" : "ml-4"}`}>
           <ChevronLeft className="icon" />
           <ChevronRight className="icon" />
         </div>
 
-        <div className="flex-1 flex items-center justify-center gap-3">
-          <ShieldHalf className="icon" />
+        <div className={`flex-1 flex items-center ${isMobile ? "justify-start gap-1" : "justify-center gap-3"}`}>
+          {!isMobile && <ShieldHalf className="icon" />}
 
           <div className="search">
             <Search className="icon" />
             <input
               type="text"
-              placeholder="Search or enter website name"
+              placeholder={isMobile ? "Search..." : "Search or enter website name"}
               className="search-input-box"
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <Share className="icon" />
-          <Plus className="icon" />
-          <Copy className="icon" />
-        </div>
+        {!isMobile && (
+          <div className="flex items-center gap-4">
+            <Share className="icon" />
+            <Plus className="icon" />
+            <Copy className="icon" />
+          </div>
+        )}
       </div>
 
       {/* ---------- Scroll Area ---------- */}

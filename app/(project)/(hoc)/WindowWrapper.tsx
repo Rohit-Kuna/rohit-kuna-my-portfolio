@@ -2,15 +2,21 @@ import { useWindowStore } from "@/app/(project)/(store)/window";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import gsap from "gsap";
-import type { ComponentType, PropsWithChildren } from "react";
+import type { ComponentType, PropsWithChildren, TouchEvent } from "react";
 import type { WindowState, WindowKey } from "@/app/(project)/(types)/windows.types";
 import type { WindowStore } from "@/app/(project)/(store)/window";
+import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
+import { dockApps } from "@/app/(project)/(content)/other.content";
 
 type DraggableInstance = {
   kill: () => void;
   disable: () => void;
   enable: () => void;
 };
+
+const DOCK_WINDOW_ORDER = dockApps
+  .filter((app) => app.canOpen)
+  .map((app) => app.id as WindowKey);
 
 /* ---------- HOC ---------- */
 
@@ -19,16 +25,18 @@ const WindowWrapper = <P extends object>(
   windowKey: WindowKey
 ) => {
   const Wrapped = (props: PropsWithChildren<P>) => {
-    const { focusWindow, windows } = useWindowStore() as WindowStore;
+    const { focusWindow, openWindow, closeWindow, windows } = useWindowStore() as WindowStore;
 
     const windowState: WindowState = windows[windowKey];
 
     const isOpen = windowState?.isOpen ?? false;
     const isMaximized = windowState?.isMaximized ?? false;
     const zIndex = windowState?.zIndex ?? 0;
+    const isMobile = useIsMobile();
 
     const ref = useRef<HTMLElement | null>(null);
     const dragInstance = useRef<DraggableInstance | null>(null);
+    const swipeStart = useRef<{ x: number; y: number; fromHeader: boolean } | null>(null);
 
     // ✅ Per-window drag memory
     const lastPosition = useRef({ x: 0, y: 0 });
@@ -36,7 +44,7 @@ const WindowWrapper = <P extends object>(
     /* ---------- DRAGGABLE ---------- */
     useGSAP(() => {
       const el = ref.current;
-      if (!isOpen || !el || typeof window === "undefined") return;
+      if (!isOpen || !el || typeof window === "undefined" || isMobile) return;
 
       let instance: DraggableInstance | null = null;
 
@@ -70,35 +78,35 @@ const WindowWrapper = <P extends object>(
         instance?.kill();
         dragInstance.current = null;
       };
-    }, [isOpen]);
+    }, [isOpen, isMobile]);
 
     /* ---------- ENABLE / DISABLE DRAG ---------- */
     useGSAP(() => {
-      if (!dragInstance.current) return;
+      if (!dragInstance.current || isMobile) return;
 
       if (isMaximized) {
         dragInstance.current.disable();
       } else {
         dragInstance.current.enable();
       }
-    }, [isMaximized]);
+    }, [isMaximized, isMobile]);
 
     /* ---------- RESET POSITION ON MAXIMIZE ---------- */
     useGSAP(() => {
       const el = ref.current;
-      if (!el || !isMaximized) return;
+      if (!el || !isMaximized || isMobile) return;
 
       gsap.set(el, {
         x: 0,
         y: 0,
         clearProps: "transform"
       });
-    }, [isMaximized]);
+    }, [isMaximized, isMobile]);
 
     /* ---------- RESTORE POSITION ON MINIMIZE ---------- */
     useGSAP(() => {
       const el = ref.current;
-      if (!el || isMaximized) return;
+      if (!el || isMaximized || isMobile) return;
 
       const { x, y } = lastPosition.current;
 
@@ -106,7 +114,7 @@ const WindowWrapper = <P extends object>(
         x,
         y
       });
-    }, [isMaximized]);
+    }, [isMaximized, isMobile]);
 
     /* ---------- OPEN ANIMATION (UNCHANGED) ---------- */
     useGSAP(() => {
@@ -130,13 +138,72 @@ const WindowWrapper = <P extends object>(
 
     if (!isOpen) return null;
 
+    const switchWindowBySwipe = (direction: "left" | "right") => {
+      const currentIndex = DOCK_WINDOW_ORDER.indexOf(windowKey);
+      if (currentIndex === -1 || DOCK_WINDOW_ORDER.length === 0) return;
+
+      const step = direction === "left" ? 1 : -1;
+      const nextIndex =
+        (currentIndex + step + DOCK_WINDOW_ORDER.length) % DOCK_WINDOW_ORDER.length;
+      const targetKey = DOCK_WINDOW_ORDER[nextIndex];
+
+      const targetWindow = useWindowStore.getState().windows[targetKey];
+      if (!targetWindow) return;
+
+      if (targetWindow.isOpen) {
+        focusWindow(targetKey);
+      } else {
+        openWindow(targetKey);
+      }
+    };
+
+    const handleTouchStart = (event: TouchEvent<HTMLElement>) => {
+      if (!isMobile) return;
+      if (event.changedTouches.length === 0) return;
+
+      const target = event.target as HTMLElement | null;
+      const fromHeader = Boolean(target?.closest("#window-header"));
+
+      const touch = event.changedTouches[0];
+      swipeStart.current = { x: touch.clientX, y: touch.clientY, fromHeader };
+    };
+
+    const handleTouchEnd = (event: TouchEvent<HTMLElement>) => {
+      if (!isMobile || !swipeStart.current) return;
+      if (event.changedTouches.length === 0) return;
+
+      const touch = event.changedTouches[0];
+      const deltaX = touch.clientX - swipeStart.current.x;
+      const deltaY = swipeStart.current.y - touch.clientY;
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+      const fromHeader = swipeStart.current.fromHeader;
+
+      swipeStart.current = null;
+
+      if (absX > 90 && absX > absY * 1.2) {
+        switchWindowBySwipe(deltaX < 0 ? "left" : "right");
+        return;
+      }
+
+      if (fromHeader && deltaY > 90 && absX < 80) {
+        closeWindow(windowKey);
+      }
+    };
+
     return (
       <section
         id={windowKey}
         ref={ref}
         style={{ zIndex }}
-        className={`absolute ${isMaximized ? "window-maximized" : ""}`}
+        className={
+          isMobile
+            ? "fixed mobile-window-shell"
+            : `absolute ${isMaximized ? "window-maximized" : ""}`
+        }
         onPointerDown={() => focusWindow(windowKey)}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         <Component {...props} />
       </section>

@@ -9,6 +9,10 @@ body {
   background-position: center;
 }
 
+:root {
+  --compact-dock-space: 96px;
+}
+
 .mac-scrollbar::-webkit-scrollbar {
     width: 4px;
 }
@@ -68,6 +72,17 @@ body {
   border-radius: 0 !important;
 }
 
+.mobile-window-shell {
+  top: 0 !important;
+  left: 0 !important;
+  width: 100dvw !important;
+  height: 100dvh !important;
+  max-width: 100dvw !important;
+  max-height: 100dvh !important;
+  border-radius: 0 !important;
+  transform: none !important;
+}
+
 .tooltip {
     @apply !py-1 !px-3 !w-fit !text-center !text-xs !rounded-md !bg-blue-200 !text-blue-900 !shadow-2xl;
 }
@@ -97,3 +112,8 @@ body {
   will-change: transform;
 }
 
+@media (max-width: 1024px) {
+  .window-scroll {
+    max-height: calc(100dvh - 135px);
+  }
+}
