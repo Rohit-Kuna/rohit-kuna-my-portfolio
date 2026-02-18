@@ -48,6 +48,15 @@ export type SocialLink = {
   link: string;
 };
 
+export type ContactContent = {
+  windowTitle: string;
+  profileImage: string;
+  profileAlt: string;
+  heading: string;
+  message: string;
+  email: string;
+};
+
 /* ---------- Gallery ---------- */
 
 export type GalleryItem = {

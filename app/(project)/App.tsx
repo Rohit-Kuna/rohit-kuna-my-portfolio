@@ -10,6 +10,7 @@ import { Terminal, Safari, Resume, Finder, Text, Image, Contact } from "@/app/(p
 import type { Location } from "@/app/(project)/(types)/location.types";
 import type {
   BlogPost,
+  ContactContent,
   SocialLink,
   TechStackCategory,
 } from "@/app/(project)/(types)/other.types";
@@ -19,11 +20,21 @@ import {
   techStack as staticTechStack,
 } from "@/app/(project)/(content)/other.content";
 
+const staticContactContent: ContactContent = {
+  windowTitle: "Contact Me",
+  profileImage: "/images/profile-photo.png",
+  profileAlt: "Rohit",
+  heading: "Let's Connect",
+  message: "Got an idea ? A bug to squash? Or just wanna talk tech? I'm in.",
+  email: "rohitkuna28@gmail.com",
+};
+
 type AppProps = {
   locationsData: Record<string, Location>;
   blogPostsData?: BlogPost[];
   techStackData?: TechStackCategory[];
   socialsData?: SocialLink[];
+  contactContent?: ContactContent;
 };
 
 const App = ({
@@ -31,6 +42,7 @@ const App = ({
   blogPostsData = staticBlogPosts,
   socialsData = staticSocials,
   techStackData = staticTechStack,
+  contactContent = staticContactContent,
 }: AppProps) => {
   const { activeLocation, setActiveLocation } = useLocationStore();
 
@@ -55,7 +67,7 @@ const App = ({
       <Finder locationsData={locationsData} />
       <Text />
       <Image />
-      <Contact socialsData={socialsData} />
+      <Contact socialsData={socialsData} contactContent={contactContent} />
       <Home locationsData={locationsData} />
     </main>
   );

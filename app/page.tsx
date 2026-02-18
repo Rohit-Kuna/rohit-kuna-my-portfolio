@@ -2,12 +2,14 @@ import App from "./(project)/App";
 import { getFinderLocationsFromSanity } from "@/app/(project)/(content)/location.cms";
 import {
   getBlogPostsFromSanity,
+  getContactContentFromSanity,
   getSocialLinksFromSanity,
   getTechStackFromSanity,
 } from "@/app/(project)/(content)/other.cms";
 import type { Location } from "@/app/(project)/(types)/location.types";
 import type {
   BlogPost,
+  ContactContent,
   SocialLink,
   TechStackCategory,
 } from "@/app/(project)/(types)/other.types";
@@ -24,6 +26,7 @@ export default async function HomePage() {
   let blogPostsData: BlogPost[] = staticBlogPosts;
   let socialsData: SocialLink[] = staticSocials;
   let techStackData: TechStackCategory[] = staticTechStack;
+  let contactContentData: ContactContent | undefined;
 
   try {
     locationsData = await getFinderLocationsFromSanity();
@@ -58,12 +61,22 @@ export default async function HomePage() {
     techStackData = staticTechStack;
   }
 
+  try {
+    const cmsContactContent = await getContactContentFromSanity();
+    if (cmsContactContent) {
+      contactContentData = cmsContactContent;
+    }
+  } catch {
+    contactContentData = undefined;
+  }
+
   return (
     <App
       locationsData={locationsData}
       blogPostsData={blogPostsData}
       socialsData={socialsData}
       techStackData={techStackData}
+      contactContent={contactContentData}
     />
   );
 }

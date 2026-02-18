@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { createClient, groq } from "next-sanity";
 import type {
   BlogPost,
+  ContactContent,
   SocialLink,
   TechStackCategory,
 } from "@/app/(project)/(types)/other.types";
@@ -46,6 +47,17 @@ const SOCIAL_LINKS_QUERY = groq`
   icon,
   bg,
   order
+}
+`;
+
+const CONTACT_CONTENT_QUERY = groq`
+*[_type == "contactContent"][0]{
+  windowTitle,
+  "profileImage": profileImage.asset->url,
+  profileAlt,
+  heading,
+  message,
+  email
 }
 `;
 
@@ -105,4 +117,14 @@ export const getSocialLinksFromSanity = async (): Promise<SocialLink[]> => {
     icon: item.icon,
     bg: item.bg,
   }));
+};
+
+export const getContactContentFromSanity = async (): Promise<ContactContent | null> => {
+  const content = await sanityClient.fetch<ContactContent | null>(
+    CONTACT_CONTENT_QUERY,
+    {},
+    { cache: "no-store" }
+  );
+
+  return content ?? null;
 };
