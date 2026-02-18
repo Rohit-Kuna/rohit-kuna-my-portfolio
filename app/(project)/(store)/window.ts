@@ -24,10 +24,31 @@ export const useWindowStore = create<WindowStore>((set) => ({
       const win = state.windows[key];
       if (!win) return state;
 
+      const isCompactViewport =
+        typeof window !== "undefined" &&
+        window.matchMedia("(max-width: 1024px)").matches;
+
+      const baseWindows = isCompactViewport
+        ? (Object.keys(state.windows) as WindowKey[]).reduce<Record<WindowKey, WindowState>>(
+            (acc, currentKey) => {
+              const current = state.windows[currentKey];
+              acc[currentKey] = {
+                ...current,
+                isOpen: false,
+                isMaximized: false,
+                zIndex: INITIAL_Z_INDEX,
+                data: null
+              };
+              return acc;
+            },
+            {} as Record<WindowKey, WindowState>
+          )
+        : state.windows;
+
       const nextWindows = {
-        ...state.windows,
+        ...baseWindows,
         [key]: {
-          ...win,
+          ...baseWindows[key],
           isOpen: true,
           isMaximized: false,
           zIndex: state.nextZIndex,

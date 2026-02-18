@@ -119,7 +119,7 @@ const Welcome = () => {
       </h1>
 
       <div className="small-screen">
-        <p className="small-screen-message">Tap dock icons to open apps. Swipe up on header to close. View on desktop for best experience.</p>
+        <p className="small-screen-message">Tap dock icons to open/close apps. View on desktop for best experience.</p>
       </div>
     </section>
   );
