@@ -9,7 +9,7 @@ import type {
   GalleryItem,
 } from "@/app/(project)/(types)/other.types";
 
-import { Folder, UserCircle, FileText, Wifi, Search, Mail, Newspaper } from "lucide-react";
+import { Folder, UserCircle, FileText, Wifi, Search, Mail } from "lucide-react";
 
 const navLinks : NavLink[] = [
   {
@@ -48,10 +48,6 @@ const navIcons : NavIcon[] = [
     img: "/icons/user.svg",
     icon: Mail
   },
-//   {
-//     id: 4,
-//     img: "/icons/mode.svg",
-//   },
 ];
 
 const dockApps: DockApp[] = [
@@ -85,18 +81,6 @@ const dockApps: DockApp[] = [
     icon: "terminal.png",
     canOpen: true,
   },
-  // {
-  //   id: "photos",
-  //   name: "Gallery", // was "Photos"
-  //   icon: "photos.png",
-  //   canOpen: true,
-  // },
-  // {
-  //   id: "trash",
-  //   name: "Archive", // was "Trash"
-  //   icon: "trash.png",
-  //   canOpen: false,
-  // },
 ];
 
 const blogPosts : BlogPost[] = [
@@ -105,42 +89,36 @@ const blogPosts : BlogPost[] = [
     date: "Dec 22, 2024",
     title:
       "Alchemist Of Art & Tech : The Story of Rohit Kuna",
-    icon: Newspaper,
     link: "https://medium.com/@rohitkuna28/alchemist-of-art-tech-the-story-of-rohit-kuna-ad17f3d43574",
   },
   {
     id: 2,
     date: "Jan 14, 2025",
     title: "Fun to Learn : Callbacks, Promises & Async/Await",
-    icon: Newspaper,
     link: "https://medium.com/@rohitkuna28/fun-to-learn-callbacks-promises-async-await-171d5035a8d7",
   },
   {
     id: 2.1,
     date: "Jan 14, 2025",
     title: "Callback, Promises & Async Await : Posts & Comments",
-    icon: Newspaper,
     link: "https://medium.com/@rohitkuna28/callback-promises-async-await-posts-comments-dd0c4ae4bcca",
   },
   {
     id: 3,
     date: "Jan 11, 2025",
     title: "Behavioral Design Patterns : Art of Burger Interactions",
-    icon: Newspaper,
     link: "https://medium.com/@rohitkuna28/behavioral-design-patterns-how-burgers-behave-44cb9520c1f1",
   },
   {
     id: 4,
     date: "Jan 2, 2025",
     title: "Structural Design Patterns : Arranging the Burger Restaurant",
-    icon: Newspaper,
     link: "https://medium.com/@rohitkuna28/structural-design-patterns-arranging-the-burger-restaurant-3b4f0c6fe08e",
   },
   {
     id: 5,
     date: "Dec 29, 2024",
     title: "Creational Design Patterns : The Burger Creation Recipes - Part1",
-    icon: Newspaper,
     link: "https://medium.com/@rohitkuna28/creational-design-patterns-the-burger-creation-recipes-fedc1821cd5b",
   },
 ];
@@ -260,5 +238,4 @@ export {
   photosLinks,
   gallery,
 };
-
 

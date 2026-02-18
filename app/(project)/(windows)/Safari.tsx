@@ -1,5 +1,4 @@
 import WindowControls from "@/app/(project)/(components)/WindowControls";
-import { blogPosts } from "@/app/(project)/(content)/other.content";
 import WindowWrapper from "@/app/(project)/(hoc)/WindowWrapper";
 import {
   ChevronLeft,
@@ -10,12 +9,18 @@ import {
   Share,
   Plus,
   Copy,
+  Newspaper,
   MoveRight
 } from "lucide-react";
+import type { BlogPost } from "@/app/(project)/(types)/other.types";
 
 /* ---------- Component ---------- */
 
-const Safari = () => {
+type SafariProps = {
+  blogPosts: BlogPost[];
+};
+
+const Safari = ({ blogPosts }: SafariProps) => {
   return (
     <>
       {/* ---------- Window Header ---------- */}
@@ -60,12 +65,12 @@ const Safari = () => {
 
           {/* ---------- Article List ---------- */}
           <div className="articles-list">
-            {blogPosts.map(({ id, icon: Icon, title, date, link }) => (
+            {blogPosts.map(({ id, title, date, link }) => (
               <div
                 key={id}
                 className="article-row"
               >
-                <Icon className="w-8 h-8 shrink-0 text-blue-500" />
+                <Newspaper className="w-8 h-8 shrink-0 text-blue-500" />
 
                 <div className="flex-1 flex flex-col gap-0.5 min-w-0">
                   <a

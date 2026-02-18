@@ -8,12 +8,15 @@ import Home from "@/app/(project)/(components)/Home";
 import useLocationStore from "@/app/(project)/(store)/location";
 import { Terminal, Safari, Resume, Finder, Text, Image, Contact } from "@/app/(project)/(windows)";
 import type { Location } from "@/app/(project)/(types)/location.types";
+import type { BlogPost } from "@/app/(project)/(types)/other.types";
+import { blogPosts as staticBlogPosts } from "@/app/(project)/(content)/other.content";
 
 type AppProps = {
   locationsData: Record<string, Location>;
+  blogPostsData?: BlogPost[];
 };
 
-const App = ({ locationsData }: AppProps) => {
+const App = ({ locationsData, blogPostsData = staticBlogPosts }: AppProps) => {
   const { activeLocation, setActiveLocation } = useLocationStore();
 
   useEffect(() => {
@@ -32,7 +35,7 @@ const App = ({ locationsData }: AppProps) => {
       <Dock />
 
       <Terminal />
-      <Safari />
+      <Safari blogPosts={blogPostsData} />
       <Resume />
       <Finder locationsData={locationsData} />
       <Text />
