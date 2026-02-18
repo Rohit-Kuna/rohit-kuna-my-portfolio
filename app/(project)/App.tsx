@@ -11,7 +11,7 @@ import type { Location } from "@/app/(project)/(types)/location.types";
 import type {
   BlogPost,
   ContactContent,
-  SocialLink,
+  ResumeContent,
   TechStackCategory,
 } from "@/app/(project)/(types)/other.types";
 import {
@@ -27,22 +27,28 @@ const staticContactContent: ContactContent = {
   heading: "Let's Connect",
   message: "Got an idea ? A bug to squash? Or just wanna talk tech? I'm in.",
   email: "rohitkuna28@gmail.com",
+  socialLinks: staticSocials,
+};
+
+const staticResumeContent: ResumeContent = {
+  windowTitle: "Resume.pdf",
+  resumeUrl: "/files/resume.pdf",
 };
 
 type AppProps = {
   locationsData: Record<string, Location>;
   blogPostsData?: BlogPost[];
   techStackData?: TechStackCategory[];
-  socialsData?: SocialLink[];
   contactContent?: ContactContent;
+  resumeContent?: ResumeContent;
 };
 
 const App = ({
   locationsData,
   blogPostsData = staticBlogPosts,
-  socialsData = staticSocials,
   techStackData = staticTechStack,
   contactContent = staticContactContent,
+  resumeContent = staticResumeContent,
 }: AppProps) => {
   const { activeLocation, setActiveLocation } = useLocationStore();
 
@@ -63,11 +69,11 @@ const App = ({
 
       <Terminal techStackData={techStackData} />
       <Safari blogPosts={blogPostsData} />
-      <Resume />
+      <Resume resumeContent={resumeContent} />
       <Finder locationsData={locationsData} />
       <Text />
       <Image />
-      <Contact socialsData={socialsData} contactContent={contactContent} />
+      <Contact contactContent={contactContent} />
       <Home locationsData={locationsData} />
     </main>
   );

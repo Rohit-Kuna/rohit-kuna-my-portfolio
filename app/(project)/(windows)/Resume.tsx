@@ -2,6 +2,7 @@ import WindowControls from "@/app/(project)/(components)/WindowControls";
 import WindowWrapper from "@/app/(project)/(hoc)/WindowWrapper";
 import { useWindowStore } from "@/app/(project)/(store)/window";
 import type { FileNode } from "@/app/(project)/(types)/location.types";
+import type { ResumeContent } from "@/app/(project)/(types)/other.types";
 import { Download } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -11,11 +12,15 @@ import 'react-pdf/dist/Page/TextLayer.css';
 type ReactPdfModule = typeof import("react-pdf");
 /* ---------- Component ---------- */
 
-const Resume = () => {
+type ResumeProps = {
+  resumeContent: ResumeContent;
+};
+
+const Resume = ({ resumeContent }: ResumeProps) => {
   const { windows } = useWindowStore();
   const resumeData = windows.resume?.data as FileNode | null;
-  const pdfUrl = resumeData?.href ?? "/files/resume.pdf";
-  const pdfName = resumeData?.name ?? "Resume.pdf";
+  const pdfUrl = resumeData?.href ?? resumeContent.resumeUrl;
+  const pdfName = resumeData?.name ?? resumeContent.windowTitle;
 
   const [pdfModule, setPdfModule] = useState<ReactPdfModule | null>(null);
   const [numPages, setNumPages] = useState(0);

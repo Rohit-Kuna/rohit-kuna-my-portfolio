@@ -3,6 +3,7 @@ import { createClient, groq } from "next-sanity";
 import type {
   BlogPost,
   ContactContent,
+  ResumeContent,
   SocialLink,
   TechStackCategory,
 } from "@/app/(project)/(types)/other.types";
@@ -57,7 +58,20 @@ const CONTACT_CONTENT_QUERY = groq`
   profileAlt,
   heading,
   message,
-  email
+  email,
+  "socialLinks": socialLinks[]->{
+    text,
+    link,
+    icon,
+    bg
+  }
+}
+`;
+
+const RESUME_CONTENT_QUERY = groq`
+*[_type == "resumeContent"][0]{
+  windowTitle,
+  "resumeUrl": resumeFile.asset->url
 }
 `;
 
@@ -120,8 +134,30 @@ export const getSocialLinksFromSanity = async (): Promise<SocialLink[]> => {
 };
 
 export const getContactContentFromSanity = async (): Promise<ContactContent | null> => {
-  const content = await sanityClient.fetch<ContactContent | null>(
+  type RawContactContent = Omit<ContactContent, "socialLinks"> & {
+    socialLinks?: Omit<SocialLink, "id">[];
+  };
+
+  const content = await sanityClient.fetch<RawContactContent | null>(
     CONTACT_CONTENT_QUERY,
+    {},
+    { cache: "no-store" }
+  );
+
+  if (!content) return null;
+
+  return {
+    ...content,
+    socialLinks: (content.socialLinks ?? []).map((item, index) => ({
+      id: index + 1,
+      ...item,
+    })),
+  };
+};
+
+export const getResumeContentFromSanity = async (): Promise<ResumeContent | null> => {
+  const content = await sanityClient.fetch<ResumeContent | null>(
+    RESUME_CONTENT_QUERY,
     {},
     { cache: "no-store" }
   );

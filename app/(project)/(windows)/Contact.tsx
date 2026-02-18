@@ -1,14 +1,13 @@
 import WindowControls from "@/app/(project)/(components)/WindowControls";
 import WindowWrapper from "@/app/(project)/(hoc)/WindowWrapper";
 import {Mail} from "lucide-react";
-import type { ContactContent, SocialLink } from "@/app/(project)/(types)/other.types";
+import type { ContactContent } from "@/app/(project)/(types)/other.types";
 
 type ContactProps = {
-    socialsData: SocialLink[];
     contactContent: ContactContent;
 };
 
-const Contact = ({ socialsData, contactContent }: ContactProps) => {
+const Contact = ({ contactContent }: ContactProps) => {
     const {
         windowTitle,
         profileImage,
@@ -16,6 +15,7 @@ const Contact = ({ socialsData, contactContent }: ContactProps) => {
         heading,
         message,
         email,
+        socialLinks,
     } = contactContent;
 
     return(
@@ -30,7 +30,7 @@ const Contact = ({ socialsData, contactContent }: ContactProps) => {
                 <p>{message}</p>
                 <p ><a className="p-1 hover:bg-gray-200 rounded cursor-pointer" href={`mailto:${email}`}><Mail className="icon inline"/>{email}</a></p>
                 <ul className="social-cards-container">
-                    {socialsData.map(({id,bg,link,icon, text})=>(
+                    {socialLinks.map(({id,bg,link,icon, text})=>(
                         <li className="social-cards" key={id} style={{backgroundColor:bg}}>
                             <a className="space-y-5" href={link} target="_blank" rel="nopener noreferre" title={text}>
                                 <img src={icon} alt={text} className="size-5" />

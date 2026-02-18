@@ -55,6 +55,12 @@ export type ContactContent = {
   heading: string;
   message: string;
   email: string;
+  socialLinks: SocialLink[];
+};
+
+export type ResumeContent = {
+  windowTitle: string;
+  resumeUrl: string;
 };
 
 /* ---------- Gallery ---------- */

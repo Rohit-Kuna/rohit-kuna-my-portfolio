@@ -3,19 +3,18 @@ import { getFinderLocationsFromSanity } from "@/app/(project)/(content)/location
 import {
   getBlogPostsFromSanity,
   getContactContentFromSanity,
-  getSocialLinksFromSanity,
+  getResumeContentFromSanity,
   getTechStackFromSanity,
 } from "@/app/(project)/(content)/other.cms";
 import type { Location } from "@/app/(project)/(types)/location.types";
 import type {
   BlogPost,
   ContactContent,
-  SocialLink,
+  ResumeContent,
   TechStackCategory,
 } from "@/app/(project)/(types)/other.types";
 import {
   blogPosts as staticBlogPosts,
-  socials as staticSocials,
   techStack as staticTechStack,
 } from "@/app/(project)/(content)/other.content";
 
@@ -24,9 +23,9 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   let locationsData: Record<string, Location> = {};
   let blogPostsData: BlogPost[] = staticBlogPosts;
-  let socialsData: SocialLink[] = staticSocials;
   let techStackData: TechStackCategory[] = staticTechStack;
   let contactContentData: ContactContent | undefined;
+  let resumeContentData: ResumeContent | undefined;
 
   try {
     locationsData = await getFinderLocationsFromSanity();
@@ -41,15 +40,6 @@ export default async function HomePage() {
     }
   } catch {
     blogPostsData = staticBlogPosts;
-  }
-
-  try {
-    const cmsSocialLinks = await getSocialLinksFromSanity();
-    if (cmsSocialLinks.length > 0) {
-      socialsData = cmsSocialLinks;
-    }
-  } catch {
-    socialsData = staticSocials;
   }
 
   try {
@@ -70,13 +60,22 @@ export default async function HomePage() {
     contactContentData = undefined;
   }
 
+  try {
+    const cmsResumeContent = await getResumeContentFromSanity();
+    if (cmsResumeContent?.resumeUrl) {
+      resumeContentData = cmsResumeContent;
+    }
+  } catch {
+    resumeContentData = undefined;
+  }
+
   return (
     <App
       locationsData={locationsData}
       blogPostsData={blogPostsData}
-      socialsData={socialsData}
       techStackData={techStackData}
       contactContent={contactContentData}
+      resumeContent={resumeContentData}
     />
   );
 }

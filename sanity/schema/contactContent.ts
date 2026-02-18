@@ -48,6 +48,18 @@ export const contactContent = defineType({
       type: "string",
       validation: (Rule) => Rule.required().email(),
     }),
+    defineField({
+      name: "socialLinks",
+      title: "Social Links",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "socialLink" }],
+        },
+      ],
+      validation: (Rule) => Rule.required().min(1),
+    }),
   ],
   preview: {
     select: {
@@ -57,4 +69,3 @@ export const contactContent = defineType({
     },
   },
 });
-
