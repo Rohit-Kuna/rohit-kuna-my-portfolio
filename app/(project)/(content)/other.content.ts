@@ -5,8 +5,6 @@ import type {
   BlogPost,
   TechStackCategory,
   SocialLink,
-  PhotosLink,
-  GalleryItem,
 } from "@/app/(project)/(types)/other.types";
 
 import { Folder, UserCircle, FileText, Wifi, Search, Mail } from "lucide-react";
@@ -181,53 +179,6 @@ const socials : SocialLink[] = [
   },
 ];
 
-const photosLinks : PhotosLink[] = [
-  {
-    id: 1,
-    icon: "/icons/gicon1.svg",
-    title: "Library",
-  },
-  {
-    id: 2,
-    icon: "/icons/gicon2.svg",
-    title: "Memories",
-  },
-  {
-    id: 3,
-    icon: "/icons/file.svg",
-    title: "Places",
-  },
-  {
-    id: 4,
-    icon: "/icons/gicon4.svg",
-    title: "People",
-  },
-  {
-    id: 5,
-    icon: "/icons/gicon5.svg",
-    title: "Favorites",
-  },
-];
-
-const gallery : GalleryItem[] = [
-  {
-    id: 1,
-    img: "/images/gal1.png",
-  },
-  {
-    id: 2,
-    img: "/images/gal2.png",
-  },
-  {
-    id: 3,
-    img: "/images/gal3.png",
-  },
-  {
-    id: 4,
-    img: "/images/gal4.png",
-  },
-];
-
 export {
   navLinks,
   navIcons,
@@ -235,7 +186,5 @@ export {
   blogPosts,
   techStack,
   socials,
-  photosLinks,
-  gallery,
 };
 

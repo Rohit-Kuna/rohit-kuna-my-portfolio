@@ -62,16 +62,3 @@ export type ResumeContent = {
   windowTitle: string;
   resumeUrl: string;
 };
-
-/* ---------- Gallery ---------- */
-
-export type GalleryItem = {
-  id: number;
-  img: string;
-};
-
-export type PhotosLink = {
-  id: number;
-  icon: string;
-  title: string;
-};
