@@ -4,19 +4,19 @@ import {Mail} from "lucide-react";
 import type { ContactContent } from "@/app/(project)/(types)/other.types";
 
 type ContactProps = {
-    contactContent: ContactContent;
+    contactContent?: ContactContent;
 };
 
 const Contact = ({ contactContent }: ContactProps) => {
     const {
-        windowTitle,
-        profileImage,
-        profileAlt,
-        heading,
-        message,
-        email,
-        socialLinks,
-    } = contactContent;
+        windowTitle = "",
+        profileImage = "",
+        profileAlt = "",
+        heading = "",
+        message = "",
+        email = "",
+        socialLinks = [],
+    } = contactContent ?? {};
 
     return(
         <>
@@ -25,10 +25,12 @@ const Contact = ({ contactContent }: ContactProps) => {
                 <h2 className="font-bold text-sm text-center w-full">{windowTitle}</h2>
             </div>
             <div className="p-5 space-y-5">
-                <img src={profileImage} alt={profileAlt} className="w-20 rounded-full" />
+                {profileImage && <img src={profileImage} alt={profileAlt} className="w-20 rounded-full" />}
                 <h3 className="text-xl font-semibold">{heading}</h3>
                 <p>{message}</p>
-                <p ><a className="p-1 hover:bg-gray-200 rounded cursor-pointer" href={`mailto:${email}`}><Mail className="icon inline"/>{email}</a></p>
+                {email && (
+                    <p><a className="p-1 hover:bg-gray-200 rounded cursor-pointer" href={`mailto:${email}`}><Mail className="icon inline"/>{email}</a></p>
+                )}
                 <ul className="social-cards-container">
                     {socialLinks.map(({id,bg,link,icon, text})=>(
                         <li className="social-cards" key={id} style={{backgroundColor:bg}}>

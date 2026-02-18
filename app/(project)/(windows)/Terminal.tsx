@@ -1,5 +1,4 @@
 import WindowWrapper from "@/app/(project)/(hoc)/WindowWrapper";
-import { techStack } from "@/app/(project)/(content)/other.content";
 import { Check } from "lucide-react";
 import WindowControls from "@/app/(project)/(components)/WindowControls";
 import type { TechStackCategory } from "@/app/(project)/(types)/other.types";
@@ -10,7 +9,7 @@ type TerminalProps = {
   techStackData?: TechStackCategory[];
 };
 
-const Terminal = ({ techStackData = techStack }: TerminalProps) => {
+const Terminal = ({ techStackData = [] }: TerminalProps) => {
   return (
     <>
       <div id="window-header">

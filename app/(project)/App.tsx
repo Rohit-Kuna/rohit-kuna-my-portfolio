@@ -14,26 +14,6 @@ import type {
   ResumeContent,
   TechStackCategory,
 } from "@/app/(project)/(types)/other.types";
-import {
-  blogPosts as staticBlogPosts,
-  socials as staticSocials,
-  techStack as staticTechStack,
-} from "@/app/(project)/(content)/other.content";
-
-const staticContactContent: ContactContent = {
-  windowTitle: "Contact Me",
-  profileImage: "/images/profile-photo.png",
-  profileAlt: "Rohit",
-  heading: "Let's Connect",
-  message: "Got an idea ? A bug to squash? Or just wanna talk tech? I'm in.",
-  email: "rohitkuna28@gmail.com",
-  socialLinks: staticSocials,
-};
-
-const staticResumeContent: ResumeContent = {
-  windowTitle: "Resume.pdf",
-  resumeUrl: "/files/resume.pdf",
-};
 
 type AppProps = {
   locationsData: Record<string, Location>;
@@ -45,10 +25,10 @@ type AppProps = {
 
 const App = ({
   locationsData,
-  blogPostsData = staticBlogPosts,
-  techStackData = staticTechStack,
-  contactContent = staticContactContent,
-  resumeContent = staticResumeContent,
+  blogPostsData = [],
+  techStackData = [],
+  contactContent,
+  resumeContent,
 }: AppProps) => {
   const { activeLocation, setActiveLocation } = useLocationStore();
 

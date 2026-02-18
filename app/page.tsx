@@ -13,17 +13,13 @@ import type {
   ResumeContent,
   TechStackCategory,
 } from "@/app/(project)/(types)/other.types";
-import {
-  blogPosts as staticBlogPosts,
-  techStack as staticTechStack,
-} from "@/app/(project)/(content)/other.content";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   let locationsData: Record<string, Location> = {};
-  let blogPostsData: BlogPost[] = staticBlogPosts;
-  let techStackData: TechStackCategory[] = staticTechStack;
+  let blogPostsData: BlogPost[] = [];
+  let techStackData: TechStackCategory[] = [];
   let contactContentData: ContactContent | undefined;
   let resumeContentData: ResumeContent | undefined;
 
@@ -34,21 +30,15 @@ export default async function HomePage() {
   }
 
   try {
-    const cmsBlogPosts = await getBlogPostsFromSanity();
-    if (cmsBlogPosts.length > 0) {
-      blogPostsData = cmsBlogPosts;
-    }
+    blogPostsData = await getBlogPostsFromSanity();
   } catch {
-    blogPostsData = staticBlogPosts;
+    blogPostsData = [];
   }
 
   try {
-    const cmsTechStack = await getTechStackFromSanity();
-    if (cmsTechStack.length > 0) {
-      techStackData = cmsTechStack;
-    }
+    techStackData = await getTechStackFromSanity();
   } catch {
-    techStackData = staticTechStack;
+    techStackData = [];
   }
 
   try {

@@ -13,14 +13,14 @@ type ReactPdfModule = typeof import("react-pdf");
 /* ---------- Component ---------- */
 
 type ResumeProps = {
-  resumeContent: ResumeContent;
+  resumeContent?: ResumeContent;
 };
 
 const Resume = ({ resumeContent }: ResumeProps) => {
   const { windows } = useWindowStore();
   const resumeData = windows.resume?.data as FileNode | null;
-  const pdfUrl = resumeData?.href ?? resumeContent.resumeUrl;
-  const pdfName = resumeData?.name ?? resumeContent.windowTitle;
+  const pdfUrl = resumeData?.href ?? resumeContent?.resumeUrl ?? "";
+  const pdfName = resumeData?.name ?? resumeContent?.windowTitle ?? "";
 
   const [pdfModule, setPdfModule] = useState<ReactPdfModule | null>(null);
   const [numPages, setNumPages] = useState(0);
@@ -62,19 +62,21 @@ const Resume = ({ resumeContent }: ResumeProps) => {
         <WindowControls target="resume" />
         <h2>{pdfName}</h2>
 
-        <a
-          href={pdfUrl}
-          download
-          className="cursor-pointer"
-          title="Download resume"
-        >
-          <Download className="icon" />
-        </a>
+        {pdfUrl && (
+          <a
+            href={pdfUrl}
+            download
+            className="cursor-pointer"
+            title="Download resume"
+          >
+            <Download className="icon" />
+          </a>
+        )}
       </div>
       <div className="pr-1">
   <div className="window-scroll mac-scrollbar">
     <div className="flex justify-center">
-      {Document && Page && (
+      {pdfUrl && Document && Page && (
         <Document
           file={pdfUrl}
           onLoadSuccess={({ numPages: totalPages }: { numPages: number }) =>
