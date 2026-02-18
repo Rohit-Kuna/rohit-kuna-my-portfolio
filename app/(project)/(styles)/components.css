@@ -11,6 +11,10 @@
     #welcome {
         @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10;
 
+        .welcome-subtitle {
+            @apply w-full max-w-[94vw] px-2 text-center leading-snug;
+        }
+
         .small-screen {
             @apply sm:hidden m-7 bg-red-300/20 backdrop-blur-lg p-3 rounded-md absolute top-10;
 
@@ -182,6 +186,10 @@
 }
 
 @media (max-width: 1024px) {
+    #home {
+        display: none;
+    }
+
     #dock {
         @apply bottom-3;
     }
@@ -196,6 +204,10 @@
 
     #window-header {
         @apply cursor-default;
+    }
+
+    #welcome .welcome-subtitle {
+        @apply max-w-[92vw] text-lg;
     }
 
     #safari,

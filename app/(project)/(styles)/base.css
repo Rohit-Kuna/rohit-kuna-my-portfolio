@@ -1,6 +1,10 @@
 @layer base {
     main {
-        @apply w-dvw h-dvh overflow-hidden;
+        @apply w-screen h-dvh overflow-hidden;
+        background-image: url("/images/wallpaper8.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
     }
 
     nav {

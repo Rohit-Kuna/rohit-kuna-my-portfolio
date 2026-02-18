@@ -24,7 +24,8 @@ const FONT_WEIGHTS: Record<FontType, FontWeightConfig> = {
 const renderText = (
   text: string,
   className: string,
-  baseWeight = 400
+  baseWeight = 400,
+  useNonBreakingSpaces = true
 ) => {
   return [...text].map((char, i) => (
     <span
@@ -32,7 +33,7 @@ const renderText = (
       className={className}
       style={{ fontVariationSettings: `'wght' ${baseWeight}` }}
     >
-      {char === " " ? "\u00A0" : char}
+      {char === " " ? (useNonBreakingSpaces ? "\u00A0" : " ") : char}
     </span>
   ));
 };
@@ -104,11 +105,12 @@ const Welcome = () => {
 
   return (
     <section id="welcome">
-      <p ref={subtitleRef}>
+      <p ref={subtitleRef} className="welcome-subtitle">
         {renderText(
           "Hey, I'm Rohit Kuna ! Welcome to my Portfolio !",
           "text-xl sm:text-2xl lg:text-3xl text-semibold font-georama",
-          100
+          100,
+          false
         )}
       </p>
 
@@ -117,7 +119,7 @@ const Welcome = () => {
       </h1>
 
       <div className="small-screen">
-        <p className="small-screen-message">Tap dock icons to open apps. Swipe up on a window header to close it.</p>
+        <p className="small-screen-message">Tap dock icons to open apps. Swipe up on header to close. View on desktop for best experience.</p>
       </div>
     </section>
   );
