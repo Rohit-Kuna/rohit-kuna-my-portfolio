@@ -2,10 +2,15 @@ import WindowWrapper from "@/app/(project)/(hoc)/WindowWrapper";
 import { techStack } from "@/app/(project)/(content)/other.content";
 import { Check } from "lucide-react";
 import WindowControls from "@/app/(project)/(components)/WindowControls";
+import type { TechStackCategory } from "@/app/(project)/(types)/other.types";
 
 /* ---------- Component ---------- */
 
-const Terminal = () => {
+type TerminalProps = {
+  techStackData?: TechStackCategory[];
+};
+
+const Terminal = ({ techStackData = techStack }: TerminalProps) => {
   return (
     <>
       <div id="window-header">
@@ -26,7 +31,7 @@ const Terminal = () => {
           </div>
 
           <ul className="content">
-            {techStack.map(({ category, items }) => (
+            {techStackData.map(({ category, items }) => (
               <li key={category} className="flex items-center">
                 <Check className="text-[#00A154] w-5" size={20} />
                 <h3 className="font-semibold text-[#00A154] w-32 ms-5">{category}</h3>

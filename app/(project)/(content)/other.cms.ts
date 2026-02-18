@@ -1,6 +1,10 @@
 import dayjs from "dayjs";
 import { createClient, groq } from "next-sanity";
-import type { BlogPost } from "@/app/(project)/(types)/other.types";
+import type {
+  BlogPost,
+  SocialLink,
+  TechStackCategory,
+} from "@/app/(project)/(types)/other.types";
 
 const sanityClient = createClient({
   projectId: "i90q0i8o",
@@ -27,6 +31,24 @@ const BLOG_POSTS_QUERY = groq`
 }
 `;
 
+const TECH_STACK_QUERY = groq`
+*[_type == "techStackCategory"] | order(order asc){
+  category,
+  items,
+  order
+}
+`;
+
+const SOCIAL_LINKS_QUERY = groq`
+*[_type == "socialLink"] | order(order asc){
+  text,
+  link,
+  icon,
+  bg,
+  order
+}
+`;
+
 export const getBlogPostsFromSanity = async (): Promise<BlogPost[]> => {
   const posts = await sanityClient.fetch<RawBlogPost[]>(
     BLOG_POSTS_QUERY,
@@ -39,5 +61,48 @@ export const getBlogPostsFromSanity = async (): Promise<BlogPost[]> => {
     title: post.title,
     link: post.link,
     date: dayjs(post.publishedAt).format("MMM D, YYYY"),
+  }));
+};
+
+type RawTechStackCategory = {
+  category: string;
+  items: string[];
+  order?: number;
+};
+
+export const getTechStackFromSanity = async (): Promise<TechStackCategory[]> => {
+  const categories = await sanityClient.fetch<RawTechStackCategory[]>(
+    TECH_STACK_QUERY,
+    {},
+    { cache: "no-store" }
+  );
+
+  return (categories ?? []).map((category) => ({
+    category: category.category,
+    items: category.items ?? [],
+  }));
+};
+
+type RawSocialLink = {
+  text: string;
+  link: string;
+  icon: string;
+  bg: string;
+  order?: number;
+};
+
+export const getSocialLinksFromSanity = async (): Promise<SocialLink[]> => {
+  const links = await sanityClient.fetch<RawSocialLink[]>(
+    SOCIAL_LINKS_QUERY,
+    {},
+    { cache: "no-store" }
+  );
+
+  return (links ?? []).map((item, index) => ({
+    id: index + 1,
+    text: item.text,
+    link: item.link,
+    icon: item.icon,
+    bg: item.bg,
   }));
 };

@@ -8,15 +8,30 @@ import Home from "@/app/(project)/(components)/Home";
 import useLocationStore from "@/app/(project)/(store)/location";
 import { Terminal, Safari, Resume, Finder, Text, Image, Contact } from "@/app/(project)/(windows)";
 import type { Location } from "@/app/(project)/(types)/location.types";
-import type { BlogPost } from "@/app/(project)/(types)/other.types";
-import { blogPosts as staticBlogPosts } from "@/app/(project)/(content)/other.content";
+import type {
+  BlogPost,
+  SocialLink,
+  TechStackCategory,
+} from "@/app/(project)/(types)/other.types";
+import {
+  blogPosts as staticBlogPosts,
+  socials as staticSocials,
+  techStack as staticTechStack,
+} from "@/app/(project)/(content)/other.content";
 
 type AppProps = {
   locationsData: Record<string, Location>;
   blogPostsData?: BlogPost[];
+  techStackData?: TechStackCategory[];
+  socialsData?: SocialLink[];
 };
 
-const App = ({ locationsData, blogPostsData = staticBlogPosts }: AppProps) => {
+const App = ({
+  locationsData,
+  blogPostsData = staticBlogPosts,
+  socialsData = staticSocials,
+  techStackData = staticTechStack,
+}: AppProps) => {
   const { activeLocation, setActiveLocation } = useLocationStore();
 
   useEffect(() => {
@@ -34,13 +49,13 @@ const App = ({ locationsData, blogPostsData = staticBlogPosts }: AppProps) => {
       <Welcome />
       <Dock />
 
-      <Terminal />
+      <Terminal techStackData={techStackData} />
       <Safari blogPosts={blogPostsData} />
       <Resume />
       <Finder locationsData={locationsData} />
       <Text />
       <Image />
-      <Contact />
+      <Contact socialsData={socialsData} />
       <Home locationsData={locationsData} />
     </main>
   );

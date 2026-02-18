@@ -1,8 +1,13 @@
 import WindowControls from "@/app/(project)/(components)/WindowControls";
-import { socials } from "@/app/(project)/(content)/other.content";
 import WindowWrapper from "@/app/(project)/(hoc)/WindowWrapper";
 import {Mail} from "lucide-react";
-const Contact=()=>{
+import type { SocialLink } from "@/app/(project)/(types)/other.types";
+
+type ContactProps = {
+    socialsData: SocialLink[];
+};
+
+const Contact = ({ socialsData }: ContactProps) => {
     return(
         <>
             <div id="window-header">
@@ -15,7 +20,7 @@ const Contact=()=>{
                 <p>Got an idea ? A bug to squash? Or just wanna talk tech? I&apos;m in.</p>
                 <p ><a className="p-1 hover:bg-gray-200 rounded cursor-pointer" href="mailto:rohitkuna28@gmail.com"><Mail className="icon inline"/>rohitkuna28@gmail.com</a></p>
                 <ul className="social-cards-container">
-                    {socials.map(({id,bg,link,icon, text})=>(
+                    {socialsData.map(({id,bg,link,icon, text})=>(
                         <li className="social-cards" key={id} style={{backgroundColor:bg}}>
                             <a className="space-y-5" href={link} target="_blank" rel="nopener noreferre" title={text}>
                                 <img src={icon} alt={text} className="size-5" />
