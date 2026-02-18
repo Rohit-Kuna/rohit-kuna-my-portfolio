@@ -1,6 +1,6 @@
 import { useWindowStore } from "@/app/(project)/(store)/window";
 import { useGSAP } from "@gsap/react";
-import { useLayoutEffect, useRef } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import type { ComponentType, PropsWithChildren } from "react";
 import type { WindowState, WindowKey } from "@/app/(project)/(types)/windows.types";
@@ -124,13 +124,7 @@ const WindowWrapper = <P extends object>(
       );
     }, [isOpen]);
 
-    /* ---------- SHOW / HIDE ---------- */
-    useLayoutEffect(() => {
-      const el = ref.current;
-      if (!el) return;
-
-      el.style.display = isOpen ? "block" : "none";
-    }, [isOpen]);
+    if (!isOpen) return null;
 
     return (
       <section
@@ -138,6 +132,7 @@ const WindowWrapper = <P extends object>(
         ref={ref}
         style={{ zIndex }}
         className={`absolute ${isMaximized ? "window-maximized" : ""}`}
+        onPointerDown={() => focusWindow(windowKey)}
       >
         <Component {...props} />
       </section>
