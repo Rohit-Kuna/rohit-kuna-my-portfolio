@@ -1,10 +1,9 @@
 import { create } from "zustand";
-import { locations } from "@/app/(project)/(content)/location.content";
 import type { Location, NavigableFolder } from "@/app/(project)/(types)/location.types";
 
 /* ---------- Defaults ---------- */
 
-const DEFAULT_LOCATION: Location = locations.work;
+const DEFAULT_LOCATION: Location | null = null;
 
 /* ---------- Store Type ---------- */
 

@@ -1,7 +1,6 @@
 import WindowControls from "@/app/(project)/(components)/WindowControls";
 import { Search } from "lucide-react";
 import WindowWrapper from "@/app/(project)/(hoc)/WindowWrapper";
-import { locations } from "@/app/(project)/(content)/location.content";
 import useLocationStore from "@/app/(project)/(store)/location";
 import clsx from "clsx";
 import { useWindowStore }from "@/app/(project)/(store)/window";
@@ -17,7 +16,11 @@ import type {
 /* Finder Component */
 /* ------------------------------------------------------------------ */
 
-const Finder = () => {
+type FinderProps = {
+  locationsData: Record<string, Location>;
+};
+
+const Finder = ({ locationsData }: FinderProps) => {
   const { openWindow } = useWindowStore();
   const { activeLocation, setActiveLocation } = useLocationStore();
 
@@ -33,7 +36,7 @@ const Finder = () => {
     const file = item as FileNode;
 
     if (file.fileType === "pdf") {
-      openWindow("resume");
+      openWindow("resume", file);
       return;
     }
 
@@ -85,10 +88,10 @@ const Finder = () => {
       <div className="bg-white flex h-full">
         {/* Sidebar */}
         <div className="sidebar">
-          {renderList("Favorites", Object.values(locations))}
+          {renderList("Favorites", Object.values(locationsData))}
           {renderList(
             "Projects",
-            locations.work.children.filter(
+            (locationsData.work?.children ?? []).filter(
               (item): item is FolderNode => item.kind === "folder"
             )
           )}

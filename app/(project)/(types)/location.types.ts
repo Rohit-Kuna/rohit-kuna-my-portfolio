@@ -35,7 +35,7 @@ export type FinderNode = FileNode | FolderNode;
 /* ---------- Locations ---------- */
 
 export type Location = {
-  id: number;
+  id: ID;
   type: string;
   name: string;
   icon: string;

@@ -1,4 +1,9 @@
-import { author } from './author'
-import { post } from './post'
+import { finderFile } from "./finderFile"
+import { finderFolder } from "./finderFolder"
+import { finderLocation } from "./finderLocation"
 
-export const schemaTypes = [post, author]
+export const schemaTypes = [
+  finderFile,
+  finderFolder,
+  finderLocation,
+]

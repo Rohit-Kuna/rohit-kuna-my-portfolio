@@ -1,5 +1,7 @@
 import WindowControls from "@/app/(project)/(components)/WindowControls";
 import WindowWrapper from "@/app/(project)/(hoc)/WindowWrapper";
+import { useWindowStore } from "@/app/(project)/(store)/window";
+import type { FileNode } from "@/app/(project)/(types)/location.types";
 import { Download } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -10,7 +12,13 @@ type ReactPdfModule = typeof import("react-pdf");
 /* ---------- Component ---------- */
 
 const Resume = () => {
+  const { windows } = useWindowStore();
+  const resumeData = windows.resume?.data as FileNode | null;
+  const pdfUrl = resumeData?.href ?? "/files/resume.pdf";
+  const pdfName = resumeData?.name ?? "Resume.pdf";
+
   const [pdfModule, setPdfModule] = useState<ReactPdfModule | null>(null);
+  const [numPages, setNumPages] = useState(0);
 
   useEffect(() => {
     let mounted = true;
@@ -35,6 +43,10 @@ const Resume = () => {
     };
   }, []);
 
+  useEffect(() => {
+    setNumPages(0);
+  }, [pdfUrl]);
+
   const Document = pdfModule?.Document;
   const Page = pdfModule?.Page;
 
@@ -43,10 +55,10 @@ const Resume = () => {
 
       <div id="window-header" className="font-bold text-sm text-center flex-1">
         <WindowControls target="resume" />
-        <h2>Resume.pdf</h2>
+        <h2>{pdfName}</h2>
 
         <a
-          href="/files/resume.pdf"
+          href={pdfUrl}
           download
           className="cursor-pointer"
           title="Download resume"
@@ -58,17 +70,20 @@ const Resume = () => {
   <div className="window-scroll mac-scrollbar">
     <div className="flex justify-center">
       {Document && Page && (
-        <Document file="/files/resume.pdf">
-          <Page
-            pageNumber={1}
-            renderTextLayer
-            renderAnnotationLayer
-          />
-          <Page
-            pageNumber={2}
-            renderTextLayer
-            renderAnnotationLayer
-          />
+        <Document
+          file={pdfUrl}
+          onLoadSuccess={({ numPages: totalPages }: { numPages: number }) =>
+            setNumPages(totalPages)
+          }
+        >
+          {Array.from({ length: numPages }, (_, index) => (
+            <Page
+              key={`${pdfUrl}-${index + 1}`}
+              pageNumber={index + 1}
+              renderTextLayer
+              renderAnnotationLayer
+            />
+          ))}
         </Document>
       )}
     </div>

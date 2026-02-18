@@ -1,21 +1,25 @@
-import { locations } from "@/app/(project)/(content)/location.content";
 import useLocationStore from "@/app/(project)/(store)/location";
 import { useWindowStore } from "@/app/(project)/(store)/window";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import type { FolderNode, Location } from "@/app/(project)/(types)/location.types";
 
-const projects = (locations.work?.children ?? []).filter(
-  (node) => node.kind === "folder"
-);
+type HomeProps = {
+  locationsData: Record<string, Location>;
+};
 
-const Home = () => {
+const Home = ({ locationsData }: HomeProps) => {
     const { setActiveLocation} = useLocationStore();
 
     const { openWindow } = useWindowStore();
-    const handleOpenProjectFinder = (project:any) =>{
+    const handleOpenProjectFinder = (project: FolderNode) =>{
         setActiveLocation(project);
         openWindow("finder");
     };
+
+  const projects = (locationsData.work?.children ?? []).filter(
+    (node): node is FolderNode => node.kind === "folder"
+  );
 
   useGSAP(() => {
     if (typeof window === "undefined") return;
