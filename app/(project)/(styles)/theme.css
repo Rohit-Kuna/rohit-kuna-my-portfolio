@@ -1,0 +1,5 @@
+@theme {
+    --font-georama: "Georama", sans-serif;
+    --font-roboto: "Roboto Mono", monospace;
+    --breakpoint-3xl: 1920px;
+}

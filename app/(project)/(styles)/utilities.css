@@ -1,0 +1,11 @@
+@utility flex-center {
+    @apply flex items-center justify-center;
+}
+
+@utility col-center {
+    @apply flex flex-col items-center justify-center;
+}
+
+@utility abs-center {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+}
