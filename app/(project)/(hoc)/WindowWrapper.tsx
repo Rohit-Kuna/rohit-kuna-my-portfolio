@@ -36,15 +36,19 @@ const WindowWrapper = <P extends object>(
     /* ---------- DRAGGABLE ---------- */
     useGSAP(() => {
       const el = ref.current;
-      if (!el || typeof window === "undefined") return;
+      if (!isOpen || !el || typeof window === "undefined") return;
 
       let instance: DraggableInstance | null = null;
 
       const init = async () => {
         const { Draggable } = await import("gsap/Draggable");
         gsap.registerPlugin(Draggable);
+        const dragHandle = el.querySelector<HTMLElement>("#window-header") ?? el;
 
         const draggables = Draggable.create(el, {
+          trigger: dragHandle,
+          cursor: "grab",
+          activeCursor: "grabbing",
           onPress: () => focusWindow(windowKey),
           bounds: window,
 
@@ -66,7 +70,7 @@ const WindowWrapper = <P extends object>(
         instance?.kill();
         dragInstance.current = null;
       };
-    }, []);
+    }, [isOpen]);
 
     /* ---------- ENABLE / DISABLE DRAG ---------- */
     useGSAP(() => {
