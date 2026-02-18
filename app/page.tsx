@@ -1,11 +1,11 @@
 import App from "./(project)/App";
-import { getFinderLocationsFromSanity } from "@/app/(project)/(content)/location.cms";
 import {
   getBlogPostsFromSanity,
   getContactContentFromSanity,
+  getFinderLocationsFromSanity,
   getResumeContentFromSanity,
   getTechStackFromSanity,
-} from "@/app/(project)/(content)/other.cms";
+} from "@/sanity/fetches";
 import type { Location } from "@/app/(project)/(types)/location.types";
 import type {
   BlogPost,

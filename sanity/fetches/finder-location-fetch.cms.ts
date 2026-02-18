@@ -1,17 +1,11 @@
-import { createClient, groq } from "next-sanity";
+import { groq } from "next-sanity";
+import { sanityClient } from "@/sanity/client";
 import type {
   FileNode,
   FinderNode,
   FolderNode,
   Location,
 } from "@/app/(project)/(types)/location.types";
-
-const sanityClient = createClient({
-  projectId: "i90q0i8o",
-  dataset: "production",
-  apiVersion: "2026-02-18",
-  useCdn: false,
-});
 
 type Ref = { _ref: string };
 
