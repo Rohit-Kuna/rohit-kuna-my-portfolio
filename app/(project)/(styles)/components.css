@@ -36,6 +36,94 @@
         }
     }
 
+    #mobile-notification-panel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50vh;
+        z-index: 3400;
+        padding: 10px 14px 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: 0 0 20px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        border-top: none;
+        background-color: rgba(255, 255, 255, 0.22);
+        background:
+            radial-gradient(circle at 16% 0%, rgba(132, 202, 214, 0.623), transparent 56%),
+            linear-gradient(145deg, rgba(116, 158, 210, 0.881), rgba(36, 46, 74, 0.76));
+        backdrop-filter: blur(30px) saturate(165%);
+        -webkit-backdrop-filter: blur(30px) saturate(165%);
+        box-shadow:
+            0 20px 45px rgba(0, 0, 0, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        transform-origin: top center;
+        transition: transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
+        will-change: transform;
+    }
+
+    .mobile-notif-backdrop {
+        @apply fixed inset-0 opacity-0 pointer-events-none;
+        z-index: 3300;
+        background: rgba(0, 10, 24, 0.36);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        transition: opacity 220ms ease;
+    }
+
+    .mobile-notif-backdrop.is-open {
+        @apply opacity-100 pointer-events-auto;
+    }
+
+    .mobile-notif-handle {
+        @apply w-12 h-1 rounded-full;
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.836);
+    }
+
+    .mobile-notif-content {
+        @apply w-full h-full flex flex-col;
+        padding-top: 20px;
+        padding-bottom: 2px;
+    }
+
+    .mobile-notif-title {
+        @apply text-center text-[16px] font-semibold mb-3 text-white;
+    }
+
+    .mobile-notif-grid {
+        @apply grid grid-cols-3 gap-2.5 flex-1 w-full;
+        grid-auto-rows: minmax(0, 1fr);
+    }
+
+    .mobile-notif-item {
+        @apply h-full w-full flex flex-col items-center justify-center gap-1 rounded-xl p-2 transition-transform duration-150;
+        background: rgba(253, 253, 253, 0.284);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .mobile-notif-item:active {
+        transform: scale(0.96);
+    }
+
+    .mobile-notif-item.is-active {
+        background: rgba(105, 173, 255, 0.871);
+        border-color: rgba(168, 192, 214, 0.684);
+    }
+
+    .mobile-notif-icon {
+        @apply size-10;
+    }
+
+    .mobile-notif-label {
+        @apply text-[11px] leading-tight text-white/90 text-center line-clamp-1;
+    }
+
     #window-controls {
         @apply flex gap-2;
 
@@ -239,6 +327,10 @@
         @apply -translate-y-2 translate-x-0.5 scale-[1.06] transition-transform duration-200;
     }
 
+    #mobile-notification-panel {
+        display: block;
+    }
+
     #window-header {
         @apply cursor-default;
     }
@@ -327,5 +419,12 @@
 
     #imgfile > div {
         @apply p-3;
+    }
+}
+
+@media (min-width: 1025px) {
+    #mobile-notification-panel,
+    .mobile-notif-backdrop {
+        display: none;
     }
 }

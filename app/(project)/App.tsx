@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Navbar from "@/app/(project)/(components)/NavBar";
+import MobileNotificationPanel from "@/app/(project)/(components)/MobileNotificationPanel";
 import Welcome from "@/app/(project)/(components)/Welcome";
 import Dock from "@/app/(project)/(components)/Dock";
 import Home from "@/app/(project)/(components)/Home";
@@ -44,6 +45,7 @@ const App = ({
   return (
     <main>
       <Navbar />
+      <MobileNotificationPanel />
       <Welcome />
       <Dock />
 

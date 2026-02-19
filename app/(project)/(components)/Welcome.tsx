@@ -118,9 +118,9 @@ const Welcome = () => {
         {renderText("think different", "text-5xl sm:text-6xl lg:text-9xl italic font-georama")}
       </h1>
 
-      <div className="small-screen">
+      {/* <div className="small-screen">
         <p className="small-screen-message">Tap dock icons to open/close apps. View on desktop for best experience.</p>
-      </div>
+      </div> */}
     </section>
   );
 };
