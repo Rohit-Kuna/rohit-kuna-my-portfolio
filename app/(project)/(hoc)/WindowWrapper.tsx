@@ -182,6 +182,15 @@ const WindowWrapper = <P extends object>(
       swipeStart.current = null;
 
       if (absX > 90 && absX > absY * 1.2) {
+        const clearDockFocus = () => {
+          const dockButtons = document.querySelectorAll<HTMLButtonElement>("#dock .dock-icon");
+          dockButtons.forEach((button) => button.blur());
+        };
+
+        clearDockFocus();
+        requestAnimationFrame(clearDockFocus);
+        window.setTimeout(clearDockFocus, 80);
+
         switchWindowBySwipe(deltaX < 0 ? "left" : "right");
         return;
       }
