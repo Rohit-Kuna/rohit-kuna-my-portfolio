@@ -9,7 +9,7 @@ const TOP_PULL_ZONE = 28;
 const OPEN_THRESHOLD = 70;
 const CLOSE_THRESHOLD = 60;
 const MAX_PULL = 120;
-const PANEL_HEIGHT_VH = 50;
+const PANEL_HEIGHT_VH = 40;
 
 type GestureMode = "open" | "close" | null;
 type QuickAppItem = {
@@ -103,6 +103,17 @@ const MobileNotificationPanel = () => {
       window.removeEventListener("touchend", onTouchEnd);
     };
   }, [isMobile, isOpen]);
+
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const closePanel = () => setIsOpen(false);
+    window.addEventListener("mobile-notification-close", closePanel);
+
+    return () => {
+      window.removeEventListener("mobile-notification-close", closePanel);
+    };
+  }, [isMobile]);
 
   const toggleApp = (app: Pick<DockApp, "id" | "canOpen">) => {
     if (!app.canOpen) return;

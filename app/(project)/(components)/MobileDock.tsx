@@ -50,6 +50,10 @@ const MobileDock = () => {
     }
   };
 
+  const closeNotificationPanel = () => {
+    window.dispatchEvent(new Event("mobile-notification-close"));
+  };
+
   const items: MobileDockItem[] = [
     ...dockApps.filter((app) => app.canOpen),
     { id: "home", name: "Home", icon: "iconapplewhite.png", canOpen: true }
@@ -70,7 +74,14 @@ const MobileDock = () => {
               type="button"
               aria-label={name}
               className={`mobile-dock-item ${isActive ? "is-active" : ""}`}
-              onClick={() => (isHome ? goHome() : toggleWindow(id, canOpen))}
+              onClick={() => {
+                closeNotificationPanel();
+                if (isHome) {
+                  goHome();
+                } else {
+                  toggleWindow(id, canOpen);
+                }
+              }}
             >
               <img
                 src={`/images/${icon}`}
