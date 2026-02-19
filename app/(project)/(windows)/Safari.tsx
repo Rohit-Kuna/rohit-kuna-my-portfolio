@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import type { BlogPost } from "@/app/(project)/(types)/other.types";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
+import { useWindowStore } from "@/app/(project)/(store)/window";
 
 /* ---------- Component ---------- */
 
@@ -23,6 +24,10 @@ type SafariProps = {
 
 const Safari = ({ blogPosts }: SafariProps) => {
   const isMobile = useIsMobile();
+  const isFullscreen = useWindowStore((state) => state.windows.safari.isMaximized);
+  const fullscreenContentStyle = isFullscreen
+    ? { height: "calc(100dvh - 56px - var(--compact-dock-space))" }
+    : undefined;
 
   return (
     <>
@@ -60,8 +65,15 @@ const Safari = ({ blogPosts }: SafariProps) => {
       </div>
 
       {/* ---------- Scroll Area ---------- */}
-      <div className="pr-1">
-        <div className="px-10 py-4 max-h-[60vh] overflow-y-auto mac-scrollbar">
+      <div
+        className={`pr-1 ${isFullscreen ? "safari-content-shell overflow-hidden" : ""}`}
+        style={fullscreenContentStyle}
+      >
+        <div
+          className={`px-10 py-4 overflow-y-auto mac-scrollbar ${
+            isFullscreen ? "safari-scroll-fullscreen h-full" : "max-h-[60vh]"
+          }`}
+        >
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">
             My Articles
           </h2>
