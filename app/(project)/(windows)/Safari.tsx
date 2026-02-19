@@ -47,7 +47,7 @@ const Safari = ({ blogPosts }: SafariProps) => {
           {!isMobile && <ShieldHalf className="icon" />}
 
           <div className="search">
-            <Search className="icon" />
+            <Search className="w-4 h-4 shrink-0 text-gray-400" />
             <input
               type="text"
               placeholder={isMobile ? "Search..." : "Search or enter website name"}
