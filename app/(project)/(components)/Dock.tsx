@@ -92,6 +92,12 @@ const Dock = () => {
     return (win.zIndex ?? 0) > (windows[active]?.zIndex ?? 0) ? key : active;
   }, null);
 
+  const isAnyDesktopWindowFullscreen = !isMobile && Object.values(windows).some(
+    (win) => win.isOpen && win.isMaximized
+  );
+
+  if (isAnyDesktopWindowFullscreen) return null;
+
   return (
     <section id="dock">
       <div ref={dockRef} className="dock-container">
