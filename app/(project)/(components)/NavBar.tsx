@@ -29,17 +29,18 @@ const Navbar = () => {
       : openWindow(key);
   };
 
-  const visibleNavIcons = isMobile
-    ? navIcons.filter(({ id }) => id !== 3)
-    : navIcons;
+  const visibleNavIcons = navIcons;
 
   return (
     <nav>
       <div>
         <img src="/images/iconapplewhite.png" className="w-8 h-8 p-2 left-0.5" alt="logo" />
+        <time className="text-white text-sm font-semibold sm:hidden" dateTime={now ? now.toISOString() : undefined}>
+          {now ? dayjs(now).format("HH:mm") : ""}
+        </time>
         <p className="font-semibold text-white max-sm:hidden">{isMobile ? "Portfolio" : "Rohit's Portfolio"}</p>
 
-        <ul className="nav-links flex items-center gap-2">
+        <ul className="nav-links flex items-center gap-2 max-sm:hidden">
           {navLinks.map(({ id, name, type}) => (
             <li
               key={id}

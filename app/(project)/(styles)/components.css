@@ -146,8 +146,8 @@
     }
 
     .mobile-notif-item.is-active {
-        background: rgba(105, 173, 255, 0.871);
-        border-color: rgba(168, 192, 214, 0.684);
+        background: rgba(253, 253, 253, 0.523);
+        border-color: rgb(181, 216, 248);
     }
 
     .mobile-notif-icon {
