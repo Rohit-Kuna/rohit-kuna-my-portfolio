@@ -79,7 +79,11 @@ const Dock = () => {
       return;
     }
 
-    window.isOpen ? closeWindow(windowKey) : openWindow(windowKey);
+    if (window.isOpen) {
+      closeWindow(windowKey);
+    } else {
+      openWindow(windowKey);
+    }
   };
 
   const activeWindowKey = dockApps.reduce<WindowKey | null>((active, app) => {
@@ -96,6 +100,7 @@ const Dock = () => {
     (win) => win.isOpen && win.isMaximized
   );
 
+  if (isMobile) return null;
   if (isAnyDesktopWindowFullscreen) return null;
 
   return (
