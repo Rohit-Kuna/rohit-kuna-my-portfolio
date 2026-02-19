@@ -24,25 +24,20 @@ const Terminal = ({ techStackData = [] }: TerminalProps) => {
             show tech stack
           </p>
 
-          <div className="label">
-            <p className="w-32">Category</p>
-            <p>Technologies</p>
+          <div className="label terminal-head-row">
+            <p className="terminal-category-col">Category</p>
+            <p className="terminal-tech-col">Technologies</p>
           </div>
 
           <ul className="content">
             {techStackData.map(({ category, items }) => (
-              <li key={category} className="flex items-center">
-                <Check className="text-[#00A154] w-5" size={20} />
-                <h3 className="font-semibold text-[#00A154] w-32 ms-5">{category}</h3>
+              <li key={category} className="terminal-row">
+                <div className="terminal-category-value">
+                  <Check className="text-[#00A154] w-5 shrink-0" size={20} />
+                  <h3 className="font-semibold text-[#00A154]">{category}</h3>
+                </div>
 
-                <ul className="flex items-center gap-3 text-gray-300">
-                  {items.map((item, i) => (
-                    <li key={item}>
-                      {item}
-                      {i < items.length - 1 ? "," : ""}
-                    </li>
-                  ))}
-                </ul>
+                <p className="terminal-tech-value">{items.join(", ")}</p>
               </li>
             ))}
           </ul>
