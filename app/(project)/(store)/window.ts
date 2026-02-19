@@ -24,17 +24,40 @@ export const useWindowStore = create<WindowStore>((set) => ({
       const win = state.windows[key];
       if (!win) return state;
 
+      const isCompactViewport =
+        typeof window !== "undefined" &&
+        window.matchMedia("(max-width: 1024px)").matches;
+
+      const baseWindows = isCompactViewport
+        ? (Object.keys(state.windows) as WindowKey[]).reduce<Record<WindowKey, WindowState>>(
+            (acc, currentKey) => {
+              const current = state.windows[currentKey];
+              acc[currentKey] = {
+                ...current,
+                isOpen: false,
+                isMaximized: false,
+                zIndex: INITIAL_Z_INDEX,
+                data: null
+              };
+              return acc;
+            },
+            {} as Record<WindowKey, WindowState>
+          )
+        : state.windows;
+
+      const nextWindows = {
+        ...baseWindows,
+        [key]: {
+          ...baseWindows[key],
+          isOpen: true,
+          isMaximized: false,
+          zIndex: state.nextZIndex,
+          data: data ?? win.data
+        }
+      };
+
       return {
-        windows: {
-          ...state.windows,
-          [key]: {
-            ...win,
-            isOpen: true,
-            isMaximized: false,
-            zIndex: state.nextZIndex,
-            data: data ?? win.data
-          }
-        },
+        windows: nextWindows,
         nextZIndex: state.nextZIndex + 1
       };
     }),
@@ -45,17 +68,19 @@ export const useWindowStore = create<WindowStore>((set) => ({
       const win = state.windows[key];
       if (!win) return state;
 
-      return {
-        windows: {
-          ...state.windows,
-          [key]: {
-            ...win,
-            isOpen: false,
-            isMaximized: false,
-            zIndex: INITIAL_Z_INDEX,
-            data: null
-          }
+      const nextWindows = {
+        ...state.windows,
+        [key]: {
+          ...win,
+          isOpen: false,
+          isMaximized: false,
+          zIndex: INITIAL_Z_INDEX,
+          data: null
         }
+      };
+
+      return {
+        windows: nextWindows
       };
     }),
 

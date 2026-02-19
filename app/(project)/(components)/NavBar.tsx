@@ -3,10 +3,12 @@ import dayjs from "dayjs";
 import { navIcons, navLinks } from "@/app/(project)/(content)/other.content";
 import { useWindowStore } from "@/app/(project)/(store)/window";
 import type { WindowKey } from "@/app/(project)/(types)/windows.types";
+import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 
 const Navbar = () => {
   const { openWindow, closeWindow } = useWindowStore();
   const getState = useWindowStore.getState;
+  const isMobile = useIsMobile();
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -27,13 +29,18 @@ const Navbar = () => {
       : openWindow(key);
   };
 
+  const visibleNavIcons = navIcons;
+
   return (
     <nav>
       <div>
         <img src="/images/iconapplewhite.png" className="w-8 h-8 p-2 left-0.5" alt="logo" />
-        <p className="font-semibold text-white">Rohit's Portfolio</p>
+        <time className="text-white text-sm font-semibold sm:hidden" dateTime={now ? now.toISOString() : undefined}>
+          {now ? dayjs(now).format("HH:mm") : ""}
+        </time>
+        <p className="font-semibold text-white max-sm:hidden">{isMobile ? "Portfolio" : "Rohit's Portfolio"}</p>
 
-        <ul className="flex items-center gap-2">
+        <ul className="nav-links flex items-center gap-2 max-sm:hidden">
           {navLinks.map(({ id, name, type}) => (
             <li
               key={id}
@@ -47,9 +54,9 @@ const Navbar = () => {
         </ul>
       </div>
 
-      <div>
-        <ul className="flex items-center gap-2">
-          {navIcons.map(({ id, icon: Icon }) => (
+      <div className="nav-right">
+        <ul className="nav-icons flex items-center gap-2">
+          {visibleNavIcons.map(({ id, icon: Icon }) => (
             <li
               key={id}
               className="relative flex items-center justify-center w-8 h-8"

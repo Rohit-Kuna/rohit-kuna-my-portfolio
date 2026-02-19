@@ -6,17 +6,20 @@ import gsap from "gsap";
 import {useWindowStore } from "@/app/(project)/(store)/window";
 import type { WindowKey } from "@/app/(project)/(types)/windows.types";
 import type { DockApp } from "@/app/(project)/(types)/other.types";
+import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 
 const Dock = () => {
   const { openWindow, closeWindow } = useWindowStore();
+  const windows = useWindowStore((state) => state.windows);
   const getState = useWindowStore.getState;
+  const isMobile = useIsMobile();
 
   const dockRef = useRef<HTMLDivElement | null>(null);
 
   /* ---------- GSAP Hover Animation ---------- */
   useGSAP(() => {
     const dock = dockRef.current;
-    if (!dock) return;
+    if (!dock || isMobile) return;
 
     const icons = dock.querySelectorAll<HTMLButtonElement>(".dock-icon");
 
@@ -61,7 +64,7 @@ const Dock = () => {
       dock.removeEventListener("mousemove", handleMouseMove);
       dock.removeEventListener("mouseleave", resetIcons);
     };
-  }, []);
+  }, [isMobile]);
 
   /* ---------- Window Toggle ---------- */
   const toggleApp = (app: Pick<DockApp, "id" | "canOpen">) => {
@@ -76,10 +79,29 @@ const Dock = () => {
       return;
     }
 
-    window.isOpen
-      ? closeWindow(windowKey)
-      : openWindow(windowKey);
+    if (window.isOpen) {
+      closeWindow(windowKey);
+    } else {
+      openWindow(windowKey);
+    }
   };
+
+  const activeWindowKey = dockApps.reduce<WindowKey | null>((active, app) => {
+    const key = app.id as WindowKey;
+    const win = windows[key];
+    if (!win?.isOpen) return active;
+
+    if (!active) return key;
+
+    return (win.zIndex ?? 0) > (windows[active]?.zIndex ?? 0) ? key : active;
+  }, null);
+
+  const isAnyDesktopWindowFullscreen = !isMobile && Object.values(windows).some(
+    (win) => win.isOpen && win.isMaximized
+  );
+
+  if (isMobile) return null;
+  if (isAnyDesktopWindowFullscreen) return null;
 
   return (
     <section id="dock">
@@ -88,7 +110,7 @@ const Dock = () => {
           <div key={id} className="relative flex justify-center">
             <button
               type="button"
-              className="dock-icon"
+              className={`dock-icon ${activeWindowKey === (id as WindowKey) ? "dock-icon-active" : ""}`}
               data-app={id}
               aria-label={name}
               data-tooltip-id="dock-tooltip"
