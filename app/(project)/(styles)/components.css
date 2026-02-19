@@ -59,20 +59,21 @@
     #safari {
         @apply w-4xl absolute top-15 left-2/12 mb-30 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
-        &.window-maximized {
+        &.window-maximized,
+        &.mobile-window-shell {
             margin-bottom: 0;
             display: flex;
             flex-direction: column;
         }
 
-        &.window-maximized .safari-content-shell {
+        &:is(.window-maximized, .mobile-window-shell) .safari-content-shell {
             display: flex;
             flex-direction: column;
             flex: 1;
             min-height: 0;
         }
 
-        &.window-maximized .safari-scroll-fullscreen {
+        &:is(.window-maximized, .mobile-window-shell) .safari-scroll-fullscreen {
             flex: 1;
             min-height: 0;
             max-height: none;

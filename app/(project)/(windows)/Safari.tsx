@@ -25,7 +25,8 @@ type SafariProps = {
 const Safari = ({ blogPosts }: SafariProps) => {
   const isMobile = useIsMobile();
   const isFullscreen = useWindowStore((state) => state.windows.safari.isMaximized);
-  const fullscreenContentStyle = isFullscreen
+  const useFullscreenLayout = isFullscreen || isMobile;
+  const fullscreenContentStyle = useFullscreenLayout
     ? { height: "calc(100dvh - 56px - var(--compact-dock-space))" }
     : undefined;
 
@@ -66,12 +67,12 @@ const Safari = ({ blogPosts }: SafariProps) => {
 
       {/* ---------- Scroll Area ---------- */}
       <div
-        className={`pr-1 ${isFullscreen ? "safari-content-shell overflow-hidden" : ""}`}
+        className={`pr-1 ${useFullscreenLayout ? "safari-content-shell overflow-hidden" : ""}`}
         style={fullscreenContentStyle}
       >
         <div
           className={`px-10 py-4 overflow-y-auto mac-scrollbar ${
-            isFullscreen ? "safari-scroll-fullscreen h-full" : "max-h-[60vh]"
+            useFullscreenLayout ? "safari-scroll-fullscreen h-full" : "max-h-[60vh]"
           }`}
         >
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">
