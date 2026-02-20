@@ -113,6 +113,25 @@
         will-change: transform;
     }
 
+    #mobile-notification-panel::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -7px;
+        transform: translateX(-50%);
+        width: 48px;
+        height: 3px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.62);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+        opacity: 0.75;
+        transition: opacity 180ms ease;
+    }
+
+    /* #mobile-notification-panel.is-open::after {
+        opacity: 0;
+    } */
+
     #mobile-notification-panel:not(.is-open) {
         box-shadow:
             0 4px 10px rgba(0, 0, 0, 0.14),
