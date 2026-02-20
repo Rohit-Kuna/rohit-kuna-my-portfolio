@@ -10,6 +10,11 @@ const Navbar = () => {
   const getState = useWindowStore.getState;
   const isMobile = useIsMobile();
   const [now, setNow] = useState<Date | null>(null);
+  const mobileStatusIcons = [
+    { id: "cell-network", src: "/icons/cell-network.png", alt: "Cell network" },
+    { id: "wifi", src: "/icons/wifi.svg", alt: "Wi-Fi", className: "invert" },
+    { id: "battery-charging", src: "/icons/battery.png", alt: "Battery" , className: "w-5 h-5"},
+  ];
 
   useEffect(() => {
     const updateNow = () => setNow(new Date());
@@ -56,14 +61,23 @@ const Navbar = () => {
 
       <div className="nav-right">
         <ul className="nav-icons flex items-center gap-2">
-          {visibleNavIcons.map(({ id, icon: Icon }) => (
-            <li
-              key={id}
-              className="relative flex items-center justify-center w-8 h-8"
-            >
-              <Icon size={14} strokeWidth={2.7} />
-            </li>
-          ))}
+          {isMobile
+            ? mobileStatusIcons.map(({ id, src, alt, className }) => (
+                <li
+                  key={id}
+                  className="relative flex items-center justify-center w-6 h-6 p-0 hover:bg-transparent"
+                >
+                  <img src={src} alt={alt} className={`w-4 h-4 object-contain ${className ?? ""}`} />
+                </li>
+              ))
+            : visibleNavIcons.map(({ id, icon: Icon }) => (
+                <li
+                  key={id}
+                  className="relative flex items-center justify-center w-8 h-8"
+                >
+                  <Icon size={14} strokeWidth={2.7} />
+                </li>
+              ))}
         </ul>
 
         <time className="time-format" dateTime={now ? now.toISOString() : undefined}>

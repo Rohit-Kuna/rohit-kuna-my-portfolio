@@ -1,4 +1,5 @@
 import { dockApps } from "@/app/(project)/(content)/other.content";
+import { HomeButtonIcon } from "@/app/(project)/(components)/HomeButton";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 import { useWindowStore } from "@/app/(project)/(store)/window";
 import type { WindowKey } from "@/app/(project)/(types)/windows.types";
@@ -6,7 +7,7 @@ import type { WindowKey } from "@/app/(project)/(types)/windows.types";
 type MobileDockItem = {
   id: string;
   name: string;
-  icon: string;
+  icon?: string;
   canOpen: boolean;
 };
 
@@ -56,7 +57,7 @@ const MobileDock = () => {
 
   const items: MobileDockItem[] = [
     ...dockApps.filter((app) => app.canOpen),
-    { id: "home", name: "Home", icon: "iconapplewhite.png", canOpen: true }
+    { id: "home", name: "Home", canOpen: true }
   ];
 
   const isHomeActive = Object.values(windows).every((win) => !win.isOpen);
@@ -83,12 +84,16 @@ const MobileDock = () => {
                 }
               }}
             >
-              <img
-                src={`/images/${icon}`}
-                alt={name}
-                loading="lazy"
-                className="mobile-dock-icon"
-              />
+              {isHome ? (
+                <HomeButtonIcon size={28} outerColor="#ffffff" innerColor="#ffffff" />
+              ) : (
+                <img
+                  src={`/images/${icon ?? ""}`}
+                  alt={name}
+                  loading="lazy"
+                  className="mobile-dock-icon"
+                />
+              )}
               <span className="mobile-dock-label">{name}</span>
             </button>
           );

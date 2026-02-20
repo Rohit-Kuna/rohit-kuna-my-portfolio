@@ -4,6 +4,7 @@ import { useWindowStore } from "@/app/(project)/(store)/window";
 import type { DockApp } from "@/app/(project)/(types)/other.types";
 import type { WindowKey } from "@/app/(project)/(types)/windows.types";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
+import { HomeButtonIcon } from "@/app/(project)/(components)/HomeButton";
 
 const TOP_PULL_ZONE = 28;
 const OPEN_THRESHOLD = 70;
@@ -15,7 +16,7 @@ type GestureMode = "open" | "close" | null;
 type QuickAppItem = {
   id: string;
   name: string;
-  icon: string;
+  icon?: string;
   canOpen: boolean;
 };
 
@@ -145,7 +146,6 @@ const MobileNotificationPanel = () => {
     {
       id: "home",
       name: "Home",
-      icon: "iconapplewhite.png",
       canOpen: true
     }
   ];
@@ -195,12 +195,16 @@ const MobileNotificationPanel = () => {
                   className={`mobile-notif-item ${isActive ? "is-active" : ""}`}
                   onClick={() => (isHome ? goHome() : toggleApp({ id, canOpen: true }))}
                 >
-                  <img
-                    src={`/images/${icon}`}
-                    alt={name}
-                    loading="lazy"
-                    className="mobile-notif-icon"
-                  />
+                  {isHome ? (
+                    <HomeButtonIcon size={34} outerColor="#ffffff" innerColor="#ffffff" />
+                  ) : (
+                    <img
+                      src={`/images/${icon ?? ""}`}
+                      alt={name}
+                      loading="lazy"
+                      className="mobile-notif-icon"
+                    />
+                  )}
                   <span className="mobile-notif-label">{name}</span>
                 </button>
               );
