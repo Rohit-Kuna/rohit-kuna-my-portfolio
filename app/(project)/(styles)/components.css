@@ -487,6 +487,10 @@
         @apply max-w-full h-auto;
     }
 
+    #resume .resume-scroll {
+        max-height: calc(100dvh - 170px);
+    }
+
     #txtfile .p-5 {
         @apply p-3;
     }

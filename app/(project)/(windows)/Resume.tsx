@@ -1,5 +1,6 @@
 import WindowControls from "@/app/(project)/(components)/WindowControls";
 import WindowWrapper from "@/app/(project)/(hoc)/WindowWrapper";
+import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 import { useWindowStore } from "@/app/(project)/(store)/window";
 import type { FileNode } from "@/app/(project)/(types)/location.types";
 import type { ResumeContent } from "@/app/(project)/(types)/other.types";
@@ -18,12 +19,14 @@ type ResumeProps = {
 
 const Resume = ({ resumeContent }: ResumeProps) => {
   const { windows } = useWindowStore();
+  const isMobile = useIsMobile();
   const resumeData = windows.resume?.data as FileNode | null;
   const pdfUrl = resumeData?.href ?? resumeContent?.resumeUrl ?? "";
   const pdfName = resumeData?.name ?? resumeContent?.windowTitle ?? "";
 
   const [pdfModule, setPdfModule] = useState<ReactPdfModule | null>(null);
   const [numPages, setNumPages] = useState(0);
+  const [mobilePageWidth, setMobilePageWidth] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     let mounted = true;
@@ -52,6 +55,23 @@ const Resume = ({ resumeContent }: ResumeProps) => {
     setNumPages(0);
   }, [pdfUrl]);
 
+  useEffect(() => {
+    if (!isMobile || typeof window === "undefined") {
+      setMobilePageWidth(undefined);
+      return;
+    }
+
+    const updatePageWidth = () => {
+      const width = Math.floor(window.innerWidth - 20);
+      setMobilePageWidth(Math.max(240, width));
+    };
+
+    updatePageWidth();
+    window.addEventListener("resize", updatePageWidth);
+
+    return () => window.removeEventListener("resize", updatePageWidth);
+  }, [isMobile]);
+
   const Document = pdfModule?.Document;
   const Page = pdfModule?.Page;
 
@@ -74,7 +94,7 @@ const Resume = ({ resumeContent }: ResumeProps) => {
         )}
       </div>
       <div className="pr-1">
-  <div className="window-scroll mac-scrollbar">
+  <div className="window-scroll resume-scroll mac-scrollbar">
     <div className="flex justify-center">
       {pdfUrl && Document && Page && (
         <Document
@@ -87,6 +107,7 @@ const Resume = ({ resumeContent }: ResumeProps) => {
             <Page
               key={`${pdfUrl}-${index + 1}`}
               pageNumber={index + 1}
+              width={mobilePageWidth}
               renderTextLayer
               renderAnnotationLayer
             />
