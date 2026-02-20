@@ -98,6 +98,7 @@ const MobileHomeFloat = () => {
     };
 
     event.currentTarget.setPointerCapture(event.pointerId);
+    window.dispatchEvent(new Event("mobile-home-drag-start"));
 
     const onPointerMove = (moveEvent: PointerEvent) => {
       const dx = moveEvent.clientX - startPointerX;
@@ -115,6 +116,7 @@ const MobileHomeFloat = () => {
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
       window.removeEventListener("pointercancel", onPointerUp);
+      window.dispatchEvent(new Event("mobile-home-drag-end"));
 
       if (!moved) {
         goHome();

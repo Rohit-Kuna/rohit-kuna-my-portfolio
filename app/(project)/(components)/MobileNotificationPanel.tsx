@@ -7,7 +7,7 @@ import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 import { HomeButtonIcon } from "@/app/(project)/(components)/HomeButton";
 import NowPlayingBar from "@/app/(project)/(components)/NowPlayingBar";
 
-const TOP_PULL_ZONE_RATIO = 0.25;
+const TOP_PULL_ZONE_RATIO = 0.30;
 const OPEN_THRESHOLD = 70;
 const CLOSE_THRESHOLD = 60;
 const MAX_PULL = 120;
@@ -39,13 +39,28 @@ const MobileNotificationPanel = () => {
   const startY = useRef(0);
   const startX = useRef(0);
   const gestureMode = useRef<GestureMode>(null);
+  const isHomeDragActive = useRef(false);
 
   useEffect(() => {
     if (!isMobile) return;
 
+    const onHomeDragStart = () => {
+      isHomeDragActive.current = true;
+      gestureMode.current = null;
+      setPullOffset(0);
+    };
+    const onHomeDragEnd = () => {
+      isHomeDragActive.current = false;
+    };
+
     const onTouchStart = (event: TouchEvent) => {
+      if (isHomeDragActive.current) return;
+
       const touch = event.changedTouches[0];
       if (!touch) return;
+
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("#mobile-home-float")) return;
 
       startY.current = touch.clientY;
       startX.current = touch.clientX;
@@ -64,6 +79,7 @@ const MobileNotificationPanel = () => {
     };
 
     const onTouchMove = (event: TouchEvent) => {
+      if (isHomeDragActive.current) return;
       if (!gestureMode.current) return;
 
       const touch = event.changedTouches[0];
@@ -87,6 +103,7 @@ const MobileNotificationPanel = () => {
     };
 
     const onTouchEnd = (event: TouchEvent) => {
+      if (isHomeDragActive.current) return;
       if (!gestureMode.current) return;
 
       const touch = event.changedTouches[0];
@@ -106,11 +123,15 @@ const MobileNotificationPanel = () => {
       setPullOffset(0);
     };
 
+    window.addEventListener("mobile-home-drag-start", onHomeDragStart);
+    window.addEventListener("mobile-home-drag-end", onHomeDragEnd);
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
     window.addEventListener("touchend", onTouchEnd, { passive: true });
 
     return () => {
+      window.removeEventListener("mobile-home-drag-start", onHomeDragStart);
+      window.removeEventListener("mobile-home-drag-end", onHomeDragEnd);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
