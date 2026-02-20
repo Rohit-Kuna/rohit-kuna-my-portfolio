@@ -104,15 +104,17 @@ const Safari = ({ blogPosts }: SafariProps) => {
                   </a>
                 </div>
 
-                <MoveRight
-                  className="
-                    ml-auto
-                    w-4 h-4 shrink-0
-                    text-gray-400
-                    transition-colors duration-150
-                    group-hover:text-gray-600
-                  "
-                />
+                {!isMobile && (
+                  <MoveRight
+                    className="
+                      ml-auto
+                      w-4 h-4 shrink-0
+                      text-gray-400
+                      transition-colors duration-150
+                      group-hover:text-gray-600
+                    "
+                  />
+                )}
               </div>
             ))}
           </div>
