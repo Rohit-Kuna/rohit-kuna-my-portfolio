@@ -90,7 +90,7 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 40vh;
+        height: 45vh;
         z-index: 3400;
         padding: 10px 14px 16px;
         display: flex;
@@ -111,6 +111,12 @@
         transform-origin: top center;
         transition: transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
         will-change: transform;
+    }
+
+    #mobile-notification-panel:not(.is-open) {
+        box-shadow:
+            0 4px 10px rgba(0, 0, 0, 0.14),
+            inset 0 4px 0 rgba(255, 255, 255, 0.32);
     }
 
     .mobile-notif-backdrop {
@@ -146,7 +152,7 @@
     }
 
     .mobile-now-playing {
-        @apply w-full rounded-xl mb-2 px-3 py-2 flex items-center justify-between;
+        @apply w-full rounded-xl mb-2 px-3 py-3 min-h-14 flex items-center justify-between;
         background: rgba(253, 253, 253, 0.284);
         border: 1px solid rgba(255, 255, 255, 0.15);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -162,7 +168,7 @@
     }
 
     .mobile-now-playing-cover {
-        @apply w-8 h-8 rounded-md object-cover shrink-0;
+        @apply w-10 h-10 rounded-md object-cover shrink-0;
         border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
@@ -171,15 +177,15 @@
     }
 
     .mobile-now-playing-label {
-        @apply text-[10px] leading-tight text-white/80;
+        @apply text-[11px] leading-tight text-white/80;
     }
 
     .mobile-now-playing-title {
-        @apply text-xs font-medium leading-tight text-white truncate;
+        @apply text-[13px] font-medium leading-tight text-white truncate;
     }
 
     .mobile-now-playing-eq {
-        @apply h-7 w-7 flex items-end justify-between shrink-0;
+        @apply h-8 w-8 flex items-end justify-between shrink-0;
         gap: 2px;
     }
 
