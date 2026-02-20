@@ -50,7 +50,7 @@
     }
 
     .mobile-dock-item {
-        @apply relative flex flex-col items-center justify-center gap-1 rounded-xl p-1.5 transition-transform duration-200;
+        @apply relative flex flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-0.5 transition-transform duration-200;
     }
 
     .mobile-dock-item.is-active {
@@ -68,12 +68,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 2rem;
-        height: 2rem;
+        width: 2.5rem;
+        height: 2.5rem;
     }
 
     .mobile-dock-icon {
-        @apply size-8;
+        @apply size-10;
     }
 
     .mobile-dock-label {
