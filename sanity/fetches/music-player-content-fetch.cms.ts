@@ -3,6 +3,7 @@ import { sanityClient } from "@/sanity/client";
 import type { MusicTrack } from "@/app/(project)/(types)/other.types";
 
 type RawMusicTrack = {
+  order?: number;
   title?: string;
   albumCover?: string;
   audioUrl?: string;
@@ -15,6 +16,7 @@ type RawMusicContent = {
 const MUSIC_PLAYER_CONTENT_QUERY = groq`
 *[_type == "musicPlayerContent"][0]{
   "tracks": tracks[]{
+    order,
     title,
     "albumCover": albumCover.asset->url,
     "audioUrl": audioFile.asset->url
@@ -31,7 +33,8 @@ export const getMusicTracksFromSanity = async (): Promise<MusicTrack[]> => {
 
   const tracks = content?.tracks ?? [];
 
-  return tracks
+  return [...tracks]
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     .filter((track) => Boolean(track?.audioUrl && track?.title))
     .map((track) => ({
       title: track.title as string,

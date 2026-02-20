@@ -23,6 +23,13 @@ export const musicPlayerContent = defineType({
           type: "object",
           fields: [
             defineField({
+              name: "order",
+              title: "Order",
+              type: "number",
+              description: "Lower number appears first in playlist.",
+              initialValue: 0,
+            }),
+            defineField({
               name: "title",
               title: "Track Title",
               type: "string",
