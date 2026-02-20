@@ -128,10 +128,6 @@
         transition: opacity 180ms ease;
     }
 
-    /* #mobile-notification-panel.is-open::after {
-        opacity: 0;
-    } */
-
     #mobile-notification-panel:not(.is-open) {
         box-shadow:
             0 4px 10px rgba(0, 0, 0, 0.14),

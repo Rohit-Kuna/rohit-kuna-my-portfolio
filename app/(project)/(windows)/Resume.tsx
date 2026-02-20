@@ -74,6 +74,40 @@ const Resume = ({ resumeContent }: ResumeProps) => {
 
   const Document = pdfModule?.Document;
   const Page = pdfModule?.Page;
+  const handleResumeDownload = async () => {
+    if (!pdfUrl || typeof window === "undefined") return;
+
+    window.open(pdfUrl, "_blank", "noopener,noreferrer");
+
+    try {
+      const response = await fetch(pdfUrl);
+      if (!response.ok) throw new Error("Failed to fetch resume");
+
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+
+      const downloadLink = document.createElement("a");
+      downloadLink.href = objectUrl;
+      downloadLink.download = pdfName || "resume.pdf";
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      URL.revokeObjectURL(objectUrl);
+    } catch {
+      // Fallback: still trigger a download without leaving the current tab.
+      const fallbackLink = document.createElement("a");
+      fallbackLink.href = pdfUrl;
+      fallbackLink.download = pdfName || "resume.pdf";
+      fallbackLink.target = "_blank";
+      fallbackLink.rel = "noopener noreferrer";
+      fallbackLink.style.display = "none";
+      document.body.appendChild(fallbackLink);
+      fallbackLink.click();
+      document.body.removeChild(fallbackLink);
+    }
+  };
 
   return (
     <>
@@ -83,14 +117,14 @@ const Resume = ({ resumeContent }: ResumeProps) => {
         <h2>{pdfName}</h2>
 
         {pdfUrl && (
-          <a
-            href={pdfUrl}
-            download
+          <button
+            type="button"
+            onClick={handleResumeDownload}
             className="cursor-pointer"
             title="Download resume"
           >
             <Download className="icon" />
-          </a>
+          </button>
         )}
       </div>
       <div className="pr-1">
