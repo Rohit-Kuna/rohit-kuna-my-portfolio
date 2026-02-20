@@ -37,11 +37,11 @@ const Navbar = () => {
   const visibleNavIcons = navIcons;
 
   return (
-    <nav className="relative px-3 sm:px-5">
+    <nav className="relative h-6 sm:h-auto px-3 sm:px-5">
       <img
         src="/images/camera.png"
         alt="Camera"
-        className="sm:hidden pointer-events-none absolute left-1/2 -translate-x-1/2 w-5 h-5 object-contain drop-shadow-[0_0_3px_rgba(255,255,255,0.75)]"
+        className="sm:hidden pointer-events-none absolute left-1/2 -translate-x-1/2 w-4 h-4 object-contain drop-shadow-[0_0_3px_rgba(255,255,255,0.75)]"
       />
       <div className="gap-1.5 sm:gap-5">
         <img src="/images/iconapplewhite.png" className="w-8 h-8 p-2 left-0.5" alt="logo" />

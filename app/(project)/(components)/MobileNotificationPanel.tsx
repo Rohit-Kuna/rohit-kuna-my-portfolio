@@ -7,7 +7,7 @@ import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 import { HomeButtonIcon } from "@/app/(project)/(components)/HomeButton";
 import NowPlayingBar from "@/app/(project)/(components)/NowPlayingBar";
 
-const TOP_PULL_ZONE = 28;
+const TOP_PULL_ZONE_RATIO = 0.25;
 const OPEN_THRESHOLD = 70;
 const CLOSE_THRESHOLD = 60;
 const MAX_PULL = 120;
@@ -51,7 +51,12 @@ const MobileNotificationPanel = () => {
       startX.current = touch.clientX;
       gestureMode.current = null;
 
-      if (!isOpen && touch.clientY <= TOP_PULL_ZONE) {
+      const topPullZone =
+        typeof window !== "undefined"
+          ? window.innerHeight * TOP_PULL_ZONE_RATIO
+          : 0;
+
+      if (!isOpen && touch.clientY <= topPullZone) {
         gestureMode.current = "open";
       } else if (isOpen) {
         gestureMode.current = "close";
