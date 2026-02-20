@@ -27,6 +27,8 @@ type RawFinderFolder = {
   _id: string;
   _type: "finderFolder";
   name: string;
+  icon?: string;
+  iconUploadUrl?: string;
   kind: "folder";
   children?: Ref[];
   order?: number;
@@ -38,6 +40,7 @@ type RawFinderLocation = {
   type: string;
   name: string;
   icon?: string;
+  iconUploadUrl?: string;
   kind: "folder";
   children?: Ref[];
   order?: number;
@@ -52,11 +55,11 @@ type RawFinderDocs = {
 const FINDER_DOCS_QUERY = groq`
 {
   "locations": *[_type == "finderLocation"]{
-    _id, _type, type, name, icon, kind, order,
+    _id, _type, type, name, icon, "iconUploadUrl": iconUpload.asset->url, kind, order,
     "children": children[]{_ref}
   },
   "folders": *[_type == "finderFolder"]{
-    _id, _type, name, kind, order,
+    _id, _type, name, icon, "iconUploadUrl": iconUpload.asset->url, kind, order,
     "children": children[]{_ref}
   },
   "files": *[_type == "finderFile"]{
@@ -143,7 +146,7 @@ export const getFinderLocationsFromSanity = async (): Promise<
     const node: FolderNode = {
       id: folder._id,
       name: folder.name,
-      icon: DEFAULT_FOLDER_ICON,
+      icon: folder.iconUploadUrl ?? folder.icon ?? DEFAULT_FOLDER_ICON,
       kind: "folder",
       children,
     };
@@ -164,7 +167,7 @@ export const getFinderLocationsFromSanity = async (): Promise<
       id: location._id,
       type: normalizedType,
       name: location.name,
-      icon: location.icon ?? DEFAULT_LOCATION_ICON,
+      icon: location.iconUploadUrl ?? location.icon ?? DEFAULT_LOCATION_ICON,
       kind: "folder",
       children,
     };

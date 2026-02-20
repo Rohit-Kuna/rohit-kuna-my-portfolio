@@ -24,7 +24,23 @@ export const finderLocation = defineType({
       title: "Icon Path",
       type: "string",
       description: 'Path in /public (example: "/icons/work.svg").',
-      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "iconUpload",
+      title: "Icon Upload",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+      description: "Optional upload. If present, this is used instead of icon path.",
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const iconPath = (context.document as { icon?: string } | undefined)?.icon;
+          if (!value && !iconPath) {
+            return "Provide either Icon Path or Icon Upload.";
+          }
+          return true;
+        }),
     }),
     defineField({
       name: "kind",
