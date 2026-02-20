@@ -37,6 +37,7 @@ type RawFinderLocation = {
   _type: "finderLocation";
   type: string;
   name: string;
+  icon?: string;
   kind: "folder";
   children?: Ref[];
   order?: number;
@@ -51,7 +52,7 @@ type RawFinderDocs = {
 const FINDER_DOCS_QUERY = groq`
 {
   "locations": *[_type == "finderLocation"]{
-    _id, _type, type, name, kind, order,
+    _id, _type, type, name, icon, kind, order,
     "children": children[]{_ref}
   },
   "folders": *[_type == "finderFolder"]{
@@ -82,12 +83,7 @@ const DEFAULT_FILE_ICONS: Record<FileNode["fileType"], string> = {
   pdf: "/images/pdf.png",
 };
 
-const DEFAULT_LOCATION_ICONS: Record<string, string> = {
-  work: "/icons/work.svg",
-  about: "/icons/info.svg",
-  resume: "/icons/file.svg",
-  trash: "/icons/trash.svg",
-};
+const DEFAULT_LOCATION_ICON = "/icons/file.svg";
 
 const mapFile = (file: RawFinderFile): FileNode => ({
   id: file._id,
@@ -157,15 +153,18 @@ export const getFinderLocationsFromSanity = async (): Promise<
   };
 
   const mappedLocations = byOrder(data.locations ?? []).map((location) => {
+    const normalizedType =
+      location.type === "trash" ? "certifications" : location.type;
+
     const children: FinderNode[] = (location.children ?? [])
       .map((child) => buildNode(child._ref))
       .filter((node): node is FinderNode => Boolean(node));
 
     const mapped: Location = {
       id: location._id,
-      type: location.type,
+      type: normalizedType,
       name: location.name,
-      icon: DEFAULT_LOCATION_ICONS[location.type] ?? DEFAULT_FOLDER_ICON,
+      icon: location.icon ?? DEFAULT_LOCATION_ICON,
       kind: "folder",
       children,
     };

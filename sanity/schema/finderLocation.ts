@@ -1,7 +1,5 @@
 import { defineField, defineType } from "sanity";
 
-const LOCATION_TYPES = ["work", "about", "resume", "trash"] as const;
-
 export const finderLocation = defineType({
   name: "finderLocation",
   title: "Finder Location",
@@ -9,17 +7,23 @@ export const finderLocation = defineType({
   fields: [
     defineField({
       name: "type",
-      title: "Location Type",
+      title: "Location Key",
       type: "string",
-      options: {
-        list: LOCATION_TYPES.map((value) => ({ title: value, value })),
-      },
+      description:
+        "Unique key used by the app (examples: work, about, resume, certifications).",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "name",
       title: "Name",
       type: "string",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "icon",
+      title: "Icon Path",
+      type: "string",
+      description: 'Path in /public (example: "/icons/work.svg").',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
