@@ -84,16 +84,18 @@ const MobileDock = () => {
                 }
               }}
             >
-              {isHome ? (
-                <HomeButtonIcon size={28} outerColor="#ffffff" innerColor="#ffffff" />
-              ) : (
-                <img
-                  src={`/images/${icon ?? ""}`}
-                  alt={name}
-                  loading="lazy"
-                  className="mobile-dock-icon"
-                />
-              )}
+              <div className="mobile-dock-icon-wrap">
+                {isHome ? (
+                  <HomeButtonIcon size={28} outerColor="#ffffff" innerColor="#ffffff" />
+                ) : (
+                  <img
+                    src={`/images/${icon ?? ""}`}
+                    alt={name}
+                    loading="lazy"
+                    className="mobile-dock-icon"
+                  />
+                )}
+              </div>
               <span className="mobile-dock-label">{name}</span>
             </button>
           );
