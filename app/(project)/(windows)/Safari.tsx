@@ -75,7 +75,7 @@ const Safari = ({ blogPosts }: SafariProps) => {
             useFullscreenLayout ? "safari-scroll-fullscreen h-full" : "max-h-[60vh]"
           }`}
         >
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+          <h2 className={`font-semibold text-gray-900 mb-4 ${isMobile ? "text-[17px]" : "text-xl"}`}>
             My Articles
           </h2>
 
@@ -93,10 +93,10 @@ const Safari = ({ blogPosts }: SafariProps) => {
                     src={postImage}
                     alt={title}
                     loading="lazy"
-                    className="w-8 h-8 rounded-md object-cover shrink-0"
+                    className={`${isMobile ? "w-7 h-7" : "w-8 h-8"} rounded-md object-cover shrink-0`}
                   />
                 ) : (
-                  <Newspaper className="w-8 h-8 shrink-0 text-blue-500" />
+                  <Newspaper className={`${isMobile ? "w-7 h-7" : "w-8 h-8"} shrink-0 text-blue-500`} />
                 )}
 
                 <div className="flex-1 flex flex-col gap-0.5 min-w-0">
@@ -106,10 +106,10 @@ const Safari = ({ blogPosts }: SafariProps) => {
                     rel="noopener noreferrer"
                     className="block"
                   >
-                    <h3 className="text-base font-medium text-gray-900 truncate">
+                    <h3 className={`${isMobile ? "text-[14px]" : "text-[15px]"} font-medium text-gray-900 truncate`}>
                       {title}
                     </h3>
-                    <span className="text-sm text-gray-400">{date}</span>
+                    <span className={`${isMobile ? "text-[11px]" : "text-[13px]"} text-gray-400`}>{date}</span>
                   </a>
                 </div>
 
