@@ -37,8 +37,8 @@ const Navbar = () => {
   const visibleNavIcons = navIcons;
 
   return (
-    <nav>
-      <div>
+    <nav className="px-3 sm:px-5">
+      <div className="gap-1.5 sm:gap-5">
         <img src="/images/iconapplewhite.png" className="w-8 h-8 p-2 left-0.5" alt="logo" />
         <time className="text-white text-sm font-semibold sm:hidden" dateTime={now ? now.toISOString() : undefined}>
           {now ? dayjs(now).format("HH:mm") : ""}
