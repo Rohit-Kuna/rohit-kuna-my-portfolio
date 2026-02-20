@@ -24,7 +24,7 @@ const Contact = ({ contactContent }: ContactProps) => {
                 <WindowControls target="contact" />
                 <h2 className="font-bold text-sm text-center w-full">{windowTitle}</h2>
             </div>
-            <div className="p-7 space-y-5">
+            <div className="p-7 space-y-5 contact-scroll mac-scrollbar">
                 {profileImage && <img src={profileImage} alt={profileAlt} className="w-20 rounded-full" />}
                 <h3 className="text-xl font-semibold">{heading}</h3>
                 <p>{message}</p>

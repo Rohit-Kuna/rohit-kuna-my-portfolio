@@ -430,6 +430,11 @@
     #contact {
         @apply max-w-2xl absolute top-40 left-5/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
+        .contact-scroll {
+            max-height: calc(90vh - 52px);
+            overflow-y: auto;
+        }
+
         .social-cards-container {
             @apply flex items-center gap-3;
 
@@ -626,8 +631,10 @@
         @apply max-w-none;
     }
 
-    #contact .p-5 {
-        @apply p-3;
+    #contact .contact-scroll {
+        max-height: calc(100dvh - 56px - var(--compact-dock-space));
+        overflow-y: auto;
+        padding-bottom: calc(var(--compact-dock-space) + 16px);
     }
 
     #contact .social-cards-container {
