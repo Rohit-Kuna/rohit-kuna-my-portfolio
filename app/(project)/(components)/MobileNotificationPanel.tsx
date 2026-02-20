@@ -5,6 +5,7 @@ import type { DockApp } from "@/app/(project)/(types)/other.types";
 import type { WindowKey } from "@/app/(project)/(types)/windows.types";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 import { HomeButtonIcon } from "@/app/(project)/(components)/HomeButton";
+import NowPlayingBar from "@/app/(project)/(components)/NowPlayingBar";
 
 const TOP_PULL_ZONE = 28;
 const OPEN_THRESHOLD = 70;
@@ -189,27 +190,7 @@ const MobileNotificationPanel = () => {
         <div className="mobile-notif-content">
           <p className="mobile-notif-title">Quick Apps</p>
 
-          <div className="mobile-now-playing" aria-label="Now playing">
-            <div className="mobile-now-playing-left">
-              <img
-                src="/images/profile-photo.png"
-                alt="Album cover"
-                loading="lazy"
-                className="mobile-now-playing-cover"
-              />
-              <div className="mobile-now-playing-text">
-                <span className="mobile-now-playing-label">Now Playing</span>
-                <span className="mobile-now-playing-title">Rohit Kuna&apos;s Portfolio</span>
-              </div>
-            </div>
-
-            <div className="mobile-now-playing-eq" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
+          <NowPlayingBar />
 
           <div className="mobile-notif-grid">
             {quickApps.map(({ id, name, icon }) => {

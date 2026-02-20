@@ -191,12 +191,39 @@
         @apply min-w-0 flex flex-col;
     }
 
+    .mobile-now-playing-controls {
+        @apply flex items-center gap-1.5 px-2 shrink-0;
+    }
+
+    .mobile-now-playing-btn {
+        @apply w-6 h-6 rounded-full flex items-center justify-center text-white/90 transition-colors;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .mobile-now-playing-btn-main {
+        @apply w-7 h-7;
+        background: rgba(255, 255, 255, 0.18);
+    }
+
+    .mobile-now-playing-btn:active {
+        background: rgba(255, 255, 255, 0.26);
+    }
+
     .mobile-now-playing-label {
         @apply text-[11px] leading-tight text-white/80;
     }
 
+    .mobile-now-playing-title-track {
+        @apply w-full max-w-[100px] overflow-hidden;
+    }
+
     .mobile-now-playing-title {
-        @apply text-[13px] font-medium leading-tight text-white truncate;
+        @apply inline-block text-[13px] font-medium leading-tight text-white whitespace-nowrap;
+        animation: mobile-now-playing-title-scroll 7s linear infinite;
+    }
+
+    .mobile-now-playing-title.is-paused {
+        animation-play-state: paused;
     }
 
     .mobile-now-playing-eq {
@@ -232,6 +259,12 @@
         animation-delay: 360ms;
     }
 
+    .mobile-now-playing-eq.is-paused span {
+        animation-play-state: paused;
+        opacity: 0.35;
+        transform: scaleY(0.25);
+    }
+
     @keyframes mobile-eq {
         0% {
             transform: scaleY(0.45);
@@ -246,6 +279,16 @@
         100% {
             transform: scaleY(0.35);
             opacity: 0.6;
+        }
+    }
+
+    @keyframes mobile-now-playing-title-scroll {
+        0% {
+            transform: translateX(-105%);
+        }
+
+        100% {
+            transform: translateX(105%);
         }
     }
 
