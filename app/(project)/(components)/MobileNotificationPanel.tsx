@@ -10,7 +10,6 @@ const TOP_PULL_ZONE = 28;
 const OPEN_THRESHOLD = 70;
 const CLOSE_THRESHOLD = 60;
 const MAX_PULL = 120;
-const PANEL_HEIGHT_VH = 40;
 const MOBILE_NOTIFICATION_WHITE_ICONS: Record<string, string> = {
   finder: "finder-white.png",
   safari: "safari-white.png",
@@ -53,7 +52,7 @@ const MobileNotificationPanel = () => {
 
       if (!isOpen && touch.clientY <= TOP_PULL_ZONE) {
         gestureMode.current = "open";
-      } else if (isOpen && touch.clientY <= window.innerHeight * (PANEL_HEIGHT_VH / 100)) {
+      } else if (isOpen) {
         gestureMode.current = "close";
       }
     };
