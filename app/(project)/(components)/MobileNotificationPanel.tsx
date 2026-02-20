@@ -206,7 +206,7 @@ const MobileNotificationPanel = () => {
                   onClick={() => (isHome ? goHome() : toggleApp({ id, canOpen: true }))}
                 >
                   {isHome ? (
-                    <HomeButtonIcon size={34} outerColor="#ffffff" innerColor="#ffffff" />
+                    <HomeButtonIcon size={38} outerColor="#ffffff" innerColor="#ffffff" />
                   ) : (
                     <img
                       src={`/images/${resolveNotificationIcon(id, icon)}`}

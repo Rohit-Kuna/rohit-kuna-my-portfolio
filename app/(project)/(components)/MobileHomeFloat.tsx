@@ -8,10 +8,27 @@ import type { WindowKey } from "@/app/(project)/(types)/windows.types";
 const BUTTON_SIZE = 52;
 const SCREEN_MARGIN = 10;
 const TOP_BOUNDARY = 52;
-const BOTTOM_RESERVE = 132;
+const INITIAL_BOTTOM_RESERVE = 132;
+const DRAG_BOTTOM_RESERVE_FALLBACK = 92;
+const DOCK_CLEARANCE = 8;
 const DRAG_THRESHOLD = 6;
 
 type Position = { x: number; y: number };
+
+const getMaxYAboveDock = (): number => {
+  if (typeof window === "undefined") return TOP_BOUNDARY;
+
+  const dock = document.getElementById("mobile-dock");
+  if (!dock) {
+    return Math.max(
+      TOP_BOUNDARY,
+      window.innerHeight - BUTTON_SIZE - DRAG_BOTTOM_RESERVE_FALLBACK
+    );
+  }
+
+  const dockTop = dock.getBoundingClientRect().top;
+  return Math.max(TOP_BOUNDARY, dockTop - BUTTON_SIZE - DOCK_CLEARANCE);
+};
 
 const getInitialPosition = (): Position => {
   if (typeof window === "undefined") {
@@ -21,7 +38,7 @@ const getInitialPosition = (): Position => {
   const maxX = Math.max(SCREEN_MARGIN, window.innerWidth - BUTTON_SIZE - SCREEN_MARGIN);
   const maxY = Math.max(
     TOP_BOUNDARY,
-    window.innerHeight - BUTTON_SIZE - BOTTOM_RESERVE
+    window.innerHeight - BUTTON_SIZE - INITIAL_BOTTOM_RESERVE
   );
 
   return {
@@ -41,10 +58,7 @@ const MobileHomeFloat = () => {
 
     const onResize = () => {
       const maxX = Math.max(SCREEN_MARGIN, window.innerWidth - BUTTON_SIZE - SCREEN_MARGIN);
-      const maxY = Math.max(
-        TOP_BOUNDARY,
-        window.innerHeight - BUTTON_SIZE - BOTTOM_RESERVE
-      );
+      const maxY = getMaxYAboveDock();
 
       setPosition((prev) => ({
         x: prev.x <= window.innerWidth / 2 ? SCREEN_MARGIN : maxX,
@@ -75,10 +89,7 @@ const MobileHomeFloat = () => {
 
     const clampPosition = (nextX: number, nextY: number): Position => {
       const maxX = Math.max(SCREEN_MARGIN, window.innerWidth - BUTTON_SIZE - SCREEN_MARGIN);
-      const maxY = Math.max(
-        TOP_BOUNDARY,
-        window.innerHeight - BUTTON_SIZE - BOTTOM_RESERVE
-      );
+      const maxY = getMaxYAboveDock();
 
       return {
         x: Math.min(Math.max(nextX, SCREEN_MARGIN), maxX),
