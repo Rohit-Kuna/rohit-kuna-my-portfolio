@@ -1,7 +1,5 @@
 import { defineField, defineType } from "sanity";
 
-const LOCATION_TYPES = ["work", "about", "resume", "trash"] as const;
-
 export const finderLocation = defineType({
   name: "finderLocation",
   title: "Finder Location",
@@ -9,11 +7,10 @@ export const finderLocation = defineType({
   fields: [
     defineField({
       name: "type",
-      title: "Location Type",
+      title: "Location Key",
       type: "string",
-      options: {
-        list: LOCATION_TYPES.map((value) => ({ title: value, value })),
-      },
+      description:
+        "Unique key used by the app (examples: work, about, resume, certifications).",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -21,6 +18,29 @@ export const finderLocation = defineType({
       title: "Name",
       type: "string",
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "icon",
+      title: "Icon Path",
+      type: "string",
+      description: 'Path in /public (example: "/icons/work.svg").',
+    }),
+    defineField({
+      name: "iconUpload",
+      title: "Icon Upload",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+      description: "Optional upload. If present, this is used instead of icon path.",
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const iconPath = (context.document as { icon?: string } | undefined)?.icon;
+          if (!value && !iconPath) {
+            return "Provide either Icon Path or Icon Upload.";
+          }
+          return true;
+        }),
     }),
     defineField({
       name: "kind",

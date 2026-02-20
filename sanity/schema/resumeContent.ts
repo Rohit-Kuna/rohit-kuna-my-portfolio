@@ -13,12 +13,15 @@ export const resumeContent = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "resumeFile",
-      title: "Resume PDF",
-      type: "file",
+      name: "resumeFinderFile",
+      title: "Resume Finder File",
+      type: "reference",
+      to: [{ type: "finderFile" }],
       options: {
-        accept: "application/pdf",
+        filter: 'fileType == $fileType',
+        filterParams: { fileType: "pdf" },
       },
+      description: "Select an existing Finder file of type PDF.",
       validation: (Rule) => Rule.required(),
     }),
   ],
@@ -28,4 +31,3 @@ export const resumeContent = defineType({
     },
   },
 });
-

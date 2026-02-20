@@ -4,8 +4,12 @@ import type { ResumeContent } from "@/app/(project)/(types)/other.types";
 
 const RESUME_CONTENT_QUERY = groq`
 *[_type == "resumeContent"][0]{
-  windowTitle,
-  "resumeUrl": resumeFile.asset->url
+  "windowTitle": coalesce(windowTitle, resumeFinderFile->name),
+  "resumeUrl": coalesce(
+    resumeFinderFile->href,
+    resumeFinderFile->pdfFile.asset->url,
+    resumeFile.asset->url
+  )
 }
 `;
 

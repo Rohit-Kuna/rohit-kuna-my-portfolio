@@ -4,18 +4,26 @@ import { useWindowStore } from "@/app/(project)/(store)/window";
 import type { DockApp } from "@/app/(project)/(types)/other.types";
 import type { WindowKey } from "@/app/(project)/(types)/windows.types";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
+import { HomeButtonIcon } from "@/app/(project)/(components)/HomeButton";
+import NowPlayingBar from "@/app/(project)/(components)/NowPlayingBar";
 
 const TOP_PULL_ZONE = 28;
 const OPEN_THRESHOLD = 70;
 const CLOSE_THRESHOLD = 60;
 const MAX_PULL = 120;
-const PANEL_HEIGHT_VH = 40;
+const MOBILE_NOTIFICATION_WHITE_ICONS: Record<string, string> = {
+  finder: "finder-white.png",
+  safari: "safari-white.png",
+  resume: "notes-icon-white.png",
+  contact: "contact-white.png",
+  terminal: "terminal-white.png",
+};
 
 type GestureMode = "open" | "close" | null;
 type QuickAppItem = {
   id: string;
   name: string;
-  icon: string;
+  icon?: string;
   canOpen: boolean;
 };
 
@@ -45,7 +53,7 @@ const MobileNotificationPanel = () => {
 
       if (!isOpen && touch.clientY <= TOP_PULL_ZONE) {
         gestureMode.current = "open";
-      } else if (isOpen && touch.clientY <= window.innerHeight * (PANEL_HEIGHT_VH / 100)) {
+      } else if (isOpen) {
         gestureMode.current = "close";
       }
     };
@@ -145,12 +153,14 @@ const MobileNotificationPanel = () => {
     {
       id: "home",
       name: "Home",
-      icon: "iconapplewhite.png",
       canOpen: true
     }
   ];
 
   if (!isMobile) return null;
+
+  const resolveNotificationIcon = (id: string, fallbackIcon?: string) =>
+    MOBILE_NOTIFICATION_WHITE_ICONS[id] ?? fallbackIcon ?? "";
 
   const openPullProgress = Math.max(0, Math.min(pullOffset, MAX_PULL)) / MAX_PULL;
   const closePullProgress = Math.max(0, Math.min(Math.abs(pullOffset), MAX_PULL)) / MAX_PULL;
@@ -180,6 +190,8 @@ const MobileNotificationPanel = () => {
         <div className="mobile-notif-content">
           <p className="mobile-notif-title">Quick Apps</p>
 
+          <NowPlayingBar />
+
           <div className="mobile-notif-grid">
             {quickApps.map(({ id, name, icon }) => {
               const isHome = id === "home";
@@ -195,12 +207,16 @@ const MobileNotificationPanel = () => {
                   className={`mobile-notif-item ${isActive ? "is-active" : ""}`}
                   onClick={() => (isHome ? goHome() : toggleApp({ id, canOpen: true }))}
                 >
-                  <img
-                    src={`/images/${icon}`}
-                    alt={name}
-                    loading="lazy"
-                    className="mobile-notif-icon"
-                  />
+                  {isHome ? (
+                    <HomeButtonIcon size={38} outerColor="#ffffff" innerColor="#ffffff" />
+                  ) : (
+                    <img
+                      src={`/images/${resolveNotificationIcon(id, icon)}`}
+                      alt={name}
+                      loading="lazy"
+                      className="mobile-notif-icon"
+                    />
+                  )}
                   <span className="mobile-notif-label">{name}</span>
                 </button>
               );

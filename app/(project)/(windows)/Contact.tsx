@@ -34,7 +34,7 @@ const Contact = ({ contactContent }: ContactProps) => {
                 <ul className="social-cards-container">
                     {socialLinks.map(({id,bg,link,icon, text})=>(
                         <li className="social-cards" key={id} style={{backgroundColor:bg}}>
-                            <a className="space-y-5" href={link} target="_blank" rel="nopener noreferre" title={text}>
+                            <a className="social-card-link" href={link} target="_blank" rel="nopener noreferre" title={text}>
                                 <img src={icon} alt={text} className="size-5" />
                                 <p className="font-semibold text-sm text-white">{text}</p>
                             </a>
