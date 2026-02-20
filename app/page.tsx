@@ -3,6 +3,7 @@ import {
   getBlogPostsFromSanity,
   getContactContentFromSanity,
   getFinderLocationsFromSanity,
+  getMusicTracksFromSanity,
   getResumeContentFromSanity,
   getTechStackFromSanity,
 } from "@/sanity/fetches";
@@ -10,6 +11,7 @@ import type { Location } from "@/app/(project)/(types)/location.types";
 import type {
   BlogPost,
   ContactContent,
+  MusicTrack,
   ResumeContent,
   TechStackCategory,
 } from "@/app/(project)/(types)/other.types";
@@ -20,6 +22,7 @@ export default async function HomePage() {
   let locationsData: Record<string, Location> = {};
   let blogPostsData: BlogPost[] = [];
   let techStackData: TechStackCategory[] = [];
+  let musicTracksData: MusicTrack[] = [];
   let contactContentData: ContactContent | undefined;
   let resumeContentData: ResumeContent | undefined;
 
@@ -39,6 +42,12 @@ export default async function HomePage() {
     techStackData = await getTechStackFromSanity();
   } catch {
     techStackData = [];
+  }
+
+  try {
+    musicTracksData = await getMusicTracksFromSanity();
+  } catch {
+    musicTracksData = [];
   }
 
   try {
@@ -64,6 +73,7 @@ export default async function HomePage() {
       locationsData={locationsData}
       blogPostsData={blogPostsData}
       techStackData={techStackData}
+      musicTracksData={musicTracksData}
       contactContent={contactContentData}
       resumeContent={resumeContentData}
     />

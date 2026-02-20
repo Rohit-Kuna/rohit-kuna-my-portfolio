@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { dockApps } from "@/app/(project)/(content)/other.content";
 import { useWindowStore } from "@/app/(project)/(store)/window";
-import type { DockApp } from "@/app/(project)/(types)/other.types";
+import type { DockApp, MusicTrack } from "@/app/(project)/(types)/other.types";
 import type { WindowKey } from "@/app/(project)/(types)/windows.types";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 import { HomeButtonIcon } from "@/app/(project)/(components)/HomeButton";
@@ -27,7 +27,11 @@ type QuickAppItem = {
   canOpen: boolean;
 };
 
-const MobileNotificationPanel = () => {
+type MobileNotificationPanelProps = {
+  musicTracks?: MusicTrack[];
+};
+
+const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelProps) => {
   const isMobile = useIsMobile();
   const { openWindow, closeWindow } = useWindowStore();
   const windows = useWindowStore((state) => state.windows);
@@ -216,7 +220,7 @@ const MobileNotificationPanel = () => {
         <div className="mobile-notif-content">
           <p className="mobile-notif-title">Quick Apps</p>
 
-          <NowPlayingBar />
+          <NowPlayingBar tracks={musicTracks} />
 
           <div className="mobile-notif-grid">
             {quickApps.map(({ id, name, icon }) => {

@@ -14,6 +14,7 @@ import type { Location } from "@/app/(project)/(types)/location.types";
 import type {
   BlogPost,
   ContactContent,
+  MusicTrack,
   ResumeContent,
   TechStackCategory,
 } from "@/app/(project)/(types)/other.types";
@@ -22,6 +23,7 @@ type AppProps = {
   locationsData: Record<string, Location>;
   blogPostsData?: BlogPost[];
   techStackData?: TechStackCategory[];
+  musicTracksData?: MusicTrack[];
   contactContent?: ContactContent;
   resumeContent?: ResumeContent;
 };
@@ -30,6 +32,7 @@ const App = ({
   locationsData,
   blogPostsData = [],
   techStackData = [],
+  musicTracksData = [],
   contactContent,
   resumeContent,
 }: AppProps) => {
@@ -47,7 +50,7 @@ const App = ({
   return (
     <main>
       <Navbar />
-      <MobileNotificationPanel />
+      <MobileNotificationPanel musicTracks={musicTracksData} />
       <Welcome />
       <MobileDock />
       <MobileHomeFloat />

@@ -1,23 +1,67 @@
 import { useEffect, useRef, useState } from "react";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import type { MusicTrack } from "@/app/(project)/(types)/other.types";
 
-const NowPlayingBar = () => {
+type NowPlayingBarProps = {
+  tracks?: MusicTrack[];
+};
+
+const DEFAULT_TRACKS: MusicTrack[] = [
+  {
+    title: "Rohit's Muse",
+    audioUrl: "/music/instrumental.mp3",
+    albumCover: "/images/profile-photo.png",
+  },
+];
+
+const NowPlayingBar = ({ tracks = [] }: NowPlayingBarProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const playlist = tracks.length > 0 ? tracks : DEFAULT_TRACKS;
+  const playlistLengthRef = useRef(playlist.length);
+  const safeTrackIndex =
+    playlist.length > 0
+      ? ((currentTrackIndex % playlist.length) + playlist.length) % playlist.length
+      : 0;
+  const currentTrack = playlist[safeTrackIndex] ?? DEFAULT_TRACKS[0];
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const audio = new Audio("/music/instrumental.mp3");
+    const audio = new Audio();
     audio.preload = "auto";
-    audio.loop = true;
+    audio.loop = false;
+    const onEnded = () => {
+      setCurrentTrackIndex((prev) => (prev + 1) % Math.max(playlistLengthRef.current, 1));
+    };
+    audio.addEventListener("ended", onEnded);
     audioRef.current = audio;
 
     return () => {
       audio.pause();
+      audio.removeEventListener("ended", onEnded);
+      audio.removeAttribute("src");
+      audio.load();
       audioRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    playlistLengthRef.current = playlist.length;
+  }, [playlist.length]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.src = currentTrack.audioUrl;
+    audio.load();
+
+    if (isPlaying) {
+      void audio.play().catch(() => setIsPlaying(false));
+    }
+  }, [currentTrack.audioUrl, isPlaying]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -33,24 +77,33 @@ const NowPlayingBar = () => {
     audio.pause();
   }, [isPlaying]);
 
-  const handleSeekBack = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.currentTime = Math.max(0, audio.currentTime - 10);
+  const handlePreviousTrack = () => {
+    if (playlist.length <= 1) {
+      const audio = audioRef.current;
+      if (!audio) return;
+      audio.currentTime = 0;
+      return;
+    }
+
+    setCurrentTrackIndex((prev) => (prev - 1 + playlist.length) % playlist.length);
   };
 
-  const handleSeekForward = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const duration = Number.isFinite(audio.duration) ? audio.duration : Infinity;
-    audio.currentTime = Math.min(duration, audio.currentTime + 10);
+  const handleNextTrack = () => {
+    if (playlist.length <= 1) {
+      const audio = audioRef.current;
+      if (!audio) return;
+      audio.currentTime = 0;
+      return;
+    }
+
+    setCurrentTrackIndex((prev) => (prev + 1) % playlist.length);
   };
 
   return (
     <div className="mobile-now-playing" aria-label="Now playing">
       <div className="mobile-now-playing-left">
         <img
-          src="/images/profile-photo.png"
+          src={currentTrack.albumCover || "/images/profile-photo.png"}
           alt="Album cover"
           loading="lazy"
           className="mobile-now-playing-cover"
@@ -59,7 +112,7 @@ const NowPlayingBar = () => {
           <span className="mobile-now-playing-label">Now Playing</span>
           <div className="mobile-now-playing-title-track">
             <span className={`mobile-now-playing-title ${isPlaying ? "" : "is-paused"}`}>
-              Rohit&apos;s Muse
+              {currentTrack.title}
             </span>
           </div>
         </div>
@@ -70,7 +123,7 @@ const NowPlayingBar = () => {
           type="button"
           className="mobile-now-playing-btn"
           aria-label="Previous"
-          onClick={handleSeekBack}
+          onClick={handlePreviousTrack}
         >
           <SkipBack size={14} strokeWidth={2.5} />
         </button>
@@ -86,7 +139,7 @@ const NowPlayingBar = () => {
           type="button"
           className="mobile-now-playing-btn"
           aria-label="Next"
-          onClick={handleSeekForward}
+          onClick={handleNextTrack}
         >
           <SkipForward size={14} strokeWidth={2.5} />
         </button>

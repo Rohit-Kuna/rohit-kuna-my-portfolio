@@ -63,3 +63,9 @@ export type ResumeContent = {
   windowTitle: string;
   resumeUrl: string;
 };
+
+export type MusicTrack = {
+  title: string;
+  audioUrl: string;
+  albumCover?: string;
+};
