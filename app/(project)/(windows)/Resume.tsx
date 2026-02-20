@@ -127,30 +127,30 @@ const Resume = ({ resumeContent }: ResumeProps) => {
           </button>
         )}
       </div>
-      <div className="pr-1">
-  <div className="window-scroll resume-scroll mac-scrollbar">
-    <div className="flex justify-center">
-      {pdfUrl && Document && Page && (
-        <Document
-          file={pdfUrl}
-          onLoadSuccess={({ numPages: totalPages }: { numPages: number }) =>
-            setNumPages(totalPages)
-          }
-        >
-          {Array.from({ length: numPages }, (_, index) => (
-            <Page
-              key={`${pdfUrl}-${index + 1}`}
-              pageNumber={index + 1}
-              width={mobilePageWidth}
-              renderTextLayer
-              renderAnnotationLayer
-            />
-          ))}
-        </Document>
-      )}
-    </div>
-  </div>
-</div>
+      <div>
+        <div className="window-scroll resume-scroll mac-scrollbar">
+          <div className="resume-pdf-content flex justify-center">
+            {pdfUrl && Document && Page && (
+              <Document
+                file={pdfUrl}
+                onLoadSuccess={({ numPages: totalPages }: { numPages: number }) =>
+                  setNumPages(totalPages)
+                }
+              >
+                {Array.from({ length: numPages }, (_, index) => (
+                  <Page
+                    key={`${pdfUrl}-${index + 1}`}
+                    pageNumber={index + 1}
+                    width={mobilePageWidth}
+                    renderTextLayer
+                    renderAnnotationLayer
+                  />
+                ))}
+              </Document>
+            )}
+          </div>
+        </div>
+      </div>
 
     </>
   );
