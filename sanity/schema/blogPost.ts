@@ -24,6 +24,15 @@ export const blogPost = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "postImage",
+      title: "Post Image",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+      description: "Optional image shown before article title in Safari list.",
+    }),
+    defineField({
       name: "order",
       title: "Order",
       type: "number",
@@ -38,4 +47,3 @@ export const blogPost = defineType({
     },
   },
 });
-

@@ -83,12 +83,21 @@ const Safari = ({ blogPosts }: SafariProps) => {
 
           {/* ---------- Article List ---------- */}
           <div className="articles-list">
-            {blogPosts.map(({ id, title, date, link }) => (
+            {blogPosts.map(({ id, title, date, link, postImage }) => (
               <div
                 key={id}
                 className="article-row"
               >
-                <Newspaper className="w-8 h-8 shrink-0 text-blue-500" />
+                {postImage ? (
+                  <img
+                    src={postImage}
+                    alt={title}
+                    loading="lazy"
+                    className="w-8 h-8 rounded-md object-cover shrink-0"
+                  />
+                ) : (
+                  <Newspaper className="w-8 h-8 shrink-0 text-blue-500" />
+                )}
 
                 <div className="flex-1 flex flex-col gap-0.5 min-w-0">
                   <a

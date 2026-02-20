@@ -8,6 +8,7 @@ type RawBlogPost = {
   title: string;
   link: string;
   publishedAt: string;
+  postImage?: string;
   order?: number;
 };
 
@@ -17,6 +18,7 @@ const BLOG_POSTS_QUERY = groq`
   title,
   link,
   publishedAt,
+  "postImage": postImage.asset->url,
   order
 }
 `;
@@ -33,5 +35,6 @@ export const getBlogPostsFromSanity = async (): Promise<BlogPost[]> => {
     title: post.title,
     link: post.link,
     date: dayjs(post.publishedAt).format("MMM D, YYYY"),
+    postImage: post.postImage,
   }));
 };

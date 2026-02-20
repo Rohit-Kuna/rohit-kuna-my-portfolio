@@ -29,6 +29,7 @@ export type BlogPost = {
   date: string; // CMS date string
   title: string;
   link: string;
+  postImage?: string;
 };
 
 /* ---------- Tech Stack ---------- */
