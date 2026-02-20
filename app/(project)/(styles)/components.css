@@ -154,6 +154,10 @@
         @apply size-10;
     }
 
+    .mobile-notif-item :is(.mobile-notif-icon, svg) {
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+    }
+
     .mobile-notif-label {
         @apply text-[11px] leading-tight text-white/90 text-center line-clamp-1;
     }
