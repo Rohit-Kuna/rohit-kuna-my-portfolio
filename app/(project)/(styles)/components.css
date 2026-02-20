@@ -372,6 +372,10 @@
             .social-cards {
                 @apply rounded-lg p-3 w-60 hover:-translate-y-0.5 hover:scale-105 origin-center transition-all duration-300;
             }
+
+            .social-card-link {
+                @apply flex flex-col gap-5;
+            }
         }
     }
 
@@ -566,6 +570,14 @@
         @apply flex-col items-stretch;
     }
 
+    #contact .social-cards {
+        @apply w-full;
+    }
+
+    #contact .social-card-link {
+        @apply w-full flex-row items-center justify-start gap-2;
+    }
+
     #resume canvas {
         @apply max-w-full h-auto;
     }
@@ -580,6 +592,12 @@
 
     #imgfile > div {
         @apply p-3;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    #contact .social-cards {
+        width: 70%;
     }
 }
 
