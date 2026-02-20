@@ -7,7 +7,7 @@ body {
 }
 
 :root {
-  --compact-dock-space: 96px;
+  --compact-dock-space: 88px;
 }
 
 .mac-scrollbar::-webkit-scrollbar {

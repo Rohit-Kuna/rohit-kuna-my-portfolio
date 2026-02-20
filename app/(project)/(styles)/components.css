@@ -666,7 +666,8 @@
     }
 
     #resume .resume-scroll {
-        max-height: calc(100dvh - 170px);
+        max-height: calc(100dvh - 56px - var(--compact-dock-space));
+        padding-bottom: calc(var(--compact-dock-space) + 16px);
     }
 
     #txtfile .p-5 {
