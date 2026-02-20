@@ -11,6 +11,13 @@ const OPEN_THRESHOLD = 70;
 const CLOSE_THRESHOLD = 60;
 const MAX_PULL = 120;
 const PANEL_HEIGHT_VH = 40;
+const MOBILE_NOTIFICATION_WHITE_ICONS: Record<string, string> = {
+  finder: "finder-white.png",
+  safari: "safari-white.png",
+  resume: "notes-icon-white.png",
+  contact: "contact-white.png",
+  terminal: "terminal-white.png",
+};
 
 type GestureMode = "open" | "close" | null;
 type QuickAppItem = {
@@ -152,6 +159,9 @@ const MobileNotificationPanel = () => {
 
   if (!isMobile) return null;
 
+  const resolveNotificationIcon = (id: string, fallbackIcon?: string) =>
+    MOBILE_NOTIFICATION_WHITE_ICONS[id] ?? fallbackIcon ?? "";
+
   const openPullProgress = Math.max(0, Math.min(pullOffset, MAX_PULL)) / MAX_PULL;
   const closePullProgress = Math.max(0, Math.min(Math.abs(pullOffset), MAX_PULL)) / MAX_PULL;
   const stretchY = isOpen ? 1 - closePullProgress * 0.03 : 1 + openPullProgress * 0.08;
@@ -199,7 +209,7 @@ const MobileNotificationPanel = () => {
                     <HomeButtonIcon size={34} outerColor="#ffffff" innerColor="#ffffff" />
                   ) : (
                     <img
-                      src={`/images/${icon ?? ""}`}
+                      src={`/images/${resolveNotificationIcon(id, icon)}`}
                       alt={name}
                       loading="lazy"
                       className="mobile-notif-icon"
