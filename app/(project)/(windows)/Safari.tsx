@@ -39,9 +39,9 @@ const Safari = ({ blogPosts }: SafariProps) => {
         {!isMobile && <PanelLeft className="ml-6 icon" />}
 
         <div className={`flex items-center gap-1 ${isMobile ? "" : "ml-4"}`}>
-          <ChevronLeft className="icon" />
-          <ChevronRight className="icon" />
-        </div>
+            <ChevronLeft className="icon" />
+            <ChevronRight className="icon" />
+          </div>
 
         <div className={`flex-1 flex items-center ${isMobile ? "justify-start gap-1" : "justify-center gap-3"}`}>
           {!isMobile && <ShieldHalf className="icon" />}

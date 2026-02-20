@@ -608,11 +608,12 @@
     }
 
     #safari #window-header {
-        @apply gap-2 px-2;
+        @apply gap-4 px-4;
     }
 
     #safari .search {
-        @apply w-full px-2 py-1.5;
+        @apply px-2 py-1.5;
+        width: 90%;
     }
 
     #safari .search .search-input-box {
