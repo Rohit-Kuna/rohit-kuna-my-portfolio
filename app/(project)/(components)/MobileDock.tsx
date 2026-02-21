@@ -78,7 +78,7 @@ const MobileDock = () => {
               key={id}
               type="button"
               aria-label={name}
-              className={`mobile-dock-item ${isActive ? "is-active" : ""} ${showAppHintTap && id === "terminal" ? "is-hint-app-tap" : ""}`}
+              className={`mobile-dock-item ${isActive ? "is-active" : ""} ${showAppHintTap && id === "contact" ? "is-hint-app-tap" : ""}`}
               onClick={() => {
                 window.dispatchEvent(new Event("mobile-dock-icon-tap"));
                 closeNotificationPanel();

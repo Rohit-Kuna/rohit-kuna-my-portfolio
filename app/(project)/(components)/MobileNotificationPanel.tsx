@@ -255,8 +255,10 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
   };
 
   const handleShowTour = () => {
-    window.dispatchEvent(new Event("mobile-show-tour"));
-    setIsOpen(false);
+    goHome();
+    window.setTimeout(() => {
+      window.dispatchEvent(new Event("mobile-show-tour"));
+    }, 120);
   };
 
   const quickApps: QuickAppItem[] = [

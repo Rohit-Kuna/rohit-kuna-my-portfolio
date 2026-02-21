@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 
-type HintStep = "swipe" | "dock" | "drag" | "done";
+type HintStep = "swipe" | "dock" | "swipeLeft" | "drag" | "done";
 const MOBILE_HINTS_COMPLETED_KEY = "mobile-onboarding-hints-completed";
 const MOBILE_HINTS_REPEAT_AFTER_MS = 15 * 24 * 60 * 60 * 1000;
 
@@ -55,7 +55,12 @@ const MobileOnboardingHints = () => {
     };
 
     const onDockTap = () => {
-      setStep((prev) => (prev === "dock" ? "drag" : prev));
+      setStep((prev) => (prev === "dock" ? "swipeLeft" : prev));
+    };
+
+    const onWindowSwiped = (event: Event) => {
+      const direction = (event as CustomEvent<{ direction?: string }>).detail?.direction;
+      setStep((prev) => (prev === "swipeLeft" && direction === "left" ? "drag" : prev));
     };
 
     const onHomeDrag = () => {
@@ -70,11 +75,13 @@ const MobileOnboardingHints = () => {
 
     window.addEventListener("mobile-notification-opened", onNotificationOpened);
     window.addEventListener("mobile-dock-icon-tap", onDockTap);
+    window.addEventListener("mobile-window-swiped", onWindowSwiped);
     window.addEventListener("mobile-home-dragged", onHomeDrag);
 
     return () => {
       window.removeEventListener("mobile-notification-opened", onNotificationOpened);
       window.removeEventListener("mobile-dock-icon-tap", onDockTap);
+      window.removeEventListener("mobile-window-swiped", onWindowSwiped);
       window.removeEventListener("mobile-home-dragged", onHomeDrag);
     };
   }, [isMobile, isUnlocked, shouldShowHints, forceShowTour]);
@@ -118,20 +125,40 @@ const MobileOnboardingHints = () => {
   const titleByStep: Record<Exclude<HintStep, "done">, string> = {
     swipe: "Swipe down for Quick Apps",
     dock: "Tap a dock icon to open an app",
+    swipeLeft: "Swipe left to switch app",
     drag: "Drag the Home button to move it, Tap to go to Home",
   };
 
   const subtextByStep: Record<Exclude<HintStep, "done">, string> = {
     swipe: "Pull from the top area",
-    dock: "Try any icon in the bottom dock",
+    dock: "Tap Contact in the bottom dock",
+    swipeLeft: "Swipe left on the open window",
     drag: "Press and drag, then release to snap",
   };
 
+  const stepClassByStep: Record<Exclude<HintStep, "done">, string> = {
+    swipe: "swipe",
+    dock: "dock",
+    swipeLeft: "swipe-left",
+    drag: "drag",
+  };
+
   return (
-    <div className={`mobile-hint-layer is-${step}`} aria-hidden="true">
+    <div className={`mobile-hint-layer is-${stepClassByStep[step]}`} aria-hidden="true">
       <div className="mobile-hint-card glass-div">
-        <p className="mobile-hint-title">{titleByStep[step]}</p>
-        <p className="mobile-hint-subtext">{subtextByStep[step]}</p>
+        <div className="mobile-hint-content-row">
+          <div>
+            <p className="mobile-hint-title">{titleByStep[step]}</p>
+            <p className="mobile-hint-subtext">{subtextByStep[step]}</p>
+          </div>
+          {step === "swipeLeft" && (
+            <div className="mobile-hint-inline-arrows" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+          )}
+        </div>
       </div>
       <div className="mobile-hint-gesture">
         <span />

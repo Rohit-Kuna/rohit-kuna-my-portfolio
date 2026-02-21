@@ -191,7 +191,13 @@ const WindowWrapper = <P extends object>(
         requestAnimationFrame(clearDockFocus);
         window.setTimeout(clearDockFocus, 80);
 
-        switchWindowBySwipe(deltaX < 0 ? "left" : "right");
+        const direction = deltaX < 0 ? "left" : "right";
+        window.dispatchEvent(
+          new CustomEvent("mobile-window-swiped", {
+            detail: { direction },
+          })
+        );
+        switchWindowBySwipe(direction);
         return;
       }
 
