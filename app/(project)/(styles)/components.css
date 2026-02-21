@@ -257,12 +257,17 @@
     }
 
     .mobile-now-playing-title-track {
-        @apply w-full max-w-[100px] overflow-hidden;
+        width: 104px;
+        min-width: 104px;
+        max-width: 104px;
+        overflow: hidden;
     }
 
     .mobile-now-playing-title {
         @apply inline-block text-[13px] font-medium leading-tight text-white whitespace-nowrap;
-        animation: mobile-now-playing-title-scroll 7s linear infinite;
+        width: 104px;
+        min-width: 104px;
+        animation: mobile-now-playing-title-scroll 5s linear infinite;
     }
 
     .mobile-now-playing-title.is-paused {
@@ -327,11 +332,11 @@
 
     @keyframes mobile-now-playing-title-scroll {
         0% {
-            transform: translateX(-105%);
+            transform: translateX(-115%);
         }
 
         100% {
-            transform: translateX(105%);
+            transform: translateX(115%);
         }
     }
 
