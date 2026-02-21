@@ -64,7 +64,7 @@ const FullscreenPrompt = () => {
   return (
     <div className="fullscreen-prompt-overlay" role="dialog" aria-modal="true">
       <div className="fullscreen-prompt-card">
-        <h3 className="fullscreen-prompt-title">Enter Fullscreen Mode for immersive experience.</h3>
+        <h3 className="fullscreen-prompt-title">Enter Fullscreen Mode For Immersive Experience.</h3>
         <div className="fullscreen-prompt-actions">
           <button type="button" onClick={closePrompt}>
             Not now

@@ -41,7 +41,7 @@ const Navbar = () => {
       {/* <img
         src="/images/camera.png"
         alt="Camera"
-        className="sm:hidden pointer-events-none absolute left-1/2 -translate-x-1/2 w-4 h-4 object-contain drop-shadow-[0_0_3px_rgba(255,255,255,0.75)]"
+        className="sm:hidden pointer-events-none absolute left-1/2 -translate-x-1/2 w-4 h-4 object-contain drop-shadow-[0_0_3px_rgba(255,255,255,0.5)]"
       /> */}
       <div className="gap-1.5 sm:gap-5">
         <img src="/images/iconapplewhite.png" className="w-8 h-8 p-2 left-0.5" alt="logo" />
