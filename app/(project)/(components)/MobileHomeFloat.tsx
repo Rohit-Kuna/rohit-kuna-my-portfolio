@@ -107,9 +107,10 @@ const MobileHomeFloat = () => {
       const dx = moveEvent.clientX - startPointerX;
       const dy = moveEvent.clientY - startPointerY;
 
-      if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+      if (!moved && (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD)) {
         moved = true;
         setIsDragging(true);
+        window.dispatchEvent(new Event("mobile-home-dragged"));
       }
 
       if (!moved) return;

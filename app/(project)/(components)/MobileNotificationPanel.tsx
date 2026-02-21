@@ -117,6 +117,7 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
 
       if (gestureMode.current === "open" && deltaY > OPEN_THRESHOLD) {
         setIsOpen(true);
+        window.dispatchEvent(new Event("mobile-notification-opened"));
       }
 
       if (gestureMode.current === "close" && Math.abs(deltaY) > CLOSE_THRESHOLD && deltaY < 0) {
