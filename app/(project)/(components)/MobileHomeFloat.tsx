@@ -52,6 +52,8 @@ const MobileHomeFloat = () => {
   const closeWindow = useWindowStore((state) => state.closeWindow);
   const getState = useWindowStore.getState;
   const [position, setPosition] = useState<Position>(getInitialPosition);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (!isMobile || typeof window === "undefined") return;
@@ -81,6 +83,7 @@ const MobileHomeFloat = () => {
   const handlePointerDown: PointerEventHandler<HTMLButtonElement> = (event) => {
     if (!isMobile || typeof window === "undefined") return;
 
+    setIsFocused(true);
     const startPointerX = event.clientX;
     const startPointerY = event.clientY;
     const startX = position.x;
@@ -106,6 +109,7 @@ const MobileHomeFloat = () => {
 
       if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
         moved = true;
+        setIsDragging(true);
       }
 
       if (!moved) return;
@@ -117,6 +121,8 @@ const MobileHomeFloat = () => {
       window.removeEventListener("pointerup", onPointerUp);
       window.removeEventListener("pointercancel", onPointerUp);
       window.dispatchEvent(new Event("mobile-home-drag-end"));
+      setIsFocused(false);
+      setIsDragging(false);
 
       if (!moved) {
         goHome();
@@ -144,7 +150,11 @@ const MobileHomeFloat = () => {
       id="mobile-home-float"
       onPointerDown={handlePointerDown}
       style={{
-        transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+        transform: `translate3d(${position.x}px, ${position.y}px, 0) scale(${isFocused ? 1.2 : 1})`,
+        transition: isDragging
+          ? "none"
+          : "transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1)",
+        willChange: "transform",
       }}
     >
       <span className="mobile-home-float-icon">
