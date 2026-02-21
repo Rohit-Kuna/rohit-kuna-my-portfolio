@@ -13,7 +13,7 @@ const Navbar = () => {
   const mobileStatusIcons = [
     { id: "cell-network", src: "/icons/cell-network.png", alt: "Cell network" },
     { id: "wifi", src: "/icons/wifi.svg", alt: "Wi-Fi", className: "invert" },
-    { id: "battery-charging", src: "/icons/battery.png", alt: "Battery" , className: "w-5 h-5"},
+    { id: "battery-charging", src: "/icons/battery.png", alt: "Battery" },
   ];
 
   useEffect(() => {
@@ -38,14 +38,17 @@ const Navbar = () => {
 
   return (
     <nav className="relative h-6 sm:h-auto px-3 sm:px-5">
-      <img
+      {/* <img
         src="/images/camera.png"
         alt="Camera"
         className="sm:hidden pointer-events-none absolute left-1/2 -translate-x-1/2 w-4 h-4 object-contain drop-shadow-[0_0_3px_rgba(255,255,255,0.75)]"
-      />
+      /> */}
       <div className="gap-1.5 sm:gap-5">
         <img src="/images/iconapplewhite.png" className="w-8 h-8 p-2 left-0.5" alt="logo" />
-        <time className="text-white text-sm font-semibold sm:hidden" dateTime={now ? now.toISOString() : undefined}>
+        <time
+          className="sm:hidden text-white text-xs font-semibold leading-none self-center"
+          dateTime={now ? now.toISOString() : undefined}
+        >
           {now ? dayjs(now).format("HH:mm") : ""}
         </time>
         <p className="font-semibold text-white max-sm:hidden">{isMobile ? "Portfolio" : "Rohit's Portfolio"}</p>
@@ -65,14 +68,14 @@ const Navbar = () => {
       </div>
 
       <div className="nav-right">
-        <ul className="nav-icons flex items-center gap-2">
+        <ul className="nav-icons flex items-center gap-1.5 sm:gap-2">
           {isMobile
             ? mobileStatusIcons.map(({ id, src, alt, className }) => (
                 <li
                   key={id}
-                  className="relative flex items-center justify-center w-6 h-6 p-0 hover:bg-transparent"
+                  className="relative flex items-center justify-center w-5 h-5 p-0 hover:bg-transparent"
                 >
-                  <img src={src} alt={alt} className={`w-4 h-4 object-contain ${className ?? ""}`} />
+                  <img src={src} alt={alt} className={`w-4 h-4 object-contain shrink-0 ${className ?? ""}`} />
                 </li>
               ))
             : visibleNavIcons.map(({ id, icon: Icon }) => (
