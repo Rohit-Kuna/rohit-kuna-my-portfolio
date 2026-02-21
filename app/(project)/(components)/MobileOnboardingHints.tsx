@@ -26,9 +26,10 @@ const MobileOnboardingHints = () => {
       typeof document !== "undefined" &&
       document.documentElement.dataset.mobileFullscreenPromptResolved === "1"
   );
+  const [forceShowTour, setForceShowTour] = useState(false);
 
   useEffect(() => {
-    if (!isMobile || !shouldShowHints) return;
+    if (!isMobile) return;
 
     const onPromptVisible = () => {
       setIsUnlocked(false);
@@ -44,10 +45,10 @@ const MobileOnboardingHints = () => {
       window.removeEventListener("mobile-fullscreen-prompt-visible", onPromptVisible);
       window.removeEventListener("mobile-fullscreen-prompt-resolved", onPromptResolved);
     };
-  }, [isMobile, shouldShowHints]);
+  }, [isMobile]);
 
   useEffect(() => {
-    if (!isMobile || !isUnlocked || !shouldShowHints) return;
+    if (!isMobile || !isUnlocked || (!shouldShowHints && !forceShowTour)) return;
 
     const onNotificationOpened = () => {
       setStep((prev) => (prev === "swipe" ? "dock" : prev));
@@ -58,7 +59,13 @@ const MobileOnboardingHints = () => {
     };
 
     const onHomeDrag = () => {
-      setStep((prev) => (prev === "drag" ? "done" : prev));
+      setStep((prev) => {
+        if (prev === "drag") {
+          setForceShowTour(false);
+          return "done";
+        }
+        return prev;
+      });
     };
 
     window.addEventListener("mobile-notification-opened", onNotificationOpened);
@@ -70,10 +77,10 @@ const MobileOnboardingHints = () => {
       window.removeEventListener("mobile-dock-icon-tap", onDockTap);
       window.removeEventListener("mobile-home-dragged", onHomeDrag);
     };
-  }, [isMobile, isUnlocked, shouldShowHints]);
+  }, [isMobile, isUnlocked, shouldShowHints, forceShowTour]);
 
   useEffect(() => {
-    if (!isMobile || !shouldShowHints) return;
+    if (!isMobile || (!shouldShowHints && !forceShowTour)) return;
 
     if (isUnlocked && step === "dock") {
       window.dispatchEvent(new Event("mobile-hint-dock-start"));
@@ -81,14 +88,32 @@ const MobileOnboardingHints = () => {
     }
 
     window.dispatchEvent(new Event("mobile-hint-dock-end"));
-  }, [isMobile, isUnlocked, step, shouldShowHints]);
+  }, [isMobile, isUnlocked, step, shouldShowHints, forceShowTour]);
 
   useEffect(() => {
     if (step !== "done" || !shouldShowHints || typeof window === "undefined") return;
     window.localStorage.setItem(MOBILE_HINTS_COMPLETED_KEY, String(Date.now()));
   }, [step, shouldShowHints]);
 
-  if (!isMobile || !shouldShowHints || !isUnlocked || step === "done") return null;
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const onShowTour = () => {
+      const isPromptResolved =
+        typeof document !== "undefined" &&
+        document.documentElement.dataset.mobileFullscreenPromptResolved === "1";
+      setIsUnlocked(isPromptResolved);
+      setStep("swipe");
+      setForceShowTour(true);
+    };
+
+    window.addEventListener("mobile-show-tour", onShowTour);
+    return () => window.removeEventListener("mobile-show-tour", onShowTour);
+  }, [isMobile]);
+
+  if (!isMobile || (!shouldShowHints && !forceShowTour) || !isUnlocked || step === "done") {
+    return null;
+  }
 
   const titleByStep: Record<Exclude<HintStep, "done">, string> = {
     swipe: "Swipe down for Quick Apps",

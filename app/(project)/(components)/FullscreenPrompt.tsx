@@ -15,6 +15,9 @@ type FullscreenElement = HTMLElement & {
   msRequestFullscreen?: () => Promise<void> | void;
 };
 
+const FULLSCREEN_PROMPT_LAST_VISIT_KEY = "fullscreen-prompt-last-visit";
+const FULLSCREEN_PROMPT_REPEAT_AFTER_MS = 15 * 24 * 60 * 60 * 1000;
+
 const FullscreenPrompt = () => {
   const [isVisible, setIsVisible] = useState(false);
   const isMobile = useIsMobile();
@@ -31,8 +34,25 @@ const FullscreenPrompt = () => {
     window.dispatchEvent(new Event("mobile-fullscreen-prompt-visible"));
   };
 
+  const shouldShowPromptByVisitRule = () => {
+    if (typeof window === "undefined") return true;
+
+    const now = Date.now();
+    const savedValue = window.localStorage.getItem(FULLSCREEN_PROMPT_LAST_VISIT_KEY);
+    const savedTimestamp = Number(savedValue);
+
+    const isFirstVisit = !savedValue;
+    const isStaleVisit = Number.isFinite(savedTimestamp)
+      ? now - savedTimestamp >= FULLSCREEN_PROMPT_REPEAT_AFTER_MS
+      : true;
+
+    window.localStorage.setItem(FULLSCREEN_PROMPT_LAST_VISIT_KEY, String(now));
+    return isFirstVisit || isStaleVisit;
+  };
+
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const shouldShowByVisitRule = shouldShowPromptByVisitRule();
 
     const doc = document as FullscreenDocument;
     const isAlreadyFullscreen = Boolean(
@@ -41,7 +61,7 @@ const FullscreenPrompt = () => {
       doc.mozFullScreenElement ||
       doc.msFullscreenElement
     );
-    if (isAlreadyFullscreen) {
+    if (isAlreadyFullscreen || !shouldShowByVisitRule) {
       markPromptResolved();
       return;
     }
@@ -79,6 +99,17 @@ const FullscreenPrompt = () => {
       closePrompt();
     }
   }, [closePrompt]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const onRequestFullscreen = () => {
+      void enableFullscreen();
+    };
+
+    window.addEventListener("mobile-request-fullscreen", onRequestFullscreen);
+    return () => window.removeEventListener("mobile-request-fullscreen", onRequestFullscreen);
+  }, [enableFullscreen]);
 
   useEffect(() => {
     if (!isVisible || isMobile || typeof window === "undefined") return;

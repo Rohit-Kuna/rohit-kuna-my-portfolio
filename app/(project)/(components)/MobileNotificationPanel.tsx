@@ -31,6 +31,20 @@ type MobileNotificationPanelProps = {
   musicTracks?: MusicTrack[];
 };
 
+type FullscreenDocument = Document & {
+  webkitFullscreenElement?: Element | null;
+  mozFullScreenElement?: Element | null;
+  msFullscreenElement?: Element | null;
+  webkitExitFullscreen?: () => Promise<void> | void;
+  msExitFullscreen?: () => Promise<void> | void;
+};
+
+type FullscreenElement = HTMLElement & {
+  webkitRequestFullscreen?: () => Promise<void> | void;
+  mozRequestFullScreen?: () => Promise<void> | void;
+  msRequestFullscreen?: () => Promise<void> | void;
+};
+
 const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelProps) => {
   const isMobile = useIsMobile();
   const { openWindow, closeWindow } = useWindowStore();
@@ -39,6 +53,7 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
 
   const [isOpen, setIsOpen] = useState(false);
   const [pullOffset, setPullOffset] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const startY = useRef(0);
   const startX = useRef(0);
@@ -154,6 +169,35 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
     };
   }, [isMobile]);
 
+  useEffect(() => {
+    if (!isMobile || typeof document === "undefined") return;
+
+    const doc = document as FullscreenDocument;
+    const updateFullscreenState = () => {
+      setIsFullscreen(
+        Boolean(
+          doc.fullscreenElement ||
+          doc.webkitFullscreenElement ||
+          doc.mozFullScreenElement ||
+          doc.msFullscreenElement
+        )
+      );
+    };
+
+    updateFullscreenState();
+    document.addEventListener("fullscreenchange", updateFullscreenState);
+    document.addEventListener("webkitfullscreenchange", updateFullscreenState as EventListener);
+    document.addEventListener("mozfullscreenchange", updateFullscreenState as EventListener);
+    document.addEventListener("MSFullscreenChange", updateFullscreenState as EventListener);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", updateFullscreenState);
+      document.removeEventListener("webkitfullscreenchange", updateFullscreenState as EventListener);
+      document.removeEventListener("mozfullscreenchange", updateFullscreenState as EventListener);
+      document.removeEventListener("MSFullscreenChange", updateFullscreenState as EventListener);
+    };
+  }, [isMobile]);
+
   const toggleApp = (app: Pick<DockApp, "id" | "canOpen">) => {
     if (!app.canOpen) return;
 
@@ -176,6 +220,42 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
         closeWindow(key);
       }
     });
+    setIsOpen(false);
+  };
+
+  const handleFullscreenToggle = async () => {
+    if (typeof document === "undefined") return;
+
+    const doc = document as FullscreenDocument;
+    const rootEl = document.documentElement as FullscreenElement;
+
+    try {
+      if (isFullscreen) {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (doc.webkitExitFullscreen) {
+          await doc.webkitExitFullscreen();
+        } else if (doc.msExitFullscreen) {
+          await doc.msExitFullscreen();
+        }
+      } else if (rootEl.requestFullscreen) {
+        await rootEl.requestFullscreen();
+      } else if (rootEl.webkitRequestFullscreen) {
+        await rootEl.webkitRequestFullscreen();
+      } else if (rootEl.mozRequestFullScreen) {
+        await rootEl.mozRequestFullScreen();
+      } else if (rootEl.msRequestFullscreen) {
+        await rootEl.msRequestFullscreen();
+      }
+    } catch {
+      // Ignore browser policy/support failures and keep UI responsive.
+    } finally {
+      setIsOpen(false);
+    }
+  };
+
+  const handleShowTour = () => {
+    window.dispatchEvent(new Event("mobile-show-tour"));
     setIsOpen(false);
   };
 
@@ -222,7 +302,25 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
       >
         <div className="mobile-notif-handle" />
         <div className="mobile-notif-content">
-          <p className="mobile-notif-title">Quick Apps</p>
+          <div className="mobile-notif-title-row">
+            <button
+              type="button"
+              className="mobile-notif-quick-action"
+              onClick={() => {
+                void handleFullscreenToggle();
+              }}
+            >
+              {isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+            </button>
+            <p className="mobile-notif-title">Quick Apps</p>
+            <button
+              type="button"
+              className="mobile-notif-quick-action"
+              onClick={handleShowTour}
+            >
+              Show Tour
+            </button>
+          </div>
 
           <NowPlayingBar tracks={musicTracks} />
 
