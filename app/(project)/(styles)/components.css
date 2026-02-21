@@ -682,11 +682,11 @@
         }
     }
 
-    #resume {
+    :is(#resume, #pdffile) {
         @apply w-fit h-fit absolute top-16 left-6/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden max-h-[90vh];
     }
 
-    #resume .resume-pdf-content {
+    :is(#resume, #pdffile) .resume-pdf-content {
         padding-left: 0.5rem;
         padding-right: 0.5rem;
         box-sizing: border-box;
@@ -694,7 +694,18 @@
         background: #fff;
     }
 
-    #resume .resume-scroll {
+    :is(#resume, #pdffile) .resume-pdf-content.mobile-zoomable {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x pan-y;
+    }
+
+    :is(#resume, #pdffile) .resume-pdf-document.mobile-zoomable {
+        min-width: max-content;
+    }
+
+    :is(#resume, #pdffile) .resume-scroll {
         scrollbar-gutter: stable both-edges;
     }
 
@@ -828,6 +839,7 @@
     #terminal,
     #contact,
     #resume,
+    #pdffile,
     #finder,
     #txtfile,
     #imgfile {
@@ -905,11 +917,11 @@
         @apply w-full flex-row items-center justify-start gap-2;
     }
 
-    #resume canvas {
+    :is(#resume, #pdffile) canvas {
         @apply max-w-full h-auto;
     }
 
-    #resume .resume-scroll {
+    :is(#resume, #pdffile) .resume-scroll {
         max-height: calc(100dvh - 56px - var(--compact-dock-space));
         padding-bottom: calc(var(--compact-dock-space) + 16px);
     }

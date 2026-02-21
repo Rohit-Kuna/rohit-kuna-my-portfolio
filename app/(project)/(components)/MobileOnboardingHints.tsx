@@ -8,7 +8,7 @@ const MOBILE_HINTS_REPEAT_AFTER_MS = 15 * 24 * 60 * 60 * 1000;
 const MobileOnboardingHints = () => {
   const isMobile = useIsMobile();
   const [step, setStep] = useState<HintStep>("swipe");
-  const [shouldShowHints, setShouldShowHints] = useState(
+  const [shouldShowHints] = useState(
     () => {
       if (typeof window === "undefined") return true;
 

@@ -11,7 +11,7 @@ import Welcome from "@/app/(project)/(components)/Welcome";
 import Dock from "@/app/(project)/(components)/Dock";
 import Home from "@/app/(project)/(components)/Home";
 import useLocationStore from "@/app/(project)/(store)/location";
-import { Terminal, Safari, Resume, Finder, Text, Image, Contact } from "@/app/(project)/(windows)";
+import { Terminal, Safari, Resume, Finder, Text, Image, Contact, PdfFile } from "@/app/(project)/(windows)";
 import type { Location } from "@/app/(project)/(types)/location.types";
 import type {
   BlogPost,
@@ -63,6 +63,7 @@ const App = ({
       <Terminal techStackData={techStackData} />
       <Safari blogPosts={blogPostsData} />
       <Resume resumeContent={resumeContent} />
+      <PdfFile />
       <Finder locationsData={locationsData} />
       <Text />
       <Image />

@@ -6,7 +6,8 @@ export type WindowKey =
   | "photos"
   | "terminal"
   | "txtfile"
-  | "imgfile";
+  | "imgfile"
+  | "pdffile";
 
 export type WindowState<T = unknown> = {
   isOpen: boolean;

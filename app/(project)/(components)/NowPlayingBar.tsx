@@ -18,6 +18,7 @@ const NowPlayingBar = ({ tracks = [] }: NowPlayingBarProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isPlayingRef = useRef(false);
   const playlist = tracks.length > 0 ? tracks : DEFAULT_TRACKS;
   const playlistLengthRef = useRef(playlist.length);
   const safeTrackIndex =
@@ -55,10 +56,13 @@ const NowPlayingBar = ({ tracks = [] }: NowPlayingBarProps) => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    audio.src = currentTrack.audioUrl;
-    audio.load();
+    const resolvedTrackUrl = new URL(currentTrack.audioUrl, window.location.href).href;
+    if (audio.src !== resolvedTrackUrl) {
+      audio.src = currentTrack.audioUrl;
+      audio.load();
+    }
 
-    if (isPlaying) {
+    if (isPlayingRef.current) {
       void audio.play().catch(() => setIsPlaying(false));
     }
   }, [currentTrack.audioUrl]);
@@ -66,6 +70,7 @@ const NowPlayingBar = ({ tracks = [] }: NowPlayingBarProps) => {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    isPlayingRef.current = isPlaying;
 
     if (isPlaying) {
       void audio.play().catch(() => {

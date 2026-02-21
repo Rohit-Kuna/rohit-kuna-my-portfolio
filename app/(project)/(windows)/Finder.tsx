@@ -36,7 +36,12 @@ const Finder = ({ locationsData }: FinderProps) => {
     const file = item as FileNode;
 
     if (file.fileType === "pdf") {
-      openWindow("resume", file);
+      const isResumeFolder = Boolean(
+        activeLocation &&
+        "type" in activeLocation &&
+        activeLocation.type === "resume"
+      );
+      openWindow(isResumeFolder ? "resume" : "pdffile", file);
       return;
     }
 
