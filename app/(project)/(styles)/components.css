@@ -633,7 +633,7 @@
     }
 
     #terminal {
-        @apply w-xl absolute top-32 left-1/12 bg-black text-gray-200 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+        @apply w-2xl absolute top-32 left-1/12 bg-black text-gray-200 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
         .techstack {
             @apply text-sm font-roboto p-5 text-gray-300;
@@ -643,7 +643,7 @@
             }
 
             .terminal-head-row {
-                @apply grid grid-cols-[9rem_minmax(0,1fr)] items-center gap-3 ms-10;
+                @apply grid grid-cols-[11.5rem_minmax(0,1fr)] items-center gap-3 ms-10;
             }
 
             .content {
@@ -651,7 +651,7 @@
             }
 
             .terminal-row {
-                @apply grid grid-cols-[9rem_minmax(0,1fr)] gap-3 items-start py-1;
+                @apply grid grid-cols-[11.5rem_minmax(0,1fr)] gap-3 items-start py-1;
             }
 
             .terminal-category-value {
