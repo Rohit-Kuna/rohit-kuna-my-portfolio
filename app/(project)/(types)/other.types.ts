@@ -71,3 +71,8 @@ export type MusicTrack = {
   audioUrl: string;
   albumCover?: string;
 };
+
+export type WelcomeContent = {
+  subtitle: string;
+  title: string;
+};

@@ -6,6 +6,7 @@ import {
   getMusicTracksFromSanity,
   getResumeContentFromSanity,
   getTechStackFromSanity,
+  getWelcomeContentFromSanity,
 } from "@/sanity/fetches";
 import type { Location } from "@/app/(project)/(types)/location.types";
 import type {
@@ -14,6 +15,7 @@ import type {
   MusicTrack,
   ResumeContent,
   TechStackCategory,
+  WelcomeContent,
 } from "@/app/(project)/(types)/other.types";
 
 export const dynamic = "force-dynamic";
@@ -25,6 +27,7 @@ export default async function HomePage() {
   let musicTracksData: MusicTrack[] = [];
   let contactContentData: ContactContent | undefined;
   let resumeContentData: ResumeContent | undefined;
+  let welcomeContentData: WelcomeContent | undefined;
 
   try {
     locationsData = await getFinderLocationsFromSanity();
@@ -68,6 +71,15 @@ export default async function HomePage() {
     resumeContentData = undefined;
   }
 
+  try {
+    const cmsWelcomeContent = await getWelcomeContentFromSanity();
+    if (cmsWelcomeContent?.subtitle && cmsWelcomeContent?.title) {
+      welcomeContentData = cmsWelcomeContent;
+    }
+  } catch {
+    welcomeContentData = undefined;
+  }
+
   return (
     <App
       locationsData={locationsData}
@@ -76,6 +88,7 @@ export default async function HomePage() {
       musicTracksData={musicTracksData}
       contactContent={contactContentData}
       resumeContent={resumeContentData}
+      welcomeContent={welcomeContentData}
     />
   );
 }

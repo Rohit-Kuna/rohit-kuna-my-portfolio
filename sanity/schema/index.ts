@@ -7,6 +7,7 @@ import { musicPlayerContent } from "./musicPlayerContent"
 import { resumeContent } from "./resumeContent"
 import { socialLink } from "./socialLink"
 import { techStackCategory } from "./techStackCategory"
+import { welcomeContent } from "./welcomeContent"
 
 export const schemaTypes = [
   blogPost,
@@ -18,4 +19,5 @@ export const schemaTypes = [
   resumeContent,
   socialLink,
   techStackCategory,
+  welcomeContent,
 ]

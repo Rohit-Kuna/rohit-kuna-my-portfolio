@@ -19,6 +19,7 @@ import type {
   MusicTrack,
   ResumeContent,
   TechStackCategory,
+  WelcomeContent,
 } from "@/app/(project)/(types)/other.types";
 
 type AppProps = {
@@ -28,6 +29,7 @@ type AppProps = {
   musicTracksData?: MusicTrack[];
   contactContent?: ContactContent;
   resumeContent?: ResumeContent;
+  welcomeContent?: WelcomeContent;
 };
 
 const App = ({
@@ -37,6 +39,7 @@ const App = ({
   musicTracksData = [],
   contactContent,
   resumeContent,
+  welcomeContent,
 }: AppProps) => {
   const { activeLocation, setActiveLocation } = useLocationStore();
 
@@ -54,7 +57,7 @@ const App = ({
       <FullscreenPrompt />
       <Navbar />
       <MobileNotificationPanel musicTracks={musicTracksData} />
-      <Welcome />
+      <Welcome content={welcomeContent} />
       <MobileDock />
       <MobileHomeFloat />
       <MobileOnboardingHints />

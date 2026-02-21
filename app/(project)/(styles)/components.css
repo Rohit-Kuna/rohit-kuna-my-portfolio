@@ -21,6 +21,7 @@
             font-size: clamp(1.61rem, 2.65vw, 3.2rem);
             line-height: 1.15;
             text-wrap: balance;
+            opacity: 0.94;
             text-shadow: 0 2px 14px rgba(5, 7, 18, 0.55);
         }
 

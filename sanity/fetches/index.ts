@@ -5,3 +5,4 @@ export { getMusicTracksFromSanity } from "@/sanity/fetches/music-player-content-
 export { getResumeContentFromSanity } from "@/sanity/fetches/resume-content-fetch.cms";
 export { getSocialLinksFromSanity } from "@/sanity/fetches/social-link-fetch.cms";
 export { getTechStackFromSanity } from "@/sanity/fetches/tech-stack-fetch.cms";
+export { getWelcomeContentFromSanity } from "@/sanity/fetches/welcome-content-fetch.cms";
