@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 
 type FullscreenDocument = Document & {
   webkitFullscreenElement?: Element | null;
@@ -16,6 +17,7 @@ type FullscreenElement = HTMLElement & {
 
 const FullscreenPrompt = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const isMobile = useIsMobile();
 
   const markPromptResolved = () => {
     if (typeof window === "undefined" || typeof document === "undefined") return;
@@ -79,7 +81,7 @@ const FullscreenPrompt = () => {
   }, [closePrompt]);
 
   useEffect(() => {
-    if (!isVisible || typeof window === "undefined") return;
+    if (!isVisible || isMobile || typeof window === "undefined") return;
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
@@ -95,7 +97,7 @@ const FullscreenPrompt = () => {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isVisible, enableFullscreen, closePrompt]);
+  }, [isVisible, isMobile, enableFullscreen, closePrompt]);
 
   if (!isVisible) return null;
 
@@ -122,7 +124,7 @@ const FullscreenPrompt = () => {
             type="button"
             className="is-primary"
             onClick={enableFullscreen}
-            autoFocus
+            autoFocus={!isMobile}
           >
             Enter
           </button>
