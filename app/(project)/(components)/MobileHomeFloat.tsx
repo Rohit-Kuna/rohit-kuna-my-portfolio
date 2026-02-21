@@ -139,6 +139,7 @@ const MobileHomeFloat = () => {
       setIsDragging(false);
 
       if (!moved) {
+        window.dispatchEvent(new Event("mobile-home-tap"));
         goHome();
         return;
       }

@@ -63,7 +63,7 @@ const MobileOnboardingHints = () => {
       setStep((prev) => (prev === "swipeLeft" && direction === "left" ? "drag" : prev));
     };
 
-    const onHomeDrag = () => {
+    const completeDragStep = () => {
       setStep((prev) => {
         if (prev === "drag") {
           setForceShowTour(false);
@@ -76,13 +76,15 @@ const MobileOnboardingHints = () => {
     window.addEventListener("mobile-notification-opened", onNotificationOpened);
     window.addEventListener("mobile-dock-icon-tap", onDockTap);
     window.addEventListener("mobile-window-swiped", onWindowSwiped);
-    window.addEventListener("mobile-home-dragged", onHomeDrag);
+    window.addEventListener("mobile-home-dragged", completeDragStep);
+    window.addEventListener("mobile-home-tap", completeDragStep);
 
     return () => {
       window.removeEventListener("mobile-notification-opened", onNotificationOpened);
       window.removeEventListener("mobile-dock-icon-tap", onDockTap);
       window.removeEventListener("mobile-window-swiped", onWindowSwiped);
-      window.removeEventListener("mobile-home-dragged", onHomeDrag);
+      window.removeEventListener("mobile-home-dragged", completeDragStep);
+      window.removeEventListener("mobile-home-tap", completeDragStep);
     };
   }, [isMobile, isUnlocked, shouldShowHints, forceShowTour]);
 

@@ -308,20 +308,32 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
           <div className="mobile-notif-title-row">
             <button
               type="button"
-              className="mobile-notif-quick-action"
+              aria-label={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+              className="mobile-notif-quick-icon-btn is-left"
               onClick={() => {
                 void handleFullscreenToggle();
               }}
             >
-              {isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+              <img
+                src={isFullscreen ? "/images/exit-fullscreen.png" : "/images/enter-fullscreen.png"}
+                alt=""
+                aria-hidden="true"
+                className="mobile-notif-quick-icon"
+              />
             </button>
             <p className="mobile-notif-title">Quick Apps</p>
             <button
               type="button"
-              className="mobile-notif-quick-action"
+              aria-label="Show Tour"
+              className="mobile-notif-quick-icon-btn is-right"
               onClick={handleShowTour}
             >
-              Show Tour
+              <img
+                src="/images/show-tour.png"
+                alt=""
+                aria-hidden="true"
+                className="mobile-notif-quick-icon"
+              />
             </button>
           </div>
 
