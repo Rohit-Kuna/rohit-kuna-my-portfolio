@@ -72,6 +72,19 @@ const MobileHomeFloat = () => {
     return () => window.removeEventListener("resize", onResize);
   }, [isMobile]);
 
+  useEffect(() => {
+    if (!isMobile || typeof window === "undefined") return;
+
+    const resetPosition = () => {
+      setIsFocused(false);
+      setIsDragging(false);
+      setPosition(getInitialPosition());
+    };
+
+    window.addEventListener("mobile-home-reset-position", resetPosition);
+    return () => window.removeEventListener("mobile-home-reset-position", resetPosition);
+  }, [isMobile]);
+
   const goHome = () => {
     const currentWindows = getState().windows;
     (Object.keys(currentWindows) as WindowKey[]).forEach((key) => {

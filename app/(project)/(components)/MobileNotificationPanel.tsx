@@ -256,6 +256,7 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
 
   const handleShowTour = () => {
     goHome();
+    window.dispatchEvent(new Event("mobile-home-reset-position"));
     window.setTimeout(() => {
       window.dispatchEvent(new Event("mobile-show-tour"));
     }, 120);
