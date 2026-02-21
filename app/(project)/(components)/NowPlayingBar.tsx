@@ -61,7 +61,7 @@ const NowPlayingBar = ({ tracks = [] }: NowPlayingBarProps) => {
     if (isPlaying) {
       void audio.play().catch(() => setIsPlaying(false));
     }
-  }, [currentTrack.audioUrl, isPlaying]);
+  }, [currentTrack.audioUrl]);
 
   useEffect(() => {
     const audio = audioRef.current;
