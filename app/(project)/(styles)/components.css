@@ -129,33 +129,40 @@
     }
 
     .fullscreen-prompt-title {
-        @apply text-[17px] font-semibold leading-snug;
+        @apply text-[15px] font-semibold leading-snug;
         color: rgba(244, 248, 252, 0.88);
     }
 
     .fullscreen-prompt-text {
-        @apply mt-1 text-[12px] leading-snug;
-        color: rgba(255, 255, 255, 0.9);
+        @apply mt-2 text-[11.5px] leading-snug;
+        color: rgba(238, 246, 255, 0.82);
     }
 
     .fullscreen-prompt-actions {
-        @apply mt-2.5 flex justify-end gap-1.5;
+        @apply mt-3 grid grid-cols-2 gap-2;
     }
 
     .fullscreen-prompt-actions button {
-        @apply px-3 py-1.5 rounded-md text-[13px] font-semibold leading-none;
-        min-width: 76px;
-        min-height: 34px;
+        @apply w-full px-3 py-2 rounded-md text-[12px] font-semibold leading-none;
+        min-height: 36px;
         color: rgba(239, 245, 252, 0.86);
         background: rgba(182, 200, 226, 0.11);
         border: 1px solid rgba(229, 237, 250, 0.24);
         backdrop-filter: blur(12px) saturate(130%);
         -webkit-backdrop-filter: blur(12px) saturate(130%);
+        outline: none;
     }
 
     .fullscreen-prompt-actions button.is-primary {
         background: rgba(198, 217, 242, 0.16);
         border-color: rgba(236, 243, 252, 0.32);
+    }
+
+    .fullscreen-prompt-actions button:focus-visible {
+        border-color: rgba(220, 237, 255, 0.56);
+        box-shadow:
+            0 0 0 1px rgba(148, 190, 238, 0.24),
+            inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
 
     .mobile-hint-layer {
@@ -783,7 +790,7 @@
     }
 
     .fullscreen-prompt-title {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     #mobile-home-float {

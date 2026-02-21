@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type FullscreenDocument = Document & {
   webkitFullscreenElement?: Element | null;
@@ -51,12 +51,12 @@ const FullscreenPrompt = () => {
     }
   }, []);
 
-  const closePrompt = () => {
+  const closePrompt = useCallback(() => {
     setIsVisible(false);
     markPromptResolved();
-  };
+  }, []);
 
-  const enableFullscreen = async () => {
+  const enableFullscreen = useCallback(async () => {
     if (typeof document === "undefined") return;
 
     const element = document.documentElement as FullscreenElement;
@@ -76,20 +76,55 @@ const FullscreenPrompt = () => {
     } finally {
       closePrompt();
     }
-  };
+  }, [closePrompt]);
+
+  useEffect(() => {
+    if (!isVisible || typeof window === "undefined") return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        void enableFullscreen();
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closePrompt();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isVisible, enableFullscreen, closePrompt]);
 
   if (!isVisible) return null;
 
   return (
-    <div className="fullscreen-prompt-overlay" role="dialog" aria-modal="true">
+    <div
+      className="fullscreen-prompt-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="fullscreen-prompt-title"
+      aria-describedby="fullscreen-prompt-description"
+    >
       <div className="fullscreen-prompt-card glass-div">
-        <h3 className="fullscreen-prompt-title">Enter Fullscreen Mode For Immersive Experience.</h3>
+        <h3 id="fullscreen-prompt-title" className="fullscreen-prompt-title">
+          Enter Fullscreen Mode?
+        </h3>
+        <p id="fullscreen-prompt-description" className="fullscreen-prompt-text">
+          For immersive experience, switch to fullscreen.
+        </p>
         <div className="fullscreen-prompt-actions">
           <button type="button" onClick={closePrompt}>
-            Not now
+            Dismiss
           </button>
-          <button type="button" className="is-primary" onClick={enableFullscreen}>
-            Yes
+          <button
+            type="button"
+            className="is-primary"
+            onClick={enableFullscreen}
+            autoFocus
+          >
+            Enter
           </button>
         </div>
       </div>
