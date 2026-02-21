@@ -84,13 +84,13 @@
     .fullscreen-prompt-overlay {
         @apply fixed inset-0 flex items-start justify-center p-3 pt-14;
         z-index: 5200;
-        background: rgba(6, 12, 24, 0.24);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        background: rgba(6, 12, 24, 0.36);
+        backdrop-filter: blur(7px);
+        -webkit-backdrop-filter: blur(7px);
     }
 
     .fullscreen-prompt-card {
-        @apply w-full max-w-[252px] rounded-xl p-2.5;
+        @apply w-full max-w-[360px] rounded-xl p-4;
         background:
             radial-gradient(circle at 16% -12%, rgba(191, 210, 238, 0.3), transparent 55%),
             linear-gradient(155deg, rgba(102, 122, 149, 0.42), rgba(58, 76, 103, 0.33));
@@ -103,7 +103,7 @@
     }
 
     .fullscreen-prompt-title {
-        @apply text-[12.5px] font-semibold leading-snug;
+        @apply text-[17px] font-semibold leading-snug;
         color: rgba(243, 247, 252, 0.94);
     }
 
@@ -117,7 +117,9 @@
     }
 
     .fullscreen-prompt-actions button {
-        @apply px-2 py-1 rounded-md text-[11px] font-medium leading-none;
+        @apply px-3 py-1.5 rounded-md text-[13px] font-semibold leading-none;
+        min-width: 76px;
+        min-height: 34px;
         color: rgba(239, 245, 252, 0.9);
         background: rgba(182, 200, 226, 0.18);
         border: 1px solid rgba(229, 237, 250, 0.28);
@@ -583,6 +585,15 @@
 }
 
 @media (max-width: 1024px) {
+    .fullscreen-prompt-card {
+        max-width: 312px;
+        padding: 14px;
+    }
+
+    .fullscreen-prompt-title {
+        font-size: 14px;
+    }
+
     #mobile-home-float {
         position: fixed;
         top: 0;
