@@ -18,7 +18,7 @@
 
         .welcome-subtitle {
             @apply w-full text-center font-borel italic;
-            font-size: clamp(2.1rem, 3.05vw, 4.4rem);
+            font-size: clamp(1.61rem, 2.65vw, 3.2rem);
             line-height: 1.15;
             text-wrap: balance;
             text-shadow: 0 2px 14px rgba(5, 7, 18, 0.55);
@@ -27,7 +27,7 @@
         .welcome-title {
             @apply text-center font-borel italic;
             margin-top: clamp(1.3rem, 2.2vw, 2.4rem);
-            font-size: clamp(3.5rem, 6vw, 7.4rem);
+            font-size: clamp(4.5rem, 7vw, 8.4rem);
             line-height: 0.95;
             text-wrap: balance;
             text-shadow: 0 4px 16px rgba(7, 9, 20, 0.48);
