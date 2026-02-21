@@ -14,10 +14,23 @@
     }
 
     #welcome {
-        @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10;
+        @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none w-full max-w-[min(92vw,1520px)] px-6 max-sm:h-screen max-sm:w-full max-sm:px-6;
 
         .welcome-subtitle {
-            @apply w-full max-w-[94vw] px-2 text-center leading-snug;
+            @apply w-full text-center font-borel italic;
+            font-size: clamp(2.1rem, 3.05vw, 4.4rem);
+            line-height: 1.15;
+            text-wrap: balance;
+            text-shadow: 0 2px 14px rgba(5, 7, 18, 0.55);
+        }
+
+        .welcome-title {
+            @apply text-center font-borel italic;
+            margin-top: clamp(1.3rem, 2.2vw, 2.4rem);
+            font-size: clamp(3.5rem, 6vw, 7.4rem);
+            line-height: 0.95;
+            text-wrap: balance;
+            text-shadow: 0 4px 16px rgba(7, 9, 20, 0.48);
         }
 
         .small-screen {
@@ -985,8 +998,22 @@
         @apply cursor-default;
     }
 
+    #welcome {
+        max-width: 96vw;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
     #welcome .welcome-subtitle {
-        @apply max-w-[92vw] text-lg;
+        font-size: clamp(1.35rem, 5.4vw, 2.1rem);
+        line-height: 1.24;
+        font-weight: 300;
+    }
+
+    #welcome .welcome-title {
+        margin-top: 1.1rem;
+        font-size: clamp(2.1rem, 9vw, 3.4rem);
+        line-height: 1.05;
     }
 
     #safari,

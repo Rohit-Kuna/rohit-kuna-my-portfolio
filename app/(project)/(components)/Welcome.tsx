@@ -1,8 +1,12 @@
+"use client";
 const Welcome = () => {
   return (
     <section id="welcome">
-      <h1 className="mt-7 text-3xl sm:text-3xl md:text-3xl lg:text-6xl xl:text-8xl italic font-borel whitespace-nowrap">
-        think different
+      <h2 className="welcome-subtitle">
+        I&apos;m Rohit Kuna, I design and engineer software systems that scale from
+      </h2>
+      <h1 className="welcome-title">
+        idea to production
       </h1>
     </section>
   );
