@@ -107,30 +107,30 @@
     .fullscreen-prompt-overlay {
         @apply fixed inset-0 flex items-start justify-center p-3 pt-14;
         z-index: 5200;
-        background: rgba(6, 12, 24, 0.36);
-        backdrop-filter: blur(7px);
-        -webkit-backdrop-filter: blur(7px);
+        background: rgba(6, 12, 24, 0.28);
+        backdrop-filter: blur(9px);
+        -webkit-backdrop-filter: blur(9px);
     }
 
     .fullscreen-prompt-card {
         @apply w-full max-w-[360px] rounded-xl p-4;
         background:
-            radial-gradient(circle at 16% -12%, rgba(191, 210, 238, 0.2), transparent 55%),
-            linear-gradient(155deg, rgba(103, 127, 159, 0.193), rgba(58, 76, 103, 0.2)),
-            rgba(255, 255, 255, 0.227);
-        border: 1px solid rgba(226, 236, 250, 0.4);
+            radial-gradient(circle at 16% -12%, rgba(191, 210, 238, 0.15), transparent 55%),
+            linear-gradient(155deg, rgba(103, 127, 159, 0.13), rgba(58, 76, 103, 0.12)),
+            rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(226, 236, 250, 0.3);
         box-shadow:
-            0 8px 16px rgba(0, 0, 0, 0.22),
-            inset 0 1px 0 rgba(255, 255, 255, 0.34);
-        backdrop-filter: blur(14px) saturate(140%);
-        -webkit-backdrop-filter: blur(14px) saturate(140%);
+            0 10px 20px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.26);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
         background-clip: padding-box;
         overflow: hidden;
     }
 
     .fullscreen-prompt-title {
         @apply text-[17px] font-semibold leading-snug;
-        color: rgba(243, 247, 252, 0.94);
+        color: rgba(244, 248, 252, 0.88);
     }
 
     .fullscreen-prompt-text {
@@ -146,16 +146,16 @@
         @apply px-3 py-1.5 rounded-md text-[13px] font-semibold leading-none;
         min-width: 76px;
         min-height: 34px;
-        color: rgba(239, 245, 252, 0.9);
-        background: rgba(182, 200, 226, 0.18);
-        border: 1px solid rgba(229, 237, 250, 0.28);
-        backdrop-filter: blur(8px) saturate(118%);
-        -webkit-backdrop-filter: blur(8px) saturate(118%);
+        color: rgba(239, 245, 252, 0.86);
+        background: rgba(182, 200, 226, 0.11);
+        border: 1px solid rgba(229, 237, 250, 0.24);
+        backdrop-filter: blur(12px) saturate(130%);
+        -webkit-backdrop-filter: blur(12px) saturate(130%);
     }
 
     .fullscreen-prompt-actions button.is-primary {
-        background: rgba(198, 217, 242, 0.24);
-        border-color: rgba(236, 243, 252, 0.38);
+        background: rgba(198, 217, 242, 0.16);
+        border-color: rgba(236, 243, 252, 0.32);
     }
 
     .mobile-hint-layer {
@@ -175,8 +175,8 @@
         border-radius: 12px;
         border: 1px solid rgba(214, 228, 246, 0.38);
         background:
-            radial-gradient(circle at 20% -18%, rgba(177, 199, 230, 0.603), transparent 56%),
-            linear-gradient(150deg, rgba(60, 85, 118, 0.453), rgba(39, 56, 82, 0.24)),
+            radial-gradient(circle at 20% -18%, rgba(146, 173, 212, 0.438), transparent 56%),
+            linear-gradient(150deg, rgba(69, 102, 145, 0.464),rgba(39, 56, 82, 0.305)),
             rgba(255, 255, 255, 0.337);
         box-shadow:
             0 8px 18px rgba(0, 0, 0, 0.24),
