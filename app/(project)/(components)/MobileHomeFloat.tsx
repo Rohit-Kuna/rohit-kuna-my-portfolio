@@ -8,8 +8,8 @@ import type { WindowKey } from "@/app/(project)/(types)/windows.types";
 const BUTTON_SIZE = 52;
 const SCREEN_MARGIN = 10;
 const TOP_BOUNDARY = 52;
-const INITIAL_BOTTOM_RESERVE = 132;
-const DRAG_BOTTOM_RESERVE_FALLBACK = 92;
+const INITIAL_BOTTOM_RESERVE = 182;
+const DRAG_BOTTOM_RESERVE_FALLBACK = 132;
 const DOCK_CLEARANCE = 8;
 const DRAG_THRESHOLD = 6;
 

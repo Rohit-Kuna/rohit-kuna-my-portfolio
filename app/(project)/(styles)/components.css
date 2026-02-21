@@ -243,6 +243,11 @@
     }
 
     .mobile-hint-layer.is-dock .mobile-hint-card {
+        left: auto;
+        right: 10px;
+        transform: none;
+        width: 76%;
+        max-width: 320px;
         bottom: 112px;
     }
 
@@ -253,14 +258,14 @@
     .mobile-hint-layer.is-drag .mobile-hint-card {
         right: 12px;
         left: auto;
-        bottom: 184px;
+        bottom: 232px;
         width: 188px;
         transform: none;
     }
 
     .mobile-hint-layer.is-drag .mobile-hint-gesture {
         right: 28px;
-        bottom: 156px;
+        bottom: 204px;
         transform: rotate(225deg);
     }
 
