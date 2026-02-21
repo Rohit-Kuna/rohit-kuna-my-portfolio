@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { dockApps } from "@/app/(project)/(content)/other.content";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 import { useWindowStore } from "@/app/(project)/(store)/window";
@@ -15,6 +16,25 @@ const MobileDock = () => {
   const { openWindow, closeWindow } = useWindowStore();
   const windows = useWindowStore((state) => state.windows);
   const getState = useWindowStore.getState;
+  const [showAppHintTap, setShowAppHintTap] = useState(false);
+
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const onHintDockStart = () => setShowAppHintTap(true);
+    const onHintDockEnd = () => setShowAppHintTap(false);
+    const onAnyDockTap = () => setShowAppHintTap(false);
+
+    window.addEventListener("mobile-hint-dock-start", onHintDockStart);
+    window.addEventListener("mobile-hint-dock-end", onHintDockEnd);
+    window.addEventListener("mobile-dock-icon-tap", onAnyDockTap);
+
+    return () => {
+      window.removeEventListener("mobile-hint-dock-start", onHintDockStart);
+      window.removeEventListener("mobile-hint-dock-end", onHintDockEnd);
+      window.removeEventListener("mobile-dock-icon-tap", onAnyDockTap);
+    };
+  }, [isMobile]);
 
   if (!isMobile) return null;
 
@@ -58,8 +78,9 @@ const MobileDock = () => {
               key={id}
               type="button"
               aria-label={name}
-              className={`mobile-dock-item ${isActive ? "is-active" : ""}`}
+              className={`mobile-dock-item ${isActive ? "is-active" : ""} ${showAppHintTap && id === "terminal" ? "is-hint-app-tap" : ""}`}
               onClick={() => {
+                window.dispatchEvent(new Event("mobile-dock-icon-tap"));
                 closeNotificationPanel();
                 toggleWindow(id, canOpen);
               }}

@@ -17,6 +17,18 @@ type FullscreenElement = HTMLElement & {
 const FullscreenPrompt = () => {
   const [isVisible, setIsVisible] = useState(false);
 
+  const markPromptResolved = () => {
+    if (typeof window === "undefined" || typeof document === "undefined") return;
+    document.documentElement.dataset.mobileFullscreenPromptResolved = "1";
+    window.dispatchEvent(new Event("mobile-fullscreen-prompt-resolved"));
+  };
+
+  const markPromptVisible = () => {
+    if (typeof window === "undefined" || typeof document === "undefined") return;
+    document.documentElement.dataset.mobileFullscreenPromptResolved = "0";
+    window.dispatchEvent(new Event("mobile-fullscreen-prompt-visible"));
+  };
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -27,6 +39,12 @@ const FullscreenPrompt = () => {
       doc.mozFullScreenElement ||
       doc.msFullscreenElement
     );
+    if (isAlreadyFullscreen) {
+      markPromptResolved();
+      return;
+    }
+
+    markPromptVisible();
     if (!isAlreadyFullscreen) {
       const timeoutId = window.setTimeout(() => setIsVisible(true), 300);
       return () => window.clearTimeout(timeoutId);
@@ -35,6 +53,7 @@ const FullscreenPrompt = () => {
 
   const closePrompt = () => {
     setIsVisible(false);
+    markPromptResolved();
   };
 
   const enableFullscreen = async () => {
@@ -63,7 +82,7 @@ const FullscreenPrompt = () => {
 
   return (
     <div className="fullscreen-prompt-overlay" role="dialog" aria-modal="true">
-      <div className="fullscreen-prompt-card">
+      <div className="fullscreen-prompt-card glass-div">
         <h3 className="fullscreen-prompt-title">Enter Fullscreen Mode For Immersive Experience.</h3>
         <div className="fullscreen-prompt-actions">
           <button type="button" onClick={closePrompt}>
