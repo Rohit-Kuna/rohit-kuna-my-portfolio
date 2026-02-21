@@ -56,6 +56,8 @@ export type ContactContent = {
   heading: string;
   message: string;
   email: string;
+  whatsappNumber?: string;
+  whatsappPrefillMessage?: string;
   socialLinks: SocialLink[];
 };
 

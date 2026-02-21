@@ -49,6 +49,22 @@ export const contactContent = defineType({
       validation: (Rule) => Rule.required().email(),
     }),
     defineField({
+      name: "whatsappNumber",
+      title: "WhatsApp Number",
+      description: "Use full international format without + (example: 919876543210).",
+      type: "string",
+      validation: (Rule) => Rule.regex(/^\d*$/, {
+        name: "digits",
+        invert: false,
+      }),
+    }),
+    defineField({
+      name: "whatsappPrefillMessage",
+      title: "WhatsApp Prefill Message",
+      type: "string",
+      initialValue: "Hi Rohit, would love to connect with you",
+    }),
+    defineField({
       name: "socialLinks",
       title: "Social Links",
       type: "array",

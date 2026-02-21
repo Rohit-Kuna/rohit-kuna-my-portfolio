@@ -10,6 +10,8 @@ const CONTACT_CONTENT_QUERY = groq`
   heading,
   message,
   email,
+  whatsappNumber,
+  whatsappPrefillMessage,
   "socialLinks": socialLinks[]->{
     text,
     link,
