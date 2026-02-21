@@ -16,14 +16,14 @@ const MobileDock = () => {
   const { openWindow, closeWindow } = useWindowStore();
   const windows = useWindowStore((state) => state.windows);
   const getState = useWindowStore.getState;
-  const [showContactHintTap, setShowContactHintTap] = useState(false);
+  const [showAppHintTap, setShowAppHintTap] = useState(false);
 
   useEffect(() => {
     if (!isMobile) return;
 
-    const onHintDockStart = () => setShowContactHintTap(true);
-    const onHintDockEnd = () => setShowContactHintTap(false);
-    const onAnyDockTap = () => setShowContactHintTap(false);
+    const onHintDockStart = () => setShowAppHintTap(true);
+    const onHintDockEnd = () => setShowAppHintTap(false);
+    const onAnyDockTap = () => setShowAppHintTap(false);
 
     window.addEventListener("mobile-hint-dock-start", onHintDockStart);
     window.addEventListener("mobile-hint-dock-end", onHintDockEnd);
@@ -78,7 +78,7 @@ const MobileDock = () => {
               key={id}
               type="button"
               aria-label={name}
-              className={`mobile-dock-item ${isActive ? "is-active" : ""} ${showContactHintTap && id === "contact" ? "is-hint-contact" : ""}`}
+              className={`mobile-dock-item ${isActive ? "is-active" : ""} ${showAppHintTap && id === "terminal" ? "is-hint-app-tap" : ""}`}
               onClick={() => {
                 window.dispatchEvent(new Event("mobile-dock-icon-tap"));
                 closeNotificationPanel();

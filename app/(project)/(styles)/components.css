@@ -58,12 +58,12 @@
         @apply relative flex flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-0.5 transition-transform duration-200;
     }
 
-    .mobile-dock-item.is-hint-contact .mobile-dock-icon-wrap {
-        animation: mobile-hint-contact-tap 1.15s ease-in-out infinite;
+    .mobile-dock-item.is-hint-app-tap .mobile-dock-icon-wrap {
+        animation: mobile-hint-app-tap 1.15s ease-in-out infinite;
         transform-origin: center;
     }
 
-    .mobile-dock-item.is-hint-contact .mobile-dock-icon-wrap::after {
+    .mobile-dock-item.is-hint-app-tap .mobile-dock-icon-wrap::after {
         content: "";
         position: absolute;
         inset: 4px;
@@ -72,7 +72,7 @@
         box-shadow:
             0 0 0 0 rgba(203, 228, 255, 0.48),
             0 0 16px rgba(159, 202, 255, 0.34);
-        animation: mobile-hint-contact-ring 1.15s ease-out infinite;
+        animation: mobile-hint-app-ring 1.15s ease-out infinite;
         pointer-events: none;
     }
 
@@ -257,7 +257,7 @@
         transform: rotate(225deg);
     }
 
-    @keyframes mobile-hint-contact-tap {
+    @keyframes mobile-hint-app-tap {
         0%,
         50%,
         100% {
@@ -273,7 +273,7 @@
         }
     }
 
-    @keyframes mobile-hint-contact-ring {
+    @keyframes mobile-hint-app-ring {
         0% {
             opacity: 0;
             transform: scale(0.84);
