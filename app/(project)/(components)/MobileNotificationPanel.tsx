@@ -194,8 +194,8 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
 
   const openPullProgress = Math.max(0, Math.min(pullOffset, MAX_PULL)) / MAX_PULL;
   const closePullProgress = Math.max(0, Math.min(Math.abs(pullOffset), MAX_PULL)) / MAX_PULL;
-  const stretchY = isOpen ? 1 - closePullProgress * 0.03 : 1 + openPullProgress * 0.08;
-  const stretchX = isOpen ? 1 + closePullProgress * 0.01 : 1 - openPullProgress * 0.025;
+  const stretchY = isOpen ? 1 - closePullProgress * 0.06 : 1 + openPullProgress * 0.15;
+  const stretchX = isOpen ? 1 + closePullProgress * 0.03 : 1 - openPullProgress * 0.06;
   const panelTranslate = isOpen
     ? `translateY(${pullOffset}px)`
     : `translateY(calc(-100% + ${pullOffset}px))`;
@@ -213,7 +213,10 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
         id="mobile-notification-panel"
         className={isOpen ? "is-open" : ""}
         style={{
-          transform: `${panelTranslate} scaleX(${stretchX}) scaleY(${stretchY})`
+          transform: `${panelTranslate} scaleX(${stretchX}) scaleY(${stretchY})`,
+          transition: isOpen
+            ? "transform 460ms cubic-bezier(0.22, 1.22, 0.22, 1)"
+            : "transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1)"
         }}
       >
         <div className="mobile-notif-handle" />
