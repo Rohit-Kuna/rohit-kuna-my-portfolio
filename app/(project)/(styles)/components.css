@@ -60,11 +60,11 @@
     }
 
     .mobile-dock-shell {
-        @apply mx-auto w-full max-w-[96vw] grid grid-cols-5 gap-1.5 p-2 rounded-2xl;
+        @apply mx-auto w-full max-w-[96vw] grid grid-cols-5 gap-1.5 p-2 rounded-2xl backdrop-blur-md;
         background: rgba(24, 40, 68, 0.34);
         border: 1px solid rgba(255, 255, 255, 0.24);
         backdrop-filter: blur(14px) saturate(140%);
-        -webkit-backdrop-filter: blur(14px) saturate(140%);
+        /* -webkit-backdrop-filter: blur(14px) saturate(140%); */
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
     }
 
@@ -119,11 +119,11 @@
     }
 
     .fullscreen-prompt-overlay {
-        @apply fixed inset-0 flex items-start justify-center p-3 pt-14;
+        @apply fixed inset-0 flex items-start justify-center p-3 pt-14 backdrop-blur-md;
         z-index: 5200;
         background: rgba(6, 12, 24, 0.28);
-        backdrop-filter: blur(9px);
-        -webkit-backdrop-filter: blur(9px);
+        /* backdrop-filter: blur(9px);
+        -webkit-backdrop-filter: blur(9px); */
     }
 
     .fullscreen-prompt-card {
@@ -187,6 +187,7 @@
     }
 
     .mobile-hint-card {
+        @apply backdrop-blur-md;
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
@@ -202,8 +203,8 @@
         box-shadow:
             0 8px 18px rgba(0, 0, 0, 0.24),
             inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(14px) saturate(140%);
-        -webkit-backdrop-filter: blur(14px) saturate(140%);
+        /* backdrop-filter: blur(14px) saturate(140%);
+        -webkit-backdrop-filter: blur(14px) saturate(140%); */
         background-clip: padding-box;
         overflow: hidden;
     }
@@ -436,6 +437,7 @@
     }
 
     #mobile-notification-panel {
+        @apply backdrop-blur-md;
         position: fixed;
         top: 0;
         left: 0;
@@ -453,8 +455,8 @@
         background:
             radial-gradient(circle at 16% 0%, rgba(132, 169, 214, 0.881), transparent 56%),
             linear-gradient(145deg, rgba(116, 158, 210, 0.881), rgba(36, 46, 74, 0.76));
-        backdrop-filter: blur(30px) saturate(165%);
-        -webkit-backdrop-filter: blur(30px) saturate(165%);
+        /* backdrop-filter: blur(30px) saturate(165%);
+        -webkit-backdrop-filter: blur(30px) saturate(165%); */
         box-shadow:
             0 20px 45px rgba(0, 0, 0, 0.42),
             inset 0 1px 0 rgba(255, 255, 255, 0.45);
@@ -473,8 +475,8 @@
         border-radius: 999px;
         background: rgba(255, 255, 255, 0.62);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
-        opacity: 0.75;
-        transition: opacity 180ms ease;
+        /* opacity: 0.75;
+        transition: opacity 180ms ease; */
     }
 
     #mobile-notification-panel:not(.is-open) {
@@ -484,11 +486,11 @@
     }
 
     .mobile-notif-backdrop {
-        @apply fixed inset-0 opacity-0 pointer-events-none;
+        @apply fixed inset-0 opacity-0 pointer-events-none backdrop-blur-md;
         z-index: 3300;
         background: rgba(0, 10, 24, 0.36);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        /* backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px); */
         transition: opacity 220ms ease;
     }
 
