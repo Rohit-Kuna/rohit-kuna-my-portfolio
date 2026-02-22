@@ -47,7 +47,14 @@
         @apply fixed bottom-5 left-1/2 -translate-x-1/2 z-[3000] select-none;
 
         .dock-container {
-            @apply bg-white/20 backdrop-blur-md justify-between rounded-2xl p-1.5 flex items-end gap-1.5;
+            @apply backdrop-blur-md justify-between rounded-2xl p-1.5 flex items-end gap-1.5;
+            border: 1px solid rgba(235, 244, 255, 0.28);
+            box-shadow:
+                0 16px 34px rgba(7, 12, 24, 0.28),
+                0 3px 12px rgba(16, 28, 60, 0.22),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.58),
+                inset 0 -0.5px 0 rgba(255, 255, 255, 0.16),
+                inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
         }
 
         .dock-icon {
