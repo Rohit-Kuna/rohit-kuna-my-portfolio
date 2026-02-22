@@ -19,7 +19,7 @@
         .welcome-subtitle {
             @apply w-full text-center font-borel italic;
             font-size: clamp(1.61rem, 2.65vw, 3.2rem);
-            line-height: 1.15;
+            line-height: 1.95;
             text-wrap: balance;
             opacity: 0.94;
             text-shadow: 0 2px 14px rgba(5, 7, 18, 0.55);
@@ -28,8 +28,8 @@
         .welcome-title {
             @apply text-center font-borel italic;
             margin-top: clamp(1.3rem, 2.2vw, 2.4rem);
-            font-size: clamp(4.5rem, 7vw, 8.4rem);
-            line-height: 0.95;
+            font-size: clamp(4.5rem, 7vw, 8.6rem);
+            line-height: 1.65;
             text-wrap: balance;
             text-shadow: 0 4px 16px rgba(7, 9, 20, 0.48);
         }
@@ -63,8 +63,6 @@
         @apply mx-auto w-full max-w-[96vw] grid grid-cols-5 gap-1.5 p-2 rounded-2xl backdrop-blur-md;
         background: rgba(24, 40, 68, 0.34);
         border: 1px solid rgba(255, 255, 255, 0.24);
-        backdrop-filter: blur(14px) saturate(140%);
-        /* -webkit-backdrop-filter: blur(14px) saturate(140%); */
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
     }
 
@@ -195,14 +193,11 @@
         width: calc(100% - 28px);
         padding: 12px 15px;
         border-radius: 12px;
-        border: 1px solid rgba(214, 228, 246, 0.38);
-        background:
-            radial-gradient(circle at 20% -18%, rgba(175, 195, 222, 0.055)),
-            linear-gradient(150deg, rgba(69, 102, 145, 0.164),rgba(39, 56, 82, 0.081)),
-            rgba(255, 255, 255, 0.134);
+        border: 0;
+        background: transparent;
         box-shadow:
-            0 8px 18px rgba(0, 0, 0, 0.24),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            0 6px 14px rgba(0, 0, 0, 0.14),
+            inset 0 1px 2px rgba(255, 255, 255, 0.08);
         /* backdrop-filter: blur(14px) saturate(140%);
         -webkit-backdrop-filter: blur(14px) saturate(140%); */
         background-clip: padding-box;
@@ -241,8 +236,8 @@
     .mobile-hint-inline-arrows span {
         width: 7px;
         height: 7px;
-        border-right: 2px solid rgba(241, 248, 255, 0.9);
-        border-bottom: 2px solid rgba(241, 248, 255, 0.9);
+        border-right: 2px solid rgba(0, 0, 0, 0.9);
+        border-bottom: 2px solid rgba(0, 0, 0, 0.9);
         transform: rotate(135deg);
         opacity: 0.35;
         animation: mobile-hint-inline-arrow-left 0.9s ease-in-out infinite;
@@ -310,14 +305,19 @@
         bottom: auto;
         width: min(78vw, 320px);
         transform: translate(-50%, -50%);
-        border-color: rgba(220, 232, 248, 0.46);
-        background:
-            radial-gradient(circle at 18% -16%, rgba(130, 156, 192, 0.44), transparent 56%),
-            linear-gradient(150deg, rgba(64, 90, 128, 0.78), rgba(34, 48, 72, 0.74)),
-            rgba(43, 61, 90, 0.58);
+        border: 0;
+        background: transparent;
         box-shadow:
-            0 12px 24px rgba(0, 0, 0, 0.34),
-            inset 0 1px 0 rgba(255, 255, 255, 0.24);
+            0 8px 16px rgba(0, 0, 0, 0.16),
+            inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    }
+
+    .mobile-hint-layer.is-swipe-left .mobile-hint-title {
+        color: rgba(0, 0, 0, 0.9);
+    }
+
+    .mobile-hint-layer.is-swipe-left .mobile-hint-subtext {
+        color: rgba(0, 0, 0, 0.8);
     }
 
     .mobile-hint-layer.is-swipe-left .mobile-hint-gesture {
@@ -334,10 +334,11 @@
         bottom: 232px;
         width: 188px;
         transform: none;
-        background:
-            radial-gradient(circle at 20% -18%, rgba(102, 130, 170, 0.805), transparent 56%),
-            linear-gradient(150deg, rgba(61, 93, 134, 0.848), rgba(39, 56, 82, 0.856)),
-            rgba(255, 255, 255, 0.57);
+        border: 0;
+        background: transparent;
+        box-shadow:
+            0 8px 16px rgba(0, 0, 0, 0.16),
+            inset 0 1px 2px rgba(255, 255, 255, 0.1);
     }
 
     .mobile-hint-layer.is-drag .mobile-hint-gesture {
@@ -475,8 +476,6 @@
         border-radius: 999px;
         background: rgba(255, 255, 255, 0.62);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
-        /* opacity: 0.75;
-        transition: opacity 180ms ease; */
     }
 
     #mobile-notification-panel:not(.is-open) {
@@ -489,8 +488,6 @@
         @apply fixed inset-0 opacity-0 pointer-events-none backdrop-blur-md;
         z-index: 3300;
         background: rgba(0, 10, 24, 0.36);
-        /* backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px); */
         transition: opacity 220ms ease;
     }
 
