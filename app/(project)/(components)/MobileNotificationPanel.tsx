@@ -63,6 +63,10 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
   useEffect(() => {
     if (!isMobile) return;
 
+    const isDrawerOpen = () =>
+      typeof document !== "undefined" &&
+      document.documentElement.classList.contains("mobile-app-drawer-open");
+
     const onHomeDragStart = () => {
       isHomeDragActive.current = true;
       gestureMode.current = null;
@@ -74,6 +78,7 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
 
     const onTouchStart = (event: TouchEvent) => {
       if (isHomeDragActive.current) return;
+      if (isDrawerOpen()) return;
 
       const touch = event.changedTouches[0];
       if (!touch) return;

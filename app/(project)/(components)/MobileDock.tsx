@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type TouchEvent as ReactTouchEvent } from "react";
 import { dockApps } from "@/app/(project)/(content)/other.content";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 import { useWindowStore } from "@/app/(project)/(store)/window";
@@ -17,6 +17,8 @@ const MobileDock = () => {
   const windows = useWindowStore((state) => state.windows);
   const getState = useWindowStore.getState;
   const [showAppHintTap, setShowAppHintTap] = useState(false);
+  const swipeStartY = useRef(0);
+  const swipeStartX = useRef(0);
 
   useEffect(() => {
     if (!isMobile) return;
@@ -63,13 +65,35 @@ const MobileDock = () => {
 
   const closeNotificationPanel = () => {
     window.dispatchEvent(new Event("mobile-notification-close"));
+    window.dispatchEvent(new Event("mobile-app-drawer-close"));
+  };
+
+  const onDockTouchStart = (event: ReactTouchEvent<HTMLElement>) => {
+    const touch = event.changedTouches[0];
+    if (!touch) return;
+    swipeStartY.current = touch.clientY;
+    swipeStartX.current = touch.clientX;
+  };
+
+  const onDockTouchEnd = (event: ReactTouchEvent<HTMLElement>) => {
+    const touch = event.changedTouches[0];
+    if (!touch) return;
+
+    const deltaY = touch.clientY - swipeStartY.current;
+    const deltaX = Math.abs(touch.clientX - swipeStartX.current);
+
+    if (deltaY < -42 && deltaX < 72) {
+      closeNotificationPanel();
+      window.dispatchEvent(new Event("mobile-app-drawer-open"));
+    }
   };
 
   const items: MobileDockItem[] = dockApps.filter((app) => app.canOpen);
 
   return (
-    <section id="mobile-dock">
+    <section id="mobile-dock" onTouchStart={onDockTouchStart} onTouchEnd={onDockTouchEnd}>
       <div className="mobile-dock-shell">
+        <div className="mobile-grab-handle mobile-dock-handle" aria-hidden="true" />
         {items.map(({ id, name, icon, canOpen }) => {
           const isActive = activeWindowKey === (id as WindowKey);
 

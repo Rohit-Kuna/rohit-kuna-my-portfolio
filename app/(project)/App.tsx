@@ -5,6 +5,7 @@ import Navbar from "@/app/(project)/(components)/NavBar";
 import FullscreenPrompt from "@/app/(project)/(components)/FullscreenPrompt";
 import MobileNotificationPanel from "@/app/(project)/(components)/MobileNotificationPanel";
 import MobileDock from "@/app/(project)/(components)/MobileDock";
+import MobileAppDrawer from "@/app/(project)/(components)/MobileAppDrawer";
 import MobileHomeFloat from "@/app/(project)/(components)/MobileHomeFloat";
 import MobileOnboardingHints from "@/app/(project)/(components)/MobileOnboardingHints";
 import Welcome from "@/app/(project)/(components)/Welcome";
@@ -59,6 +60,7 @@ const App = ({
       <MobileNotificationPanel musicTracks={musicTracksData} />
       <Welcome content={welcomeContent} />
       <MobileDock />
+      <MobileAppDrawer />
       <MobileHomeFloat />
       <MobileOnboardingHints />
       <Dock />

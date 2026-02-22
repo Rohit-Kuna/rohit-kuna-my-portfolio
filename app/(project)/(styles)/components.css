@@ -57,6 +57,118 @@
 
     #mobile-dock {
         @apply fixed bottom-2 left-0 right-0 z-[3500] px-2;
+        transition: opacity 180ms ease, transform 220ms ease;
+    }
+
+    :root.mobile-app-drawer-open #mobile-dock {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(6px) scale(0.985);
+    }
+
+    .mobile-app-drawer-backdrop {
+        @apply fixed inset-0 opacity-0 pointer-events-none backdrop-blur-md;
+        z-index: 3850;
+        background: rgba(4, 10, 20, 0.24);
+        transition: opacity 180ms ease;
+    }
+
+    .mobile-app-drawer-backdrop.is-open {
+        @apply opacity-100 pointer-events-auto;
+    }
+
+    #mobile-app-drawer {
+        @apply backdrop-blur-md;
+        position: fixed;
+        inset: 0;
+        transform: translateY(100%);
+        z-index: 3860;
+        border-radius: 0;
+        border: 0;
+        background:
+            radial-gradient(circle at 50% -12%, rgba(172, 196, 236, 0.14), transparent 48%),
+            linear-gradient(180deg, rgba(10, 22, 48, 0.52), rgba(6, 16, 35, 0.62));
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.18),
+            0 -24px 50px rgba(0, 0, 0, 0.28);
+        padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px calc(env(safe-area-inset-bottom, 0px) + 28px);
+        overflow-y: auto;
+        opacity: 0;
+        pointer-events: none;
+        transition:
+            transform 300ms cubic-bezier(0.2, 0.86, 0.2, 1),
+            opacity 180ms ease;
+    }
+
+    #mobile-app-drawer.is-open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .mobile-grab-handle {
+        width: 46px;
+        height: 2px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.74);
+        box-shadow:
+            0 0 0 1px rgba(255, 255, 255, 0.12),
+            0 1px 3px rgba(0, 0, 0, 0.16);
+        opacity: 0.9;
+    }
+
+    .mobile-app-drawer-handle {
+        margin: 0 auto 14px;
+    }
+
+    .mobile-app-drawer-title {
+        @apply text-center text-white;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 18px;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+
+    .mobile-app-drawer-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px 10px;
+        justify-items: center;
+        align-content: start;
+        min-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 120px);
+    }
+
+    .mobile-app-drawer-app {
+        @apply w-full flex flex-col items-center justify-start;
+        gap: 6px;
+        background: transparent;
+        border: 0;
+        padding: 0;
+        min-height: 88px;
+        transition: transform 140ms ease, opacity 140ms ease;
+    }
+
+    .mobile-app-drawer-app:active {
+        transform: scale(0.95);
+        opacity: 0.9;
+    }
+
+    .mobile-app-drawer-icon {
+        width: 52px;
+        height: 52px;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 10px rgba(6, 10, 20, 0.35));
+    }
+
+    .mobile-app-drawer-app.is-active .mobile-app-drawer-icon {
+        filter:
+            drop-shadow(0 0 0.45rem rgba(223, 236, 255, 0.65))
+            drop-shadow(0 4px 10px rgba(6, 10, 20, 0.38));
+    }
+
+    .mobile-app-drawer-label {
+        @apply text-[11px] leading-tight text-white text-center line-clamp-1;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     }
 
     .mobile-dock-shell {
@@ -67,6 +179,11 @@
             0 18px 40px rgba(0, 0, 0, 0.28),
             inset 0 1px 0 rgba(255, 255, 255, 0.42),
             inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .mobile-dock-handle {
+        grid-column: 1 / -1;
+        margin: 1px auto 4px;
     }
 
     .mobile-dock-item {
@@ -736,7 +853,8 @@
     }
 
     .mobile-notif-label {
-        @apply text-[11px] leading-tight text-white/90 text-center line-clamp-1;
+        @apply text-[11px] leading-tight text-white/100 text-center line-clamp-1;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
     }
 
     #window-controls {
@@ -1140,7 +1258,9 @@
     #mobile-notification-panel,
     .mobile-notif-backdrop,
     #mobile-dock,
-    .mobile-hint-layer {
+    .mobile-hint-layer,
+    .mobile-app-drawer-backdrop,
+    #mobile-app-drawer {
         display: none;
     }
 }
