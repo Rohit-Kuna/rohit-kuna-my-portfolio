@@ -114,13 +114,13 @@
     }
 
     .mobile-grab-handle {
-        width: 46px;
-        height: 2px;
+        width: 48px;
+        height: 3px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.74);
+        background: rgba(255, 255, 255, 0.7);
         box-shadow:
-            0 0 0 1px rgba(255, 255, 255, 0.12),
-            0 1px 3px rgba(0, 0, 0, 0.16);
+            0 1px 2px rgba(0, 0, 0, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.65);
         opacity: 0.9;
     }
 
@@ -248,8 +248,6 @@
         @apply fixed inset-0 flex items-start justify-center p-3 pt-14 backdrop-blur-md;
         z-index: 5200;
         background: rgba(6, 12, 24, 0.28);
-        /* backdrop-filter: blur(9px);
-        -webkit-backdrop-filter: blur(9px); */
     }
 
     .fullscreen-prompt-card {
@@ -326,8 +324,6 @@
         box-shadow:
             0 6px 14px rgba(0, 0, 0, 0.14),
             inset 0 1px 2px rgba(255, 255, 255, 0.08);
-        /* backdrop-filter: blur(14px) saturate(140%);
-        -webkit-backdrop-filter: blur(14px) saturate(140%); */
         background-clip: padding-box;
         overflow: hidden;
     }
@@ -624,15 +620,17 @@
     }
 
     .mobile-notif-handle {
-        @apply w-12 h-1 rounded-full;
         position: absolute;
         top: 8px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(255, 255, 255, 0.82);
+        width: 48px;
+        height: 3px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.7);
         box-shadow:
-            0 1px 2px rgba(0, 0, 0, 0.16),
-            inset 0 1px 0 rgba(255, 255, 255, 0.72);
+            0 1px 2px rgba(0, 0, 0, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.65);
     }
 
     .mobile-notif-content {
