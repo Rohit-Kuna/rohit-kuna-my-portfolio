@@ -1,14 +1,36 @@
 import { useEffect, useRef, useState } from "react";
 import { dockApps } from "@/app/(project)/(content)/other.content";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
+import useLocationStore from "@/app/(project)/(store)/location";
 import { useWindowStore } from "@/app/(project)/(store)/window";
 import type { WindowKey } from "@/app/(project)/(types)/windows.types";
+import type { FolderNode, Location } from "@/app/(project)/(types)/location.types";
 
 const SWIPE_CLOSE_THRESHOLD = 54;
 
-const MobileAppDrawer = () => {
+type MobileAppDrawerProps = {
+  locationsData: Record<string, Location>;
+};
+
+type AppDrawerItem =
+  | {
+      kind: "app";
+      id: string;
+      name: string;
+      icon: string;
+    }
+  | {
+      kind: "project-folder";
+      id: string;
+      name: string;
+      icon: string;
+      folder: FolderNode;
+    };
+
+const MobileAppDrawer = ({ locationsData }: MobileAppDrawerProps) => {
   const isMobile = useIsMobile();
   const { openWindow, closeWindow } = useWindowStore();
+  const { activeLocation, setActiveLocation } = useLocationStore();
   const windows = useWindowStore((state) => state.windows);
   const getState = useWindowStore.getState;
 
@@ -90,22 +112,55 @@ const MobileAppDrawer = () => {
 
   if (!isMobile) return null;
 
-  const toggleWindow = (id: string) => {
+  const closeAllWindows = () => {
+    const currentWindows = getState().windows;
+    (Object.keys(currentWindows) as WindowKey[]).forEach((key) => {
+      if (currentWindows[key]?.isOpen) {
+        closeWindow(key);
+      }
+    });
+  };
+
+  const projectFolders = (locationsData.work?.children ?? []).filter(
+    (item): item is FolderNode => item.kind === "folder"
+  );
+
+  const appItems: AppDrawerItem[] = dockApps
+    .filter((app) => app.canOpen)
+    .map((app) => ({
+      kind: "app",
+      id: app.id,
+      name: app.name,
+      icon: `/images/${app.icon}`,
+    }));
+
+  const projectItems: AppDrawerItem[] = projectFolders.map((folder) => ({
+    kind: "project-folder",
+    id: `project-${String(folder.id)}`,
+    name: folder.name,
+    icon: folder.icon,
+    folder,
+  }));
+
+  const items: AppDrawerItem[] = [...appItems, ...projectItems];
+
+  const openSingleWindow = (id: string) => {
     const key = id as WindowKey;
-    const win = getState().windows[key];
-    if (!win) return;
+    if (!getState().windows[key]) return;
 
-    if (win.isOpen) {
-      closeWindow(key);
-    } else {
-      openWindow(key);
-    }
-
+    closeAllWindows();
+    openWindow(key);
     window.dispatchEvent(new Event("mobile-notification-close"));
     setIsOpen(false);
   };
 
-  const items = dockApps.filter((app) => app.canOpen);
+  const openProjectFolder = (folder: FolderNode) => {
+    closeAllWindows();
+    setActiveLocation(folder);
+    openWindow("finder");
+    window.dispatchEvent(new Event("mobile-notification-close"));
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -121,19 +176,30 @@ const MobileAppDrawer = () => {
         <p className="mobile-app-drawer-title">App Drawer</p>
 
         <div className="mobile-app-drawer-grid">
-          {items.map(({ id, name, icon }) => {
-            const key = id as WindowKey;
-            const isActive = Boolean(windows[key]?.isOpen);
+          {items.map((item) => {
+            const isActive =
+              item.kind === "app"
+                ? Boolean(windows[item.id as WindowKey]?.isOpen)
+                : Boolean(windows.finder?.isOpen) && activeLocation?.id === item.folder.id;
 
             return (
               <button
-                key={id}
+                key={item.id}
                 type="button"
                 className={`mobile-app-drawer-app ${isActive ? "is-active" : ""}`}
-                onClick={() => toggleWindow(id)}
+                onClick={() =>
+                  item.kind === "app"
+                    ? openSingleWindow(item.id)
+                    : openProjectFolder(item.folder)
+                }
               >
-                <img src={`/images/${icon}`} alt={name} loading="lazy" className="mobile-app-drawer-icon" />
-                <span className="mobile-app-drawer-label">{name}</span>
+                <img
+                  src={item.icon}
+                  alt={item.name}
+                  loading="lazy"
+                  className="mobile-app-drawer-icon"
+                />
+                <span className="mobile-app-drawer-label">{item.name}</span>
               </button>
             );
           })}

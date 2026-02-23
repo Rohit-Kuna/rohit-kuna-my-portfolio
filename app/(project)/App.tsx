@@ -60,7 +60,7 @@ const App = ({
       <MobileNotificationPanel musicTracks={musicTracksData} />
       <Welcome content={welcomeContent} />
       <MobileDock />
-      <MobileAppDrawer />
+      <MobileAppDrawer locationsData={locationsData} />
       <MobileHomeFloat />
       <MobileOnboardingHints />
       <Dock />
