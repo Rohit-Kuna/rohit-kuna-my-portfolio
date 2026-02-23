@@ -8,6 +8,7 @@ import { HomeButtonIcon } from "@/app/(project)/(components)/HomeButton";
 import NowPlayingBar from "@/app/(project)/(components)/NowPlayingBar";
 
 const TOP_PULL_ZONE_RATIO = 0.30;
+const TOP_PULL_ZONE_WITH_OPEN_WINDOW_RATIO = 0.10;
 const OPEN_THRESHOLD = 70;
 const CLOSE_THRESHOLD = 60;
 const MAX_PULL = 120;
@@ -90,9 +91,15 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
       startX.current = touch.clientX;
       gestureMode.current = null;
 
+      const hasOpenWindow = Object.values(getState().windows).some(
+        (windowState) => windowState?.isOpen
+      );
+      const topPullZoneRatio = hasOpenWindow
+        ? TOP_PULL_ZONE_WITH_OPEN_WINDOW_RATIO
+        : TOP_PULL_ZONE_RATIO;
       const topPullZone =
         typeof window !== "undefined"
-          ? window.innerHeight * TOP_PULL_ZONE_RATIO
+          ? window.innerHeight * topPullZoneRatio
           : 0;
 
       if (!isOpen && touch.clientY <= topPullZone) {
@@ -161,7 +168,7 @@ const MobileNotificationPanel = ({ musicTracks = [] }: MobileNotificationPanelPr
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
     };
-  }, [isMobile, isOpen]);
+  }, [isMobile, isOpen, getState]);
 
   useEffect(() => {
     if (!isMobile) return;
