@@ -5,13 +5,7 @@ import type { FileNode } from "@/app/(project)/(types)/location.types";
 import useIsMobile from "@/app/(project)/(hooks)/useIsMobile";
 import { useEffect, useRef, useState } from "react";
 
-type TouchListLike = {
-  length: number;
-  [index: number]: { clientX: number; clientY: number } | undefined;
-};
-
 const MIN_IMAGE_ZOOM = 1;
-const MAX_IMAGE_ZOOM = 4;
 const DOUBLE_TAP_IMAGE_ZOOM = 2;
 const DOUBLE_TAP_DELAY_MS = 260;
 
@@ -30,26 +24,9 @@ const Image = () => {
   const zoomContainerRef = useRef<HTMLDivElement | null>(null);
   const [naturalSize, setNaturalSize] = useState({ width: 0, height: 0 });
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
-  const imageZoomRef = useRef(1);
-  const pinchStartDistanceRef = useRef<number | null>(null);
-  const pinchStartZoomRef = useRef(1);
   const lastTapAtRef = useRef(0);
 
-  useEffect(() => {
-    imageZoomRef.current = imageZoom;
-  }, [imageZoom]);
-
   const enableTouchZoom = isMobile;
-
-  const getTouchDistance = (touches: TouchListLike) => {
-    if (touches.length < 2) return 0;
-    const first = touches[0];
-    const second = touches[1];
-    if (!first || !second) return 0;
-    const dx = first.clientX - second.clientX;
-    const dy = first.clientY - second.clientY;
-    return Math.hypot(dx, dy);
-  };
 
   useEffect(() => {
     if (!enableTouchZoom) return;
@@ -80,32 +57,7 @@ const Image = () => {
     const container = zoomContainerRef.current;
     if (!container) return;
 
-    const onTouchStart = (event: TouchEvent) => {
-      if (event.touches.length === 2) {
-        pinchStartDistanceRef.current = getTouchDistance(event.touches);
-        pinchStartZoomRef.current = imageZoomRef.current;
-      }
-    };
-
-    const onTouchMove = (event: TouchEvent) => {
-      if (event.touches.length !== 2 || pinchStartDistanceRef.current === null) return;
-
-      const currentDistance = getTouchDistance(event.touches);
-      if (currentDistance <= 0) return;
-
-      event.preventDefault();
-      const nextZoom =
-        pinchStartZoomRef.current * (currentDistance / pinchStartDistanceRef.current);
-      setImageZoom(Math.min(MAX_IMAGE_ZOOM, Math.max(MIN_IMAGE_ZOOM, nextZoom)));
-    };
-
     const onTouchEnd = (event: TouchEvent) => {
-      const wasPinching = pinchStartDistanceRef.current !== null;
-      if (event.touches.length < 2) {
-        pinchStartDistanceRef.current = null;
-      }
-      if (wasPinching) return;
-
       if (event.changedTouches.length !== 1) return;
       const now = Date.now();
       if (now - lastTapAtRef.current <= DOUBLE_TAP_DELAY_MS) {
@@ -117,14 +69,10 @@ const Image = () => {
       lastTapAtRef.current = now;
     };
 
-    container.addEventListener("touchstart", onTouchStart, { passive: true });
-    container.addEventListener("touchmove", onTouchMove, { passive: false });
     container.addEventListener("touchend", onTouchEnd, { passive: true });
     container.addEventListener("touchcancel", onTouchEnd, { passive: true });
 
     return () => {
-      container.removeEventListener("touchstart", onTouchStart);
-      container.removeEventListener("touchmove", onTouchMove);
       container.removeEventListener("touchend", onTouchEnd);
       container.removeEventListener("touchcancel", onTouchEnd);
     };
@@ -185,7 +133,6 @@ const Image = () => {
                   height: target.naturalHeight || 0
                 });
                 setImageZoom(1);
-                imageZoomRef.current = 1;
               }}
               className={`rounded ${enableTouchZoom ? "mobile-zoomable" : ""}`}
               style={{

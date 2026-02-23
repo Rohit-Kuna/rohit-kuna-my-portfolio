@@ -11,13 +11,8 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
 type ReactPdfModule = typeof import("react-pdf");
-type TouchListLike = {
-  length: number;
-  [index: number]: { clientX: number; clientY: number } | undefined;
-};
 
 const MIN_MOBILE_ZOOM = 1;
-const MAX_MOBILE_ZOOM = 3;
 const DOUBLE_TAP_ZOOM = 2;
 const DOUBLE_TAP_DELAY_MS = 260;
 /* ---------- Component ---------- */
@@ -39,9 +34,6 @@ const Resume = ({ resumeContent }: ResumeProps) => {
   const [mobileZoom, setMobileZoom] = useState(1);
   const [supportsTouchZoom, setSupportsTouchZoom] = useState(false);
   const zoomContainerRef = useRef<HTMLDivElement | null>(null);
-  const mobileZoomRef = useRef(1);
-  const pinchStartDistanceRef = useRef<number | null>(null);
-  const pinchStartZoomRef = useRef(1);
   const lastTapAtRef = useRef(0);
 
   useEffect(() => {
@@ -73,10 +65,6 @@ const Resume = ({ resumeContent }: ResumeProps) => {
   }, [pdfUrl]);
 
   useEffect(() => {
-    mobileZoomRef.current = mobileZoom;
-  }, [mobileZoom]);
-
-  useEffect(() => {
     if (typeof window === "undefined") return;
 
     const hasTouchPoints = navigator.maxTouchPoints > 0;
@@ -104,48 +92,13 @@ const Resume = ({ resumeContent }: ResumeProps) => {
     return () => window.removeEventListener("resize", updatePageWidth);
   }, [enableTouchZoom]);
 
-  const getTouchDistance = (touches: TouchListLike) => {
-    if (touches.length < 2) return 0;
-    const first = touches[0];
-    const second = touches[1];
-    if (!first || !second) return 0;
-    const dx = first.clientX - second.clientX;
-    const dy = first.clientY - second.clientY;
-    return Math.hypot(dx, dy);
-  };
-
   useEffect(() => {
     if (!enableTouchZoom) return;
 
     const container = zoomContainerRef.current;
     if (!container) return;
 
-    const onTouchStart = (event: TouchEvent) => {
-      if (event.touches.length === 2) {
-        pinchStartDistanceRef.current = getTouchDistance(event.touches);
-        pinchStartZoomRef.current = mobileZoomRef.current;
-      }
-    };
-
-    const onTouchMove = (event: TouchEvent) => {
-      if (event.touches.length !== 2 || pinchStartDistanceRef.current === null) return;
-
-      const currentDistance = getTouchDistance(event.touches);
-      if (currentDistance <= 0) return;
-
-      event.preventDefault();
-      const nextZoom =
-        pinchStartZoomRef.current * (currentDistance / pinchStartDistanceRef.current);
-      setMobileZoom(Math.min(MAX_MOBILE_ZOOM, Math.max(MIN_MOBILE_ZOOM, nextZoom)));
-    };
-
     const onTouchEnd = (event: TouchEvent) => {
-      const wasPinching = pinchStartDistanceRef.current !== null;
-      if (event.touches.length < 2) {
-        pinchStartDistanceRef.current = null;
-      }
-      if (wasPinching) return;
-
       if (event.changedTouches.length !== 1) return;
       const now = Date.now();
       if (now - lastTapAtRef.current <= DOUBLE_TAP_DELAY_MS) {
@@ -157,14 +110,10 @@ const Resume = ({ resumeContent }: ResumeProps) => {
       lastTapAtRef.current = now;
     };
 
-    container.addEventListener("touchstart", onTouchStart, { passive: true });
-    container.addEventListener("touchmove", onTouchMove, { passive: false });
     container.addEventListener("touchend", onTouchEnd, { passive: true });
     container.addEventListener("touchcancel", onTouchEnd, { passive: true });
 
     return () => {
-      container.removeEventListener("touchstart", onTouchStart);
-      container.removeEventListener("touchmove", onTouchMove);
       container.removeEventListener("touchend", onTouchEnd);
       container.removeEventListener("touchcancel", onTouchEnd);
     };
