@@ -36,7 +36,12 @@ const WindowWrapper = <P extends object>(
 
     const ref = useRef<HTMLElement | null>(null);
     const dragInstance = useRef<DraggableInstance | null>(null);
-    const swipeStart = useRef<{ x: number; y: number; fromHeader: boolean } | null>(null);
+    const swipeStart = useRef<{
+      x: number;
+      y: number;
+      fromHeader: boolean;
+      startedInZoomedContent: boolean;
+    } | null>(null);
 
     // ✅ Per-window drag memory
     const lastPosition = useRef({ x: 0, y: 0 });
@@ -163,9 +168,17 @@ const WindowWrapper = <P extends object>(
 
       const target = event.target as HTMLElement | null;
       const fromHeader = Boolean(target?.closest("#window-header"));
+      const startedInZoomedContent = Boolean(
+        target?.closest('[data-mobile-zoomed="1"]')
+      );
 
       const touch = event.changedTouches[0];
-      swipeStart.current = { x: touch.clientX, y: touch.clientY, fromHeader };
+      swipeStart.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        fromHeader,
+        startedInZoomedContent
+      };
     };
 
     const handleTouchEnd = (event: TouchEvent<HTMLElement>) => {
@@ -178,8 +191,13 @@ const WindowWrapper = <P extends object>(
       const absX = Math.abs(deltaX);
       const absY = Math.abs(deltaY);
       const fromHeader = swipeStart.current.fromHeader;
+      const startedInZoomedContent = swipeStart.current.startedInZoomedContent;
 
       swipeStart.current = null;
+
+      if (startedInZoomedContent) {
+        return;
+      }
 
       if (absX > 90 && absX > absY * 1.2) {
         const clearDockFocus = () => {

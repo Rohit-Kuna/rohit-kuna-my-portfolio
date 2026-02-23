@@ -232,6 +232,7 @@ const Resume = ({ resumeContent }: ResumeProps) => {
         <div className="window-scroll resume-scroll mac-scrollbar">
           <div
             ref={zoomContainerRef}
+            data-mobile-zoomed={enableTouchZoom && mobileZoom > 1 ? "1" : "0"}
             className={`resume-pdf-content flex justify-center ${enableTouchZoom ? "mobile-zoomable" : ""}`}
             style={{
               justifyContent: enableTouchZoom && mobileZoom > 1 ? "flex-start" : "center"
