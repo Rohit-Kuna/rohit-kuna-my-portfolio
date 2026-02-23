@@ -39,10 +39,7 @@ const Image = () => {
     imageZoomRef.current = imageZoom;
   }, [imageZoom]);
 
-  const supportsTouchZoom =
-    typeof window !== "undefined" &&
-    (navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches);
-  const enableTouchZoom = isMobile || supportsTouchZoom;
+  const enableTouchZoom = isMobile;
 
   const getTouchDistance = (touches: TouchListLike) => {
     if (touches.length < 2) return 0;
@@ -55,6 +52,8 @@ const Image = () => {
   };
 
   useEffect(() => {
+    if (!enableTouchZoom) return;
+
     const container = zoomContainerRef.current;
     if (!container || typeof window === "undefined") return;
 
