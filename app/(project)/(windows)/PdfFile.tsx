@@ -5,7 +5,6 @@ import { useWindowStore } from "@/app/(project)/(store)/window";
 import type { FileNode } from "@/app/(project)/(types)/location.types";
 import { Download } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import type { TouchEvent as ReactTouchEvent } from "react";
 
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -32,6 +31,9 @@ const PdfFile = () => {
   const [numPages, setNumPages] = useState(0);
   const [mobilePageWidth, setMobilePageWidth] = useState<number | undefined>(undefined);
   const [mobileZoom, setMobileZoom] = useState(1);
+  const [supportsTouchZoom, setSupportsTouchZoom] = useState(false);
+  const zoomContainerRef = useRef<HTMLDivElement | null>(null);
+  const mobileZoomRef = useRef(1);
   const pinchStartDistanceRef = useRef<number | null>(null);
   const pinchStartZoomRef = useRef(1);
   const lastTapAtRef = useRef(0);
@@ -65,7 +67,21 @@ const PdfFile = () => {
   }, [pdfUrl]);
 
   useEffect(() => {
-    if (!isMobile || typeof window === "undefined") {
+    mobileZoomRef.current = mobileZoom;
+  }, [mobileZoom]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const hasTouchPoints = navigator.maxTouchPoints > 0;
+    const hasCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    setSupportsTouchZoom(hasTouchPoints || hasCoarsePointer);
+  }, []);
+
+  const enableTouchZoom = isMobile || supportsTouchZoom;
+
+  useEffect(() => {
+    if (!enableTouchZoom || typeof window === "undefined") {
       setMobilePageWidth(undefined);
       setMobileZoom(1);
       return;
@@ -80,7 +96,7 @@ const PdfFile = () => {
     window.addEventListener("resize", updatePageWidth);
 
     return () => window.removeEventListener("resize", updatePageWidth);
-  }, [isMobile]);
+  }, [enableTouchZoom]);
 
   const getTouchDistance = (touches: TouchListLike) => {
     if (touches.length < 2) return 0;
@@ -92,51 +108,65 @@ const PdfFile = () => {
     return Math.hypot(dx, dy);
   };
 
-  const handlePdfTouchStart = (event: ReactTouchEvent<HTMLDivElement>) => {
-    if (!isMobile) return;
+  useEffect(() => {
+    if (!enableTouchZoom) return;
 
-    if (event.touches.length === 2) {
-      pinchStartDistanceRef.current = getTouchDistance(event.touches);
-      pinchStartZoomRef.current = mobileZoom;
-    }
-  };
+    const container = zoomContainerRef.current;
+    if (!container) return;
 
-  const handlePdfTouchMove = (event: ReactTouchEvent<HTMLDivElement>) => {
-    if (!isMobile) return;
-    if (event.touches.length !== 2 || pinchStartDistanceRef.current === null) return;
+    const onTouchStart = (event: TouchEvent) => {
+      if (event.touches.length === 2) {
+        pinchStartDistanceRef.current = getTouchDistance(event.touches);
+        pinchStartZoomRef.current = mobileZoomRef.current;
+      }
+    };
 
-    const currentDistance = getTouchDistance(event.touches);
-    if (currentDistance <= 0) return;
+    const onTouchMove = (event: TouchEvent) => {
+      if (event.touches.length !== 2 || pinchStartDistanceRef.current === null) return;
 
-    event.preventDefault();
-    const nextZoom =
-      pinchStartZoomRef.current * (currentDistance / pinchStartDistanceRef.current);
-    setMobileZoom(Math.min(MAX_MOBILE_ZOOM, Math.max(MIN_MOBILE_ZOOM, nextZoom)));
-  };
+      const currentDistance = getTouchDistance(event.touches);
+      if (currentDistance <= 0) return;
 
-  const handlePdfTouchEnd = (event: ReactTouchEvent<HTMLDivElement>) => {
-    if (!isMobile) return;
+      event.preventDefault();
+      const nextZoom =
+        pinchStartZoomRef.current * (currentDistance / pinchStartDistanceRef.current);
+      setMobileZoom(Math.min(MAX_MOBILE_ZOOM, Math.max(MIN_MOBILE_ZOOM, nextZoom)));
+    };
 
-    const wasPinching = pinchStartDistanceRef.current !== null;
-    if (event.touches.length < 2) {
-      pinchStartDistanceRef.current = null;
-    }
-    if (wasPinching) return;
+    const onTouchEnd = (event: TouchEvent) => {
+      const wasPinching = pinchStartDistanceRef.current !== null;
+      if (event.touches.length < 2) {
+        pinchStartDistanceRef.current = null;
+      }
+      if (wasPinching) return;
 
-    if (event.changedTouches.length !== 1) return;
-    const now = Date.now();
-    if (now - lastTapAtRef.current <= DOUBLE_TAP_DELAY_MS) {
-      setMobileZoom((prev) => (prev > MIN_MOBILE_ZOOM ? MIN_MOBILE_ZOOM : DOUBLE_TAP_ZOOM));
-      lastTapAtRef.current = 0;
-      return;
-    }
+      if (event.changedTouches.length !== 1) return;
+      const now = Date.now();
+      if (now - lastTapAtRef.current <= DOUBLE_TAP_DELAY_MS) {
+        setMobileZoom((prev) => (prev > MIN_MOBILE_ZOOM ? MIN_MOBILE_ZOOM : DOUBLE_TAP_ZOOM));
+        lastTapAtRef.current = 0;
+        return;
+      }
 
-    lastTapAtRef.current = now;
-  };
+      lastTapAtRef.current = now;
+    };
+
+    container.addEventListener("touchstart", onTouchStart, { passive: true });
+    container.addEventListener("touchmove", onTouchMove, { passive: false });
+    container.addEventListener("touchend", onTouchEnd, { passive: true });
+    container.addEventListener("touchcancel", onTouchEnd, { passive: true });
+
+    return () => {
+      container.removeEventListener("touchstart", onTouchStart);
+      container.removeEventListener("touchmove", onTouchMove);
+      container.removeEventListener("touchend", onTouchEnd);
+      container.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [enableTouchZoom]);
 
   const Document = pdfModule?.Document;
   const Page = pdfModule?.Page;
-  const effectivePageWidth = isMobile && mobilePageWidth
+  const effectivePageWidth = enableTouchZoom && mobilePageWidth
     ? Math.floor(mobilePageWidth * mobileZoom)
     : mobilePageWidth;
 
@@ -194,18 +224,15 @@ const PdfFile = () => {
       <div>
         <div className="window-scroll resume-scroll mac-scrollbar">
           <div
-            className={`resume-pdf-content flex justify-center ${isMobile ? "mobile-zoomable" : ""}`}
-            onTouchStart={handlePdfTouchStart}
-            onTouchMove={handlePdfTouchMove}
-            onTouchEnd={handlePdfTouchEnd}
-            onTouchCancel={handlePdfTouchEnd}
+            ref={zoomContainerRef}
+            className={`resume-pdf-content flex justify-center ${enableTouchZoom ? "mobile-zoomable" : ""}`}
             style={{
-              justifyContent: isMobile && mobileZoom > 1 ? "flex-start" : "center"
+              justifyContent: enableTouchZoom && mobileZoom > 1 ? "flex-start" : "center"
             }}
           >
             {pdfUrl && Document && Page && (
               <Document
-                className={`resume-pdf-document ${isMobile ? "mobile-zoomable" : ""}`}
+                className={`resume-pdf-document ${enableTouchZoom ? "mobile-zoomable" : ""}`}
                 file={pdfUrl}
                 onLoadSuccess={({ numPages: totalPages }: { numPages: number }) =>
                   setNumPages(totalPages)
