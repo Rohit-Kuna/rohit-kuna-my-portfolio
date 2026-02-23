@@ -63,7 +63,7 @@
     }
 
     #mobile-dock {
-        @apply fixed bottom-2 left-0 right-0 z-[3500] px-2;
+        @apply fixed bottom-0 left-0 right-0 z-[3500] px-0;
         transition: opacity 180ms ease, transform 220ms ease;
     }
 
@@ -88,6 +88,7 @@
         @apply backdrop-blur-md;
         position: fixed;
         inset: 0;
+        width: 100vw;
         transform: translateY(100%);
         z-index: 3860;
         border-radius: 0;
@@ -98,13 +99,20 @@
         box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.18),
             0 -24px 50px rgba(0, 0, 0, 0.28);
-        padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px calc(env(safe-area-inset-bottom, 0px) + 28px);
+        padding: calc(env(safe-area-inset-top, 0px) + 12px) 0 calc(env(safe-area-inset-bottom, 0px) + 28px);
         overflow-y: auto;
         opacity: 0;
         pointer-events: none;
         transition:
             transform 300ms cubic-bezier(0.2, 0.86, 0.2, 1),
             opacity 180ms ease;
+    }
+
+    #mobile-app-drawer .mobile-app-drawer-handle,
+    #mobile-app-drawer .mobile-app-drawer-title,
+    #mobile-app-drawer .mobile-app-drawer-grid {
+        padding-left: 14px;
+        padding-right: 14px;
     }
 
     #mobile-app-drawer.is-open {
@@ -179,9 +187,15 @@
     }
 
     .mobile-dock-shell {
-        @apply mx-auto w-full max-w-[96vw] grid grid-cols-5 gap-1.5 p-2 rounded-2xl backdrop-blur-md;
-        background: rgba(24, 40, 68, 0.34);
-        border: 1px solid rgba(255, 255, 255, 0.24);
+        @apply w-full grid grid-cols-5 gap-1.5 backdrop-blur-md;
+        border-radius: 26px 26px 0 0;
+        padding: 6px 8px calc(env(safe-area-inset-bottom, 0px) + 8px);
+        border-top: 1px solid rgba(255, 255, 255, 0.24);
+        border-left: 1px solid rgba(255, 255, 255, 0.24);
+        border-right: 1px solid rgba(255, 255, 255, 0.24);
+        background:
+            radial-gradient(circle at 16% 0%, rgba(84, 107, 158, 0.3), transparent 52%),
+            linear-gradient(160deg, rgba(37, 63, 121, 0.3), rgba(20, 44, 96, 0.3));
         box-shadow:
             0 18px 40px rgba(0, 0, 0, 0.28),
             inset 0 1px 0 rgba(255, 255, 255, 0.42),
@@ -841,7 +855,7 @@
     }
 
     .mobile-notif-item.is-active {
-        background: linear-gradient(160deg, rgba(251, 252, 255, 0.7), rgba(162, 162, 162, 0.8));
+        background: linear-gradient(160deg, rgba(232, 238, 255, 0.7), rgba(206, 212, 230, 0.7));
         border-color: rgba(255, 255, 255, 0.32);
         box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.58),
@@ -859,7 +873,7 @@
 
     .mobile-notif-label {
         @apply text-[11px] leading-tight text-white/100 text-center line-clamp-1;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
     }
 
     #window-controls {
