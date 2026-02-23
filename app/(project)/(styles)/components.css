@@ -1059,6 +1059,17 @@
 
     }
 
+    #imgfile .image-zoom-container.mobile-zoomable {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x pan-y;
+    }
+
+    #imgfile img.mobile-zoomable {
+        display: block;
+        will-change: transform;
+    }
+
 
     #home {
         @apply relative z-0 top-12 h-full w-[25%] p-8 m-0 overflow-visible;
