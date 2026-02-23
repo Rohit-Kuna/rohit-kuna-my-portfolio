@@ -1251,6 +1251,10 @@
         @apply max-w-full h-auto;
     }
 
+    :is(#resume, #pdffile) .resume-pdf-document.mobile-zoomable canvas {
+        max-width: none !important;
+    }
+
     :is(#resume, #pdffile) .resume-scroll {
         max-height: calc(100dvh - 56px - var(--compact-dock-space));
         padding-bottom: calc(var(--compact-dock-space) + 16px);
