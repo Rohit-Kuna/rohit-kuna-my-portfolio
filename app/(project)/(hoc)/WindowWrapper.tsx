@@ -185,14 +185,12 @@ const WindowWrapper = <P extends object>(
       const startedAtEdge =
         touch.clientX <= edgeWidth ||
         touch.clientX >= viewportWidth - edgeWidth;
-      const startedInRightHalf = viewportWidth > 0 ? touch.clientX >= viewportWidth * 0.5 : false;
       swipeStart.current = {
         x: touch.clientX,
         y: touch.clientY,
         fromHeader,
         startedInZoomedContent,
         startedAtEdge,
-        startedInRightHalf
       };
     };
 
@@ -208,7 +206,6 @@ const WindowWrapper = <P extends object>(
       const fromHeader = swipeStart.current.fromHeader;
       const startedInZoomedContent = swipeStart.current.startedInZoomedContent;
       const startedAtEdge = swipeStart.current.startedAtEdge;
-      const startedInRightHalf = swipeStart.current.startedInRightHalf;
 
       swipeStart.current = null;
 
@@ -217,7 +214,7 @@ const WindowWrapper = <P extends object>(
       }
 
       const isLeftSwipe = deltaX < 0;
-      if (!startedAtEdge && startedInRightHalf && isLeftSwipe && absX > 90 && absX > absY * 1.2) {
+      if (!startedAtEdge && isLeftSwipe && absX > 90 && absX > absY * 1.2) {
         const clearDockFocus = () => {
           const dockButtons = document.querySelectorAll<HTMLButtonElement>("#dock .dock-icon");
           dockButtons.forEach((button) => button.blur());
